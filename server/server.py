@@ -20,7 +20,7 @@ def enableCORSGenericRoute():
 # Route functions #########################################
 
 
-@app.post('/login')
+@app.post('/user/login')
 def login():
     """
     Expects JSON
@@ -37,7 +37,7 @@ def login():
     return httpraise(status, msg)
 
 
-@app.post('/logout')
+@app.post('/user/logout')
 def logout():
     """
     Expects JSON
