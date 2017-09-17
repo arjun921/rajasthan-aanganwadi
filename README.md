@@ -16,6 +16,9 @@ API
     - This needs JSON in POST with 'token' keys.
     - token must be 100 chars in length, composed of alphabets(upper and/or lower) and numbers only.
     - successful logout is indicated by 200 status code
+- `/user/create`
+    - This needs JSON in POST with 'name', 'email', 'pwd', 'address', 'mobile' keys.
+    - successful creation is indicated by 200 status code
 
 
 
