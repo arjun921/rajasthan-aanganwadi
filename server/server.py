@@ -19,6 +19,7 @@ def enableCORSGenericRoute():
     bottle.response.headers['Access-Control-Allow-Origin'] = '*'
 
 # Route functions #########################################
+# USER ROUTES #########################################
 
 
 @app.post('/user/login')
@@ -70,3 +71,38 @@ def create_user():
     if status == 200:
         utils.create_user(json)
     return httpraise(status, msg)
+
+# USER ROUTES #########################################
+
+
+@app.post('/content/create')
+def content_create():
+    pass
+
+
+@app.post('/content/list')
+def content_list():
+    pass
+
+
+@app.post('/content/<contentid>/access')
+def content_access(contentid):
+    pass
+
+
+@app.post('/content/<contentid>/remove')
+def content_remove(contentid):
+    # ADMIN
+    pass
+
+
+@app.post('/content/<contentid>/activate')
+def content_activate(contentid):
+    # ADMIN
+    pass
+
+
+@app.post('/content/<contentid>/deactivate')
+def content_deactivate(contentid):
+    # ADMIN
+    pass
