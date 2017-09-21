@@ -65,7 +65,7 @@ def is_token_available(token):
     if not dev:  # NOTE: remove this
         count = client.aang.tokens.find({'token': token}).count()
     else:
-        return False
+        return True
     return count == 0
 
 

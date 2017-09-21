@@ -31,7 +31,7 @@ def login():
         {
             'email' : <username>,
             'pwd'   : <password hash>,
-            'token' : <a 50 character randomly generated token>
+            'token' : <character randomly generated token>
         }
     Returns OK in case of successful login
     """
