@@ -2,8 +2,8 @@ import os
 from pymongo import MongoClient
 
 
-MONGO_URL = os.environ.get('MONGO_URL')
-if MONGO_URL:
+if os.environ.get('PRODUCTION_ENV'):
+    MONGO_URL = os.environ.get('MONGO_URL')
     client = MongoClient()
     dev = False
     print('Production')

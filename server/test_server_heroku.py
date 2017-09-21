@@ -1,8 +1,13 @@
+import os
 import requests
 
 
-# root = 'https://rajasthan-aanganwadi.herokuapp.com'
-root = 'http://localhost:8000'
+if os.environ.get('PRODUCTION_ENV'):
+    print('Production')
+    root = 'https://rajasthan-aanganwadi.herokuapp.com'
+else:
+    root = 'http://localhost:8000'
+    print('Development')
 
 
 def test_user_create_works():
