@@ -21,7 +21,6 @@ def httpraise(no, msg):
 def enableCORSGenericRoute():
     bottle.response.headers['Access-Control-Allow-Origin'] = '*'
 
-# Route functions #########################################
 # USER ROUTES #########################################
 
 
