@@ -14,8 +14,8 @@ def is_valid_login_request(request):
     "Is this a valid login request?"
     json = None
     try:
-        json = request.json()
-    except:
+        json = request.json
+    except Exception as e:
         return (422, 'JSON unreadable', None)
     else:
         if not all(i in json for i in ['email', 'pwd', 'token']):
@@ -31,7 +31,7 @@ def is_valid_login_request(request):
 def is_valid_logout_request(request):
     "Is this a valid logout request?"
     try:
-        json = request.json()
+        json = request.json
     except:
         return (422, 'JSON unreadable', None)
     else:
@@ -48,7 +48,7 @@ def is_valid_logout_request(request):
 def is_valid_user_info(request):
     "Is this valid info to create a new user?"
     try:
-        json = request.json()
+        json = request.json
     except:
         return (422, 'JSON unreadable', None)
     else:
