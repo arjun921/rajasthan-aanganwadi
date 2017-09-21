@@ -1,3 +1,5 @@
 bottle
 gunicorn
 pymongo
+requests
+pytest
