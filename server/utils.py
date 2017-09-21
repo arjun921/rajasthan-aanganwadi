@@ -1,7 +1,13 @@
+import os
 from pymongo import MongoClient
 
 
-client = MongoClient()
+MONGO_URL = os.environ.get('MONGO_URL')
+if MONGO_URL:
+    client = MongoClient()
+    dev = False
+else:
+    dev = True
 
 
 def is_valid_login_request(request):
@@ -56,7 +62,10 @@ def is_valid_user_info(request):
 
 def is_token_available(token):
     "Is the token available in the database?"
-    count = client.aang.tokens.find({'token': token}).count()
+    if not dev:  # NOTE: remove this
+        count = client.aang.tokens.find({'token': token}).count()
+    else:
+        False
     return count == 0
 
 
@@ -64,13 +73,15 @@ def login_user(json):
     "Create an entry in the token table"
     email, pwd, token = json['email'], json['pwd'], json['token']
     logid = {'email': email, 'pwd': pwd, 'token': token}
-    client.aang.tokens.insert_one(logid)
+    if not dev:  # NOTE: remove this
+        client.aang.tokens.insert_one(logid)
 
 
 def logout_user(json):
     "Remove this entry from the token table"
     token = json['token']
-    client.aang.tokens.find_one_and_delete({"token": token})
+    if not dev:  # NOTE: remove this
+        client.aang.tokens.find_one_and_delete({"token": token})
 
 
 def create_user(json):
@@ -80,4 +91,5 @@ def create_user(json):
                 name=json['name'],
                 aadhaar=json['address'],
                 mobile=json['mobile'])
-    client.aang.users.insert_one(data)
+    if not dev:  # NOTE: remove this
+        client.aang.users.insert_one(data)
