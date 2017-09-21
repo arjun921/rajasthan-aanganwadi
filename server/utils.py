@@ -8,6 +8,8 @@ if MONGO_URL:
     dev = False
 else:
     dev = True
+    tokens = {}
+    users = []
 
 
 def is_valid_login_request(request):
@@ -64,9 +66,10 @@ def is_token_available(token):
     "Is the token available in the database?"
     if not dev:  # NOTE: remove this
         count = client.aang.tokens.find({'token': token}).count()
+        return count == 0
     else:
-        return True
-    return count == 0
+        count = tokens.get(token)
+        return token is not None
 
 
 def login_user(json):
@@ -75,6 +78,8 @@ def login_user(json):
     logid = {'email': email, 'pwd': pwd, 'token': token}
     if not dev:  # NOTE: remove this
         client.aang.tokens.insert_one(logid)
+    else:
+        tokens[token] = logid
 
 
 def logout_user(json):
@@ -82,6 +87,9 @@ def logout_user(json):
     token = json['token']
     if not dev:  # NOTE: remove this
         client.aang.tokens.find_one_and_delete({"token": token})
+    else:
+        if token in tokens:
+            tokens.pop(token)
 
 
 def create_user(json):
@@ -93,3 +101,6 @@ def create_user(json):
                 mobile=json['mobile'])
     if not dev:  # NOTE: remove this
         client.aang.users.insert_one(data)
+    else:
+        if data not in users:
+            users.append(data)
