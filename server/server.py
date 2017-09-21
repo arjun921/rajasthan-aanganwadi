@@ -61,11 +61,12 @@ def create_user():
     """
     Expects JSON
         {
-            'name'      : <identifier>
+            'email'     : <identifier>
             'address'   : <address>
             'name'      : <name>
             'mobile'    : <mobile>
             'email'     : <email>
+            'pwd'       : <password hash>
         }
     returns OK
     """
@@ -119,3 +120,7 @@ def content_activate(contentid):
 def content_deactivate(contentid):
     # ADMIN
     pass
+
+
+if __name__ == '__main__':
+    app.run(debug=True, port=8000, reloader=True)
