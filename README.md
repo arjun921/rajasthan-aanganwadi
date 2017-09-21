@@ -5,20 +5,12 @@ Rajasthan
 App and server code for Aanganwadi.
 
 
-API
----
+Working API
+----------
 
 - `/user/login`
-    - This needs JSON in POST with 'uname', 'pwd', 'token' keys necessary.
-    - token must be 100 chars in length, composed of alphabets(upper and/or lower) and numbers only.
-    - successful login is indicated by 200 status code
 - `/user/logout`
-    - This needs JSON in POST with 'token' keys.
-    - token must be 100 chars in length, composed of alphabets(upper and/or lower) and numbers only.
-    - successful logout is indicated by 200 status code
 - `/user/create`
-    - This needs JSON in POST with 'name', 'email', 'pwd', 'address', 'mobile' keys.
-    - successful creation is indicated by 200 status code
 
 
 
@@ -35,6 +27,10 @@ export TEST_LOCAL='true' && pytest test_server_heroku.py
 To test the heroku app `pytest test_server_heroku.py`
 
 
+DOCS
+----
+
+Run `cd server/docs && make html` to build the documentation. It is then available in `server/docs/_build/html/index.html`
 
 
 NOTES
