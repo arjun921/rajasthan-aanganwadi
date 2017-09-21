@@ -70,7 +70,7 @@ def create_user():
         }
     returns OK
     """
-    status, msg, json = utils.is_valid_user_info(bottle.request)
+    status, msg, json = utils.is_valid_user_create_info(bottle.request)
     if status == 200:
         utils.create_user(json)
     return httpraise(status, msg)

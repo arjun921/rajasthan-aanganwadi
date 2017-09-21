@@ -2,26 +2,34 @@ import os
 from pymongo import MongoClient
 
 
-if os.environ.get('PRODUCTION_ENV'):
+if os.environ.get('USE_MONGO'):
     MONGO_URL = os.environ.get('MONGO_URL')
     client = MongoClient()
     dev = False
-    print('Production')
+    print('Using mongo')
 else:
-    print('Development')
+    print('Using RAM db')
     dev = True
     tokens = {}
     users = []
 
 
-def is_valid_login_request(request):
-    "Is this a valid login request?"
-    json = None
+def is_json_readable(request):
+    "Is the json readable in this request?"
     try:
         json = request.json
-    except Exception as e:
-        return (422, 'JSON unreadable', None)
+        if json is None:
+            raise Exception('Json unreadable')
+    except:
+        return False
     else:
+        return True
+
+
+def is_valid_login_request(request):
+    "Is this a valid login request?"
+    if is_json_readable(request):
+        json = request.json
         if not all(i in json for i in ['email', 'pwd', 'token']):
             return (422, 'email|pwd|token not in JSON', None)
         if len(json['token']) != 100:
@@ -30,37 +38,38 @@ def is_valid_login_request(request):
             return (422, 'regenerate token', None)
         # OK
         return (200, 'OK', json)
+    else:
+        return (422, 'JSON unreadable', None)
 
 
 def is_valid_logout_request(request):
     "Is this a valid logout request?"
-    try:
-        json = request.json
-    except:
+    if not is_json_readable(request):
         return (422, 'JSON unreadable', None)
     else:
+        json = request.json
         if 'token' not in json:
             return (422, 'token not in JSON', None)
         if len(json['token']) != 100:
             return (422, 'token len invalid', None)
         if not token_is_listed_in_db(json['token']):
-            print(tokens, json['token'])
             return (422, 'invalid token', None)
         # OK
         return (200, 'OK', json)
 
 
-def is_valid_user_info(request):
+def is_valid_user_create_info(request):
     "Is this valid info to create a new user?"
-    try:
-        json = request.json
-    except:
+    if not is_json_readable(request):
         return (422, 'JSON unreadable', None)
     else:
+        json = request.json
         if not all((i in json)
                    for i in ['email', 'pwd', 'name',
                              'address', 'mobile']):
             return (422, 'keys missing in JSON', None)
+        if does_user_exist(json):
+            return (422, 'user already exists', None)
         # OK
         return (200, 'OK', json)
 
@@ -107,3 +116,14 @@ def create_user(json):
     else:
         if data not in users:
             users.append(data)
+
+
+def does_user_exist(json):
+    "Does this user exist?"
+    data = dict(email=json['email'])
+    if not dev:
+        count = client.aang.users.find(data).count()
+        return count > 0
+    else:
+        return len(list(1 for i in users
+                   if i['email'] == json['email'])) > 0
