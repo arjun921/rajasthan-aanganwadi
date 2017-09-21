@@ -1,9 +1,12 @@
+import os
 import bottle
+import hashlib
 import utils
-__version__ = (0, 0, 1)
+__version__ = (0, 0, 2)
 
 
 app = bottle.Bottle()
+UPLOAD_DIR = 'uploads'
 
 # Generic functions #######################################
 
@@ -77,7 +80,18 @@ def create_user():
 
 @app.post('/content/create')
 def content_create():
-    pass
+    fl = bottle.request.files.get('file')
+    hasher = hashlib.md5()
+    buf = fl.file.read()
+    hasher.update(buf)
+    fname = hasher.hexdigest()
+    filepath = os.path.join(UPLOAD_DIR, fname)
+    if os.path.exists(filepath):
+        return "File already exists."
+    else:
+        fl.file.seek(0)
+        fl.save(filepath)
+        return 'OK'
 
 
 @app.post('/content/list')
