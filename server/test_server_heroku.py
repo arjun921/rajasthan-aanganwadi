@@ -1,13 +1,8 @@
-import os
 import requests
 
 
-if os.environ.get('PRODUCTION_ENV'):
-    print('Production')
-    root = 'https://rajasthan-aanganwadi.herokuapp.com'
-else:
-    root = 'http://localhost:8000'
-    print('Development')
+# root = 'http://localhost:8000'
+root = 'https://rajasthan-aanganwadi.herokuapp.com'
 
 
 def test_user_create_works():
@@ -74,7 +69,8 @@ def test_user_login_fails_for_repeated_token():
             'pwd': 'hash',
             'token': 'a'*100}
     url = root + '/user/login'
-    resp = requests.post(url, json=data)
+    resp = requests.post(url, json=data)  # once to ensure this happens
+    resp = requests.post(url, json=data)  # once to ensure this fails
     assert resp.status_code == 422, resp.text
     assert resp.text == 'regenerate token', resp.text
 
