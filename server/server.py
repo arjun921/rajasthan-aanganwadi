@@ -6,33 +6,40 @@ __version__ = (0, 0, 2)
 
 
 app = bottle.Bottle()
-UPLOAD_DIR = 'uploads'
+UPLOAD_DIR = 'uploads'  # NOTE: Needs to be replaced with amazon s3
 
 # Generic functions #######################################
 
 
 def httpraise(no, msg):
-    'raise an http error in the respnose'
+    """
+    Helper function to easily set response status and return the needed
+    message
+    """
     bottle.response.status = no
     return msg
 
 
 @bottle.route('/<:re:.*>', method='OPTIONS')
 def enableCORSGenericRoute():
+    "This allows for CORS usage"
     bottle.response.headers['Access-Control-Allow-Origin'] = '*'
 
 # USER ROUTES #########################################
 
 
 @app.post('/user/login')
-def login():
+def user_login():
     """
+    /user/login
+
     Expects JSON
         {
-            'email' : <username>,
+            'email' : <email>,
             'pwd'   : <password hash>,
-            'token' : <character randomly generated token>
+            'token' : <randomly generated token of 100 chars>
         }
+
     Returns OK in case of successful login
     """
     status, msg, json = utils.is_valid_login_request(bottle.request)
@@ -42,8 +49,10 @@ def login():
 
 
 @app.post('/user/logout')
-def logout():
+def user_logout():
     """
+    /user/logout
+
     Expects JSON
         {
             'token' : <token which needs to be logged out>
@@ -57,15 +66,16 @@ def logout():
 
 
 @app.post('/user/create')
-def create_user():
+def user_create():
     """
+    /user/create
+
     Expects JSON
         {
-            'email'     : <identifier>
+            'email'     : <identifier. Must be unique>
             'address'   : <address>
             'name'      : <name>
             'mobile'    : <mobile>
-            'email'     : <email>
             'pwd'       : <password hash>
         }
     returns OK
