@@ -21,10 +21,10 @@ To test local dev environment.
 
 ```bash
 cd server && python server.py
-export TEST_LOCAL='true' && pytest test_server_heroku.py
+export TEST_LOCAL='true' && pytest test_.py
 ```
 
-To test the heroku app `pytest test_server_heroku.py`
+To test the heroku app `pytest test_.py`
 
 
 DOCS
