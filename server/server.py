@@ -148,16 +148,19 @@ def form_list():
             'forms': [list of forms ids]
         }
     """
-    if utils.is_logged_in_user(bottle.request):
-        user = utils.get_user_from_token(bottle.request.json['token'])
-        if user is not None:
-            forms = utils.get_user_forms(user)
-            return {'forms': forms}
+    status, msg, json = utils.is_valid_form_list_request(bottle.request)
+    if status == 200:
+        if utils.token_is_listed_in_db(json['token']):
+            user = utils.get_user_from_token(json['token'])
+            if user is not None:
+                forms = utils.get_user_forms(user)
+                return {'forms': forms}
+            else:
+                return httpraise(404, 'no such user')
         else:
-            return httpraise(404, 'no such user')
+            return httpraise(403, 'login to access forms')
     else:
-        return httpraise(403, 'login to access forms')
-    return httpraise(404, 'no forms found')
+        return httpraise(status, msg)
 
 
 @app.post('/form/<formid>')
