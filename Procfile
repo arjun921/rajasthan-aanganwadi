@@ -1,1 +1,1 @@
-web: cd server && gunicorn server:app --log-file -
+web: cd server && gunicorn server:app --log-file - -w 1
