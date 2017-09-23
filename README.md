@@ -17,14 +17,14 @@ Working API
 TESTS
 -----
 
-To test local dev environment.
+To test heroku environment.
 
 ```bash
 cd server && python server.py
-export TEST_LOCAL='true' && pytest test_.py
+export TEST_HEROKU='true' && pytest test_.py
 ```
 
-To test the heroku app `pytest test_.py`
+To test the local app `pytest test_.py`
 
 
 DOCS
