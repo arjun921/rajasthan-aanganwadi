@@ -1,8 +1,22 @@
-import os
+'''
+This module defines the functions which handle the API endpoints
+
+Function docstrings define the JSON schema that is acceptable
+to the endpoint. The docstring is split into n parts by
+
+----------
+
+Namely 10 minus symbols
+
+The first part defines the endpoint method and url separated by a single space,
+the second defines the acceptable input JSON schema. Since this schema is used
+in the code please do not make changes unless you know what you are doing.
+'''
 import bottle
-import hashlib
 import utils
-__version__ = (0, 0, 2)
+from functools import wraps
+from jsonschema import validate
+__version__ = (0, 0, 3)
 
 
 app = bottle.Bottle()
@@ -10,6 +24,46 @@ db = utils.db
 UPLOAD_DIR = 'uploads'  # NOTE: Needs to be replaced with amazon s3
 
 # Generic functions #######################################
+
+
+def json_validate(function):
+    """
+    Perform JSON schema validation using the schema present in function's
+    docstring.
+
+    This makes sure that we only ingest that JSON which we expect to.
+    """
+    schema = function.__doc__.split('----------')[1].strip()
+    # Eval poses no threat here since we are running on known string
+    schema = eval(schema)
+
+    @wraps(function)
+    def newfunction(*args, **kwargs):
+        if utils.is_json_readable(bottle.request):
+            try:
+                validate(bottle.request.json, schema)
+            except:
+                return httpraise(422, 'Ill formed JSON')
+            else:
+                return function()
+        else:
+            return httpraise(422, 'JSON not readable')
+    return newfunction
+
+
+def endpoint(function):
+    """
+    Wraps a given function and turns it into a JSON endpoint
+    commplete with JSON validation protection as per the
+    provided functions's docstring.
+    """
+    method, uri = function.__doc__.split('----------')[0].strip().split(' ')
+    fn = json_validate(function)
+    if method.lower() == 'post':
+        f = app.post(uri)(fn)
+    elif method.lower() == 'get':
+        f = app.post(uri)(fn)
+    return f
 
 
 def httpraise(no, msg):
@@ -29,125 +83,124 @@ def enableCORSGenericRoute():
 # USER ROUTES #########################################
 
 
-@app.post('/user/login')
+@endpoint
 def user_login():
     """
-    /user/login
+    POST /user/login
 
-    Expects JSON
+    ----------
         {
-            'email' : <email>,
-            'pwd'   : <password hash>,
-            'token' : <randomly generated token of 100 chars>
+            "type"      : "object",
+            "properties":   {
+                                "email" : { "type": "string",
+                                            "format": "email"},
+                                "pwd"   : { "type": "string" },
+                                "token" : { "type": "string",
+                                            "minLength": 100,
+                                            "maxLength": 100
+                                          },
+                            },
+            "required": ["pwd", "email", "token"]
         }
 
+    ----------
     Returns OK in case of successful login
     """
-    status, msg, json = utils.is_valid_login_request(bottle.request)
-    if status == 200:
-        pwd, token, email = json['pwd'], json['token'], json['email']
-        if db.user_pwd_present(email, pwd):
+    json = bottle.request.json
+    pwd, token, email = json['pwd'], json['token'], json['email']
+    if db.user_pwd_present(email, pwd):
+        if not db.token_present(token):
             db.token_insert(token, email)
+            status, msg = 200, 'OK'
         else:
-            status, msg = 401, 'wrong credentials'
+            status, msg = 422, 'regenerate token'
+    else:
+        status, msg = 401, 'wrong credentials'
     return httpraise(status, msg)
 
 
-@app.post('/user/logout')
+@endpoint
 def user_logout():
     """
-    /user/logout
+    POST /user/logout
 
-    Expects JSON
+    ----------
         {
-            'token' : <token which needs to be logged out>
+            "type"      : "object",
+            "properties":{
+                            "token" : { "type": "string",
+                                        "minLength": 100,
+                                        "maxLength": 100
+                                      },
+                        },
+            "required"  : ["token"]
         }
+    ----------
+
     Returns OK in case of successful login
     """
-    status, msg, json = utils.is_valid_logout_request(bottle.request)
-    if status == 200:
-        db.token_remove(json['token'])
-    return httpraise(status, msg)
+    if not db.token_present(bottle.request.json['token']):
+        return (422, 'invalid token', None)
+    db.token_remove(bottle.request.json['token'])
+    return httpraise(200, 'OK')
 
 
-@app.post('/user/create')
+@endpoint
 def user_create():
     """
-    /user/create
-
-    Expects JSON
+    POST /user/create
+    ----------
         {
-            'email'     : <identifier. Must be unique>,
-            'address'   : <address>,
-            'name'      : <name>,
-            'mobile'    : <mobile>,
-            'pwd'       : <password hash>
+            "type"      :   "object",
+            "properties":   {
+                                "email"     :   {
+                                                    "type": "string",
+                                                    "format": "email"
+                                                },
+                                "address"   : {"type": "string"},
+                                "name"      : {"type": "string"},
+                                "mobile"    : {"type": "string"},
+                                "pwd"       : {"type": "string"}
+                            },
+            "required"  : ["email", "address", "name", "mobile", "pwd"]
         }
+    ----------
+
     returns OK
     """
-    status, msg, json = utils.is_valid_user_create_info(bottle.request)
-    if status == 200:
-        db.user_insert(json)
-    return httpraise(status, msg)
+    json = bottle.request.json
+    if db.user_present(json['email']):
+        return httpraise(422, 'user already exists')
+    db.user_insert(json)
+    return httpraise(200, 'OK')
 
 # CONTENT ROUTES #########################################
 
 
-@app.post('/content/create')
-def content_create():
-    fl = bottle.request.files.get('file')
-    hasher = hashlib.md5()
-    buf = fl.file.read()
-    hasher.update(buf)
-    fname = hasher.hexdigest()
-    filepath = os.path.join(UPLOAD_DIR, fname)
-    if os.path.exists(filepath):
-        return "File already exists."
-    else:
-        fl.file.seek(0)
-        fl.save(filepath)
-        return 'OK'
-
-
-@app.post('/content/list')
-def content_list():
-    pass
-
-
-@app.post('/content/<contentid>/access')
-def content_access(contentid):
-    pass
-
-
-@app.post('/content/<contentid>/remove')
-def content_remove(contentid):
-    # ADMIN
-    pass
-
-
-@app.post('/content/<contentid>/activate')
-def content_activate(contentid):
-    # ADMIN
-    pass
-
-
-@app.post('/content/<contentid>/deactivate')
-def content_deactivate(contentid):
-    # ADMIN
-    pass
-
+# '/content/create'
+# '/content/list'
+# '/content/<contentid>/access'
+# '/content/<contentid>/remove'
+# '/content/<contentid>/activate'
+# '/content/<contentid>/deactivate'
 
 # CONTENT ROUTES #########################################
 
-@app.post('/form/list')
+@endpoint
 def form_list():
     """
-    /form/list
-    Expects JSON
+    POST /form/list
+    ----------
         {
-            'token' : <logged in user token>
+            "type"          :   "object",
+            "properties"    :   {
+                                    "token" :   {"type" : "string",
+                                                 "minLength": 100,
+                                                 "maxLength": 100}
+                                },
+            "required"      : ["token"]
         }
-
+    ----------
     Returns JSON
         {
             'forms': [list of forms ids]
