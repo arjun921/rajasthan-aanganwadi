@@ -45,7 +45,7 @@ def json_validate(function):
             except:
                 return httpraise(422, 'Ill formed JSON')
             else:
-                return function()
+                return function(*args, **kwargs)
         else:
             return httpraise(422, 'JSON not readable')
     return newfunction
@@ -184,7 +184,7 @@ def user_create():
 # '/content/<contentid>/activate'
 # '/content/<contentid>/deactivate'
 
-# CONTENT ROUTES #########################################
+# FORM ROUTES #########################################
 
 @endpoint
 def form_list():
@@ -301,26 +301,36 @@ def form_create():
         return httpraise(403, 'admin access required')
 
 
-@app.post('/form/<formid>/submit')
 def form_submit(formid):
     """
-    /form/<formid>/submit
+    POST /form/submit
 
-    Expects JSON
-        {
-            'token' : <user token>,
-            'data'  :   [
-                            {
-                                'identifier'    :<identifier>,
-                                'value'         :<value>
-                            },
-                            {
-                                'identifier'    :<identifier>,
-                                'value'         :<value>
-                            }
-                        ]
-        }
+    ----------
+    {
+    "type"      :   "object",
+    "properties":   {
+                    "token":   {
+                                   "type"      :   "string",
+                                   "minLength" :   100,
+                                   "maxLength" :   100
+                               },
+                    "data" :   {
+                               "type"  : "array",
+                               "uniqueItems": true
+                               "items" : {
+                                           "type": "object",
+                                           "properties":{
+                                               "identifier":{"type": "string"},
+                                               "value"     :{"type": "string"}
+                                           },
+                                           "required": ["identifier", "value"]
+                                   }
+                               }
+                    }
+    "required"  : ["token", "data"]
+    }
 
+    ----------
     Returns JSON
         {
             'status'    : true

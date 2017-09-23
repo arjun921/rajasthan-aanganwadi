@@ -28,7 +28,7 @@ def _test_form_list_fails_for_invalid_token():
     assert resp.status_code == 403, resp.text
 
 
-def _test_form_list_works():
+def _test_form_create_works():
     global testcount
     testcount = str(int(testcount) + 1)
     data = {
@@ -40,7 +40,7 @@ def _test_form_list_works():
             }
     url = root + '/user/create'
     resp = requests.post(url, json=data)  # create a user
-    assert resp.status_code == 200, resp.text
+    assert resp.status_code == 200, "user creation not working"
     # --------------login
     token = (testcount * 100)[:100]
     data = {'email': 'e@mail'+testcount,
@@ -48,7 +48,7 @@ def _test_form_list_works():
             'token': token}
     url = root + '/user/login'
     resp = requests.post(url, json=data)
-    assert resp.status_code == 200, resp.text
+    assert resp.status_code == 200, "User login not working"
     # --------------test for form listing
     data = {'token': token}
     url = root + '/form/list'

@@ -18,6 +18,35 @@ class DB:
             self.dev = True
             self.tokens = {}
             self.users = []
+            self.forms = []
+            self.responses = []
+
+    def form_present(self, formid):
+        "Is this form present?"
+        if not self.dev:  # NOTE: remove this
+            count = self.client.aang.forms.find({'formid': formid}).count()
+            return count == 1
+        else:
+            count = [f for f in self.forms
+                     if f['formid'] == formid]
+            return len(count) == 1
+
+    def form_insert(self, form):
+        "Insert a form into the database"
+        if not self.form_present(form['formid']):
+            if not self.dev:  # NOTE: remove this
+                self.client.aang.forms.insert_one(form)
+            else:
+                self.forms.append(form)
+
+    def form_remove(self, formid):
+        "Remove form from database"
+        if self.form_present(formid):
+            if not self.dev:  # NOTE: remove this
+                self.client.aang.forms.find_one_and_delete({'formid': formid})
+            else:
+                self.forms = [i for i in self.forms
+                              if i['formid'] != formid]
 
     def token_present(self, token):
         "Is the token available in the database?"
