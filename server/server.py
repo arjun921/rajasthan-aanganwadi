@@ -6,6 +6,7 @@ __version__ = (0, 0, 2)
 
 
 app = bottle.Bottle()
+db = utils.db
 UPLOAD_DIR = 'uploads'  # NOTE: Needs to be replaced with amazon s3
 
 # Generic functions #######################################
@@ -44,7 +45,11 @@ def user_login():
     """
     status, msg, json = utils.is_valid_login_request(bottle.request)
     if status == 200:
-        utils.login_user(json)
+        pwd, token, email = json['pwd'], json['token'], json['email']
+        if db.user_pwd_present(email, pwd):
+            db.token_insert(token, email)
+        else:
+            status, msg = 401, 'wrong credentials'
     return httpraise(status, msg)
 
 
@@ -61,7 +66,7 @@ def user_logout():
     """
     status, msg, json = utils.is_valid_logout_request(bottle.request)
     if status == 200:
-        utils.logout_user(json)
+        db.token_remove(json['token'])
     return httpraise(status, msg)
 
 
@@ -82,7 +87,7 @@ def user_create():
     """
     status, msg, json = utils.is_valid_user_create_info(bottle.request)
     if status == 200:
-        utils.create_user(json)
+        db.user_insert(json)
     return httpraise(status, msg)
 
 # CONTENT ROUTES #########################################
