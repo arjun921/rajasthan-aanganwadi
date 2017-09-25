@@ -75,7 +75,7 @@ def httpraise(no, msg):
     return msg
 
 
-@bottle.route('/<:re:.*>', method='OPTIONS')
+@app.route('/<:re:.*>', method=['OPTIONS'])
 def enableCORSGenericRoute():
     "This allows for CORS usage"
     bottle.response.headers['Access-Control-Allow-Origin'] = '*'
