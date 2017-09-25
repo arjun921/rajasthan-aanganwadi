@@ -9,9 +9,96 @@ else:
 
 
 testcount = '0'
+# TODO: Use fixtures to remove the need to testcount
 
 
 # ################################### /form/list
+def test_form_url_fails_for_non_existant_form_id():
+    global testcount
+    testcount = str(int(testcount) + 1)
+    token = (testcount*100)[:100]
+    data = {'token': token, 'formid': 'dummy'}
+    url = root + '/form'
+    resp = requests.post(url, json=data)
+    assert resp.status_code == 404, resp.text
+
+
+def test_form_url_fails_for_missing_keys():
+    global testcount
+    testcount = str(int(testcount) + 1)
+    token = (testcount*100)[:100]
+    data = {'token': token, 'formid': 'dummy'}
+    url = root + '/form'
+    for key in list(data.keys()):
+        d = dict(data)
+        d.pop(key)
+        resp = requests.post(url, json=d)
+        assert resp.status_code == 422, resp.text
+
+
+def test_form_url_fails_for_non_json():
+    global testcount
+    testcount = str(int(testcount) + 1)
+    token = (testcount*100)[:100]
+    data = {'token': token}
+    url = root + '/form'
+    resp = requests.post(url, data=data)
+    assert resp.status_code == 422, resp.text
+
+
+def test_form_url_fails_for_missing_token():
+    global testcount
+    testcount = str(int(testcount) + 1)
+    data = {}
+    url = root + '/form'
+    resp = requests.post(url, json=data)
+    assert resp.status_code == 422, resp.text
+
+
+def test_form_list_works():
+    global testcount
+    testcount = str(int(testcount) + 1)
+    token = (testcount*100)[:100]
+    data = {'token': token}
+    url = root + '/form/list'
+    resp = requests.post(url, json=data)
+    assert resp.status_code == 200, resp.text
+
+
+def test_form_list_fails_for_non_json():
+    global testcount
+    testcount = str(int(testcount) + 1)
+    token = (testcount*100)[:100]
+    data = {'token': token}
+    url = root + '/form/list'
+    resp = requests.post(url, data=data)
+    assert resp.status_code == 422, resp.text
+
+
+def test_form_list_fails_for_missing_token():
+    global testcount
+    testcount = str(int(testcount) + 1)
+    data = {}
+    url = root + '/form/list'
+    resp = requests.post(url, json=data)
+    assert resp.status_code == 422, resp.text
+
+
+def test_form_list_fails_for_invalid_token_len():
+    global testcount
+    testcount = str(int(testcount) + 1)
+    token = (testcount*100)[:99]
+    data = {'token': token}
+    url = root + '/form/list'
+    resp = requests.post(url, data=data)
+    assert resp.status_code == 422, resp.text
+    token = (testcount*101)[:101]
+    data = {'token': token}
+    url = root + '/form/list'
+    resp = requests.post(url, data=data)
+    assert resp.status_code == 422, resp.text
+
+
 def _test_form_list_fails_for_invalid_user():
     global testcount
     testcount = str(int(testcount) + 1)
@@ -200,7 +287,6 @@ def test_user_login_fails_for_repeated_token():
     resp = requests.post(url, json=data)  # once to ensure this happens
     resp2 = requests.post(url, json=data)  # once to ensure this fails
     assert resp2.status_code == 422, (resp.text, resp2.text)
-    assert resp2.text == 'regenerate token', resp.text
 
 
 # ################################### /user/logout
@@ -267,7 +353,7 @@ def test_cors_urls():
             # '/content/activate',
             # '/content/deactivate',
             # '/form/',
-            # '/form/list',
+            '/form/list',
             # '/form/create',
             # '/form/submmit',
             # '/form/deactivate',
@@ -276,3 +362,6 @@ def test_cors_urls():
     for url in urls:
         resp = requests.options(root + url)
         assert resp.status_code == 200, (url)
+        assert all(i in resp.headers for i in ['Access-Control-Allow-Origin',
+                                               'Access-Control-Allow-Methods',
+                                               'Access-Control-Allow-Headers'])

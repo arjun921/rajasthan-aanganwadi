@@ -16,7 +16,7 @@ import bottle
 import utils
 from functools import wraps
 from jsonschema import validate
-__version__ = (0, 0, 4)
+__version__ = (0, 0, 5)
 
 
 app = bottle.Bottle()
@@ -43,11 +43,11 @@ def json_validate(function):
             try:
                 validate(bottle.request.json, schema)
             except:
-                return httpraise(422, 'Ill formed JSON')
+                raise bottle.HTTPError(422, 'JSON does not satisfy scheme')
             else:
                 return function(*args, **kwargs)
         else:
-            return httpraise(422, 'JSON not readable')
+            raise bottle.HTTPError(422, 'JSON not found')
     return newfunction
 
 
@@ -66,21 +66,13 @@ def endpoint(function):
     return f
 
 
-def httpraise(no, msg):
-    """
-    Helper function to easily set response status and return the needed
-    message on the outgoing response
-    """
-    bottle.response.status = no
-    return msg
-
-
 @app.route('/<:re:.*>', method=['OPTIONS'])
 def enableCORSGenericRoute():
     "This allows for CORS usage"
     bottle.response.headers['Access-Control-Allow-Origin'] = '*'
     bottle.response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
-    bottle.response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
+    string = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
+    bottle.response.headers['Access-Control-Allow-Headers'] = string
 
 # USER ROUTES #########################################
 
@@ -113,12 +105,11 @@ def user_login():
     if db.user_pwd_present(email, pwd):
         if not db.token_present(token):
             db.token_insert(token, email)
-            status, msg = 200, 'OK'
+            return 'OK'
         else:
-            status, msg = 422, 'regenerate token'
+            raise bottle.HTTPError(422, 'regenerate token')
     else:
-        status, msg = 401, 'wrong credentials'
-    return httpraise(status, msg)
+        raise bottle.HTTPError(401, 'wrong credentials')
 
 
 @endpoint
@@ -142,9 +133,9 @@ def user_logout():
     Returns OK in case of successful login
     """
     if not db.token_present(bottle.request.json['token']):
-        return (422, 'invalid token', None)
+        raise bottle.HTTPError(422, 'invalid token')
     db.token_remove(bottle.request.json['token'])
-    return httpraise(200, 'OK')
+    return 'OK'
 
 
 @endpoint
@@ -172,9 +163,9 @@ def user_create():
     """
     json = bottle.request.json
     if db.user_present(json['email']):
-        return httpraise(422, 'user already exists')
+        raise bottle.HTTPError(422, 'user exists')
     db.user_insert(json)
-    return httpraise(200, 'OK')
+    return 'OK'
 
 # CONTENT ROUTES #########################################
 
@@ -208,30 +199,26 @@ def form_list():
             'forms': [list of forms ids]
         }
     """
-    status, msg, json = utils.is_valid_form_list_request(bottle.request)
-    if status == 200:
-        if utils.token_is_listed_in_db(json['token']):
-            user = utils.get_user_from_token(json['token'])
-            if user is not None:
-                forms = utils.get_user_forms(user)
-                return {'forms': forms}
-            else:
-                return httpraise(404, 'no such user')
-        else:
-            return httpraise(403, 'login to access forms')
-    else:
-        return httpraise(status, msg)
+    return db.form_list()  # TODO: user authorize
 
 
-@app.post('/form/<formid>')
-def form_formid(formid):
+@endpoint
+def form_formid():
     """
-    /form/<formid>
-    Expects JSON
+    POST /form
+    ----------
         {
-            'token': <logged in user token>,
+            "type"          :   "object",
+            "properties"    :   {
+                                    "token" :   {"type" : "string",
+                                                 "minLength": 100,
+                                                 "maxLength": 100},
+                                    "formid":   {"type" : "string"}
+                                },
+            "required"      : ["token", "formid"]
         }
 
+    ----------
     Returns JSON
         {
             "formid"    : <formid>,
@@ -250,15 +237,12 @@ def form_formid(formid):
                             ]
         }
     """
-    if utils.is_logged_in_user(bottle.request):
-        ok = utils.user_is_allowed_form_access(bottle.request.json['token'],
-                                               formid)
-        if ok:
-            return utils.get_form(formid)
-        else:
-            return httpraise(403, 'Log in to access forms')
+    # TODO: user authorization
+    formid = bottle.request.json['formid']
+    if db.form_present(formid):
+        return db.form_data(formid)
     else:
-        return httpraise(403, 'Log in to access forms')
+        raise bottle.HTTPError(404, 'form not found')
 
 
 @app.post('/form/create')
@@ -293,14 +277,7 @@ def form_create():
             'formid': <formid if created>
         }
     """
-    if utils.is_logged_in_user(bottle.request, admin=True):
-        ok, formid = utils.add_form_format(bottle.request.json)
-        if ok:
-            return {'status': True, 'formid': formid}
-        else:
-            return {'status': False, 'formid': None}
-    else:
-        return httpraise(403, 'admin access required')
+    pass
 
 
 def form_submit(formid):
@@ -338,17 +315,7 @@ def form_submit(formid):
             'status'    : true
         }
     """
-    if utils.is_logged_in_user(bottle.request):
-        ok = utils.user_is_allowed_form_access(bottle.request.json['token'],
-                                               formid)
-        if ok:
-            status = utils.submit_form(formid, bottle.request.json['token'],
-                                       bottle.request.json['data'])
-            return {'status': status}
-        else:
-            return httpraise(403, 'Log in to access forms')
-    else:
-        return httpraise(403, 'login required')
+    pass
 
 
 @app.post('/form/<formid>/deactivate')
@@ -366,11 +333,7 @@ def form_deactivate(formid):
             "status": true/false
         }
     """
-    if utils.is_logged_in_user(bottle.request, admin=True):
-        status = utils.deactivate_form(formid)
-        return {'status': status}
-    else:
-        return httpraise(403, 'admin access required')
+    pass
 
 
 @app.post('/form/<formid>/activate')
@@ -389,11 +352,7 @@ def form_activate(formid):
             'status': true/false
         }
     """
-    if utils.is_logged_in_user(bottle.request, admin=True):
-        status = utils.activate_form(formid)
-        return {'status': status}
-    else:
-        return httpraise(403, 'admin access required')
+    pass
 
 
 if __name__ == '__main__':

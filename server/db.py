@@ -21,6 +21,23 @@ class DB:
             self.forms = []
             self.responses = []
 
+    def form_data(self, formid):
+        "Return form for this formid"
+        if self.form_present(formid):
+            if not self.dev:
+                return self.client.aang.forms.find_one({'formid': formid})
+            else:
+                return [f for f in self.forms
+                        if f['formid'] == formid][0]
+
+    def form_list(self, email=None):
+        "List forms available for this user"
+        if not self.dev:
+            frms = self.client.aang.forms.find()
+            return [f['formid'] for f in frms]
+        else:
+            return [f['formid'] for f in self.forms]
+
     def form_present(self, formid):
         "Is this form present?"
         if not self.dev:  # NOTE: remove this
