@@ -250,3 +250,29 @@ def test_user_logout_fails_for_missing_keys():
         d.pop(key)
         resp = requests.post(url, json=d)
         assert resp.status_code == 422, resp.text
+
+
+# ################################## CORS tests
+def test_cors_urls():
+    global testcount
+    testcount = str(int(testcount) + 1)
+    urls = ['/user/login',
+            '/user/logour',
+            '/user/create',
+            # '/content/',
+            # '/content/create',
+            # '/content/list',
+            # '/content/access',
+            # '/content/remove',
+            # '/content/activate',
+            # '/content/deactivate',
+            # '/form/',
+            # '/form/list',
+            # '/form/create',
+            # '/form/submmit',
+            # '/form/deactivate',
+            # '/form/activate'
+            ]
+    for url in urls:
+        resp = requests.options(root + url)
+        assert resp.status_code == 200, (url)
