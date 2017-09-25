@@ -16,7 +16,7 @@ import bottle
 import utils
 from functools import wraps
 from jsonschema import validate
-__version__ = (0, 0, 3)
+__version__ = (0, 0, 4)
 
 
 app = bottle.Bottle()
@@ -79,6 +79,8 @@ def httpraise(no, msg):
 def enableCORSGenericRoute():
     "This allows for CORS usage"
     bottle.response.headers['Access-Control-Allow-Origin'] = '*'
+    bottle.response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
+    bottle.response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
 
 # USER ROUTES #########################################
 
