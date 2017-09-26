@@ -22,8 +22,38 @@ __version__ = (0, 0, 5)
 app = bottle.Bottle()
 db = utils.db
 UPLOAD_DIR = 'uploads'  # NOTE: Needs to be replaced with amazon s3
+whitelist = 'abcdefghijklmnopqrstuvwxyz1234567890'
 
 # Generic functions #######################################
+
+
+def admin_only(function):
+    """
+    Raise permission errors if logged in user is not Admin.
+    Requires function to have been wrapped in login_required
+    """
+    # TODO
+    return function
+
+
+def login_required(function):
+    """
+    Detect a valid token in the json of the request.
+    Requires function to be wrapped in json_validate
+    """
+    @wraps(function)
+    def fn(*a, **kw):
+        json = bottle.request.json
+        if json is None or 'token' not in json:
+            raise bottle.HTTPError(403, 'please login')
+        token = ''.join(i for i in json['token']
+                        if i in whitelist)
+        if len(token) != 100:
+            raise bottle.HTTPError(422, 'invalid token')
+        if not db.token_present(token):
+            raise bottle.HTTPError(422, 'invalid token')
+        return function(*a, **kw)
+    return fn
 
 
 def json_validate(function):
@@ -280,6 +310,8 @@ def form_create():
     db.form_insert(bottle.request.json)
 
 
+@app.post('/form/submit')
+@json_validate
 def form_submit():
     """
     POST /form/submit
@@ -293,20 +325,23 @@ def form_submit():
                                    "minLength" :   100,
                                    "maxLength" :   100
                                },
+                    "formid":  {
+                                   "type"      :   "string"
+                               },
                     "data" :   {
                                "type"  : "array",
-                               "uniqueItems": true
+                               "uniqueItems": True,
                                "items" : {
                                            "type": "object",
                                            "properties":{
-                                               "identifier":{"type": "string"},
+                                               "id":{"type": "string"},
                                                "value"     :{"type": "string"}
                                            },
-                                           "required": ["identifier", "value"]
+                                           "required": ["id", "value"]
                                    }
                                }
-                    }
-    "required"  : ["token", "data"]
+                    },
+    "required"  : ["token", "data", "formid"]
     }
 
     ----------
@@ -318,41 +353,27 @@ def form_submit():
     pass
 
 
-@app.post('/form/<formid>/deactivate')
-def form_deactivate(formid):
+@app.post('/form/delete')
+@json_validate
+def form_delete():
     """
-    /form/<formid>/deactivate
-
-    Expects JSON
+    POST /form
+    ----------
         {
-            "token" : <user token>,
+            "type"          :   "object",
+            "properties"    :   {
+                                    "token" :   {"type" : "string",
+                                                 "minLength": 100,
+                                                 "maxLength": 100},
+                                    "formid":   {"type" : "string"}
+                                },
+            "required"      : ["token", "formid"]
         }
 
-    Returns JSON
-        {
-            "status": true/false
-        }
+    ----------
+    Returns OK
     """
-    pass
-
-
-@app.post('/form/<formid>/activate')
-def form_activate(formid):
-    """
-    /form/<formid>/activate
-
-    Expects JSON
-        {
-            'token': <user token>
-        }
-
-    Returns JSON
-
-        {
-            'status': true/false
-        }
-    """
-    pass
+    db.form_remove(bottle.request.json['formid'])
 
 
 if __name__ == '__main__':

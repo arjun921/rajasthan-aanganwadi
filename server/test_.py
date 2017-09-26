@@ -9,10 +9,90 @@ else:
 
 
 testcount = '0'
+active_urls = ['/user/login',
+               '/user/logout',
+               '/user/create',
+               # '/content/',
+               # '/content/create',
+               # '/content/list',
+               # '/content/access',
+               # '/content/remove',
+               # '/content/activate',
+               # '/content/deactivate',
+               # '/form/',
+               '/form/list',
+               '/form/create',
+               '/form/submit',
+               '/form/delete',
+               # '/form/activate'
+               ]
 # TODO: Use fixtures to remove the need to testcount
 
 
 # ################################### /form/
+def test_form_submit_fails_on_non_unique_items():
+    global testcount
+    testcount = str(int(testcount) + 1)
+    data = {'formid': '1',
+            'token': (testcount * 100)[:100],
+            'data': [{'id': '1',
+                      'value': 'a'},
+                     {'id': '1',
+                      'value': 'a'},
+                     {'id': '1',
+                      'value': 'a'},
+                     {'id': '1',
+                      'value': 'a'}
+                     ]
+            }
+    url = root + '/form/submit'
+    resp = requests.post(url, json=data)
+    assert resp.status_code == 422, resp.text
+
+
+def test_form_submit_fails_on_missing_keys():
+    global testcount
+    testcount = str(int(testcount) + 1)
+    data = {'formid': '1',
+            'token': (testcount * 100)[:100],
+            'data': [{'id': '1',
+                      'value': 'a'},
+                     {'id': '2',
+                      'value': 'a'},
+                     {'id': '3',
+                      'value': 'a'},
+                     {'id': '4',
+                      'value': 'a'}
+                     ]
+            }
+    url = root + '/form/submit'
+    for key in data.keys():
+        d = dict(data)
+        d.pop(key)
+        resp = requests.post(url, json=d)
+        assert resp.status_code == 422, resp.text
+
+
+def test_form_submit_fails_on_non_json():
+    global testcount
+    testcount = str(int(testcount) + 1)
+    data = {'formid': '1',
+            'token': (testcount * 100)[:100],
+            'data': [{'id': '1',
+                      'value': 'a'},
+                     {'id': '2',
+                      'value': 'a'},
+                     {'id': '3',
+                      'value': 'a'},
+                     {'id': '4',
+                      'value': 'a'}
+                     ]
+            }
+    url = root + '/form/submit'
+    resp = requests.post(url, data=data)
+    assert resp.status_code == 422, resp.text
+
+
 def test_form_create_works():
     global testcount
     testcount = str(int(testcount) + 1)
@@ -446,26 +526,9 @@ def test_user_logout_fails_for_missing_keys():
 
 # ################################## CORS tests
 def test_cors_urls():
-    global testcount
+    global testcount, active_urls
     testcount = str(int(testcount) + 1)
-    urls = ['/user/login',
-            '/user/logour',
-            '/user/create',
-            # '/content/',
-            # '/content/create',
-            # '/content/list',
-            # '/content/access',
-            # '/content/remove',
-            # '/content/activate',
-            # '/content/deactivate',
-            # '/form/',
-            '/form/list',
-            '/form/create',
-            # '/form/submmit',
-            # '/form/deactivate',
-            # '/form/activate'
-            ]
-    for url in urls:
+    for url in active_urls:
         resp = requests.options(root + url)
         assert resp.status_code == 200, (url)
         assert all(i in resp.headers for i in ['Access-Control-Allow-Origin',
@@ -474,26 +537,9 @@ def test_cors_urls():
 
 
 def test_endpoints_accept_only_options_and_post():
-    global testcount
+    global testcount, active_urls
     testcount = str(int(testcount) + 1)
-    urls = ['/user/login',
-            '/user/logout',
-            '/user/create',
-            # '/content/',
-            # '/content/create',
-            # '/content/list',
-            # '/content/access',
-            # '/content/remove',
-            # '/content/activate',
-            # '/content/deactivate',
-            # '/form/',
-            '/form/list',
-            '/form/create',
-            # '/form/submmit',
-            # '/form/deactivate',
-            # '/form/activate'
-            ]
-    for url in urls:
+    for url in active_urls:
         resp = requests.options(root + url)
         assert resp.status_code == 200, (url)
         resp = requests.post(root + url)

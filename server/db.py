@@ -20,6 +20,7 @@ class DB:
             self.users = []
             self.forms = []
             self.responses = []
+            self.groups = {}
 
     def form_data(self, formid):
         "Return form for this formid"
