@@ -11,6 +11,12 @@ Working API
 - `/user/login`
 - `/user/logout`
 - `/user/create`
+- `/user/delete`
+- `/form`
+- `/form/list`
+- `/form/create`
+- `/form/delete`
+- `/form/submit`
 
 
 
