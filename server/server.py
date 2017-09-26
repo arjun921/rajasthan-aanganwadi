@@ -53,13 +53,13 @@ def login_required(function):
     def fn(*a, **kw):
         json = bottle.request.json
         if 'token' not in json:
-            raise bottle.HTTPError(403, body='please login')
+            raise bottle.HTTPError(403, body='please provide a token')
         token = ''.join(i for i in json['token']
                         if i in whitelist)
         if len(token) != 100:
             raise bottle.HTTPError(422, body='invalid token')
         if not db.token_present(token):
-            raise bottle.HTTPError(422, body='invalid token')
+            raise bottle.HTTPError(403, body='user not logged in')
         return function(*a, **kw)
     return fn
 
@@ -269,6 +269,7 @@ def form_list():
 
 @app.post('/form')
 @json_validate
+@login_required
 def form_formid():
     """
     POST /form
@@ -293,13 +294,9 @@ def form_formid():
                                 {
                                     'label'     : <field label>,
                                     'kind'      : <kind of field>,
-                                    'identifier': <identifier>
+                                    'id'        : <identifier>
+                                    'misc'      : ['item1', 'item2']
                                 },
-                                {
-                                    'label'     : <field label>,
-                                    'kind'      : <kind of field>,
-                                    'identifier': <identifier>
-                                }
                             ]
         }
     """

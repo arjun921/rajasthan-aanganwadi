@@ -24,7 +24,7 @@ active_urls = ['/user/login',
                # '/content/remove',
                # '/content/activate',
                # '/content/deactivate',
-               # '/form/',
+               '/form',
                '/form/list',
                '/form/create',
                '/form/submit',
@@ -92,6 +92,24 @@ def form(admin):
 
 
 # TESTS---------------------------------------------------------------
+def test_form_retreival_fails_for_unlogged_user(form, loggeduser):
+    data = {'token': loggeduser['token'][1:]+'1', 'formid': form['formid']}
+    resp = requests.post(point('/form'), json=data)
+    assert resp.status_code == 403, resp.text
+
+
+def test_form_retreival_fails_for_invalid_formid(form, loggeduser):
+    data = {'token': loggeduser['token'], 'formid': form['formid']+'salt'}
+    resp = requests.post(point('/form'), json=data)
+    assert resp.status_code == 404, resp.text
+
+
+def test_form_retreival_works(form, loggeduser):
+    data = {'token': loggeduser['token'], 'formid': form['formid']}
+    resp = requests.post(point('/form'), json=data)
+    assert resp.status_code == 200, resp.text
+
+
 def test_form_submit_fails_for_duplicate_items(form, loggeduser):
     data = {'token': loggeduser['token'],
             'formid': form['formid'],
@@ -165,7 +183,7 @@ def test_form_create_fails_for_non_admin(loggeduser):
 def test_form_list_fails_for_unlogged_user():
     data = {'token': 'b'*100}
     resp = requests.post(point('/form/list'), json=data)
-    assert resp.status_code == 422, resp.text
+    assert resp.status_code == 403, resp.text
 
 
 def test_form_list_works(loggeduser):
