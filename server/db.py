@@ -30,6 +30,13 @@ class DB:
             self.users.append(data)
             self.admins.append(data['email'])
 
+    def response_submit(self, data):
+        "submit a form response"
+        if not self.dev:
+            self.client.aang.responses.insert_one(data)
+        else:
+            self.responses.append(data)
+
     def is_admin(self, uemail):
         "Is this member present in the admin list"
         if self.user_present(uemail):

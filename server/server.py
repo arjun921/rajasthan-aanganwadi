@@ -360,6 +360,7 @@ def form_create():
 
 @app.post('/form/submit')
 @json_validate
+@login_required
 def form_submit():
     """
     POST /form/submit
@@ -383,7 +384,7 @@ def form_submit():
                                            "type": "object",
                                            "properties":{
                                                "id":{"type": "string"},
-                                               "value"     :{"type": "string"}
+                                               "value":{"type": "string"}
                                            },
                                            "required": ["id", "value"]
                                    }
@@ -398,7 +399,11 @@ def form_submit():
             'status'    : true
         }
     """
-    pass
+    email = db.token_data(bottle.request.json['token'])
+    data = dict(bottle.request.json)
+    data['email'] = email
+    db.response_submit(data)
+    return 'OK'
 
 
 @app.post('/form/delete')

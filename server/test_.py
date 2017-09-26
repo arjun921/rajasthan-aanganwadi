@@ -27,7 +27,7 @@ active_urls = ['/user/login',
                # '/form/',
                '/form/list',
                '/form/create',
-               # '/form/submit',
+               '/form/submit',
                '/form/delete',
                ]
 
@@ -92,6 +92,30 @@ def form(admin):
 
 
 # TESTS---------------------------------------------------------------
+def test_form_submit_fails_for_duplicate_items(form, loggeduser):
+    data = {'token': loggeduser['token'],
+            'formid': form['formid'],
+            'data': [
+                {'id': '1', 'value': 'a'},
+                {'id': '1', 'value': 'a'}
+                ]
+            }
+    resp = requests.post(point('/form/submit'), json=data)
+    assert resp.status_code == 422, resp.text
+
+
+def test_form_submit_works(form, loggeduser):
+    data = {'token': loggeduser['token'],
+            'formid': form['formid'],
+            'data': [
+                {'id': '1', 'value': 'a'},
+                {'id': '2', 'value': 'a'}
+                ]
+            }
+    resp = requests.post(point('/form/submit'), json=data)
+    assert resp.status_code == 200, resp.text
+
+
 def test_form_delete_fails_for_non_admin(form, loggeduser):
     d = {'token': loggeduser['token'], 'formid': form['formid']}
     resp = requests.post(point('/form/delete'), json=d)
