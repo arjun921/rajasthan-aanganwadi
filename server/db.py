@@ -138,6 +138,7 @@ class DB:
                 self.tokens.pop(token)
 
     def token_data(self, token):
+        "Return email of person to whom token belongs"
         if self.token_present(token):
             if not self.dev:
                 em = self.client.aang.tokens.find_one({'token': token})

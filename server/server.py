@@ -14,15 +14,15 @@ in the code please do not make changes unless you know what you are doing.
 '''
 import bottle
 import utils
+import hashlib
 from functools import wraps
 from jsonschema import validate
-__version__ = (0, 0, 7)
+__version__ = (0, 0, 8)
 
 
 app = bottle.Bottle()
 db = utils.db
 UPLOAD_DIR = 'uploads'  # NOTE: Needs to be replaced with amazon s3
-whitelist = 'abcdefghijklmnopqrstuvwxyz1234567890'
 
 # wrappers functions #######################################
 
@@ -53,8 +53,7 @@ def login_required(function):
         json = bottle.request.json
         if 'token' not in json:
             raise bottle.HTTPError(403, body='please provide a token')
-        token = ''.join(i for i in json['token']
-                        if i in whitelist)
+        token = utils.clean_token(json['token'])
         if len(token) != 100:
             raise bottle.HTTPError(422, body='invalid token')
         if not db.token_present(token):
@@ -239,17 +238,129 @@ def user_create():
     db.user_insert(data)
     return 'OK'
 
-# CONTENT ROUTES #########################################
+
+@app.post('/content/create')
+def content_create():
+    """
+    File upload to create content.
+    Returns file name on successful creation
+    """
+    token = bottle.request.forms.get('token')
+    if token is None:
+        raise bottle.HTTPError(422, body='invalid token')
+    token = utils.clean_token(token)
+    if len(token) != 100:
+        raise bottle.HTTPError(422, body='invalid token')
+    if not db.token_present(token):
+        raise bottle.HTTPError(403, body='user not logged in')
+    email = db.token_data(token)['email']
+    if not db.is_admin(email):
+        raise bottle.HTTPError(403, body='not admin')
+    # --------------alel ok
+    file = bottle.request.files.get('upload')
+    hasher = hashlib.md5()
+    hasher.update(file.file.read())
+    name = hasher.hexdigest()
+    fname = name + file.filename.split('.')[-1]
+    savepath = utils.get_savepath(fname)
+    file.file.seek(0)
+    file.save(savepath, overwrite=True)
+    return fname
 
 
-# '/content/create'
-# '/content/list'
-# '/content/<contentid>/access'
+@app.post('/content/delete')
+@json_validate
+@login_required
+@admin_only
+def content_delete():
+    """
+    POST /content/delete
+
+    ----------
+
+    {
+        "type"      :   "object",
+        "properties":   {
+                            "token" :   {"type": "string",
+                                         "maxLength": 100,
+                                         "minLength": 100},
+                            "fname"   :   {"type": "string"}
+                        },
+        "required"  :   ["token", "fname"]
+
+    }
+
+    ----------
+
+    Return OK
+    """
+    fname = bottle.request.json['fname']
+    # TODO: should clean this path
+    utils.del_uploaded(fname)
+
+
+@app.post('/content/list')
+@json_validate
+@login_required
+def list_content():
+    """
+    POST /content/list
+
+    ----------
+
+    {
+        "type": "object",
+        "properties":   {
+                            "token" :   {"type": "string",
+                                         "maxLength": 100,
+                                         "minLength": 100}
+                        },
+        "required": ["token"]
+    }
+
+    ----------
+    returns JSON
+
+    { 'contents': []}
+    """
+    return {'contents': utils.os.listdir(utils.upath)}
+
+
+@app.post('/content')
+@json_validate
+@login_required
+def content_retreive():
+    """
+    POST /content/list
+
+    ----------
+
+    {
+        "type": "object",
+        "properties":   {
+                            "token" :   {"type": "string",
+                                         "maxLength": 100,
+                                         "minLength": 100},
+                            "fname" :   {"type": "string"}
+                        },
+        "required": ["token", "fname"]
+    }
+
+    ----------
+
+    returns the relevant file if permissions allow
+    """
+    fname = bottle.request.json['fname']
+    # TODO: clean filename
+    return bottle.static_file(fname, root=utils.upath)
+
+# '/content'
 # '/content/<contentid>/remove'
 # '/content/<contentid>/activate'
 # '/content/<contentid>/deactivate'
 
 # FORM ROUTES #########################################
+
 
 @app.post('/form/list')
 @json_validate

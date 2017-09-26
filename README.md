@@ -17,6 +17,11 @@ Working API
 - `/form/create`
 - `/form/delete`
 - `/form/submit`
+- `/content/create`
+- `/content/delete`
+- `/content/list`
+- `/content`
+
 
 
 
