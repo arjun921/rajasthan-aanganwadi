@@ -8,11 +8,20 @@ class DB:
     between using mongo and a RAM db
     """
     def __init__(self):
+        data = dict(email='arjoonn.94@gmail.com',
+                    pwd='hash',
+                    name='arjoonn',
+                    address='india',
+                    mobile='123')
         if os.environ.get('USE_MONGO'):
             MONGO_URL = os.environ.get('MONGO_URL')
             self.client = MongoClient(MONGO_URL)
             self.dev = False
             print('Using mongo')
+            if self.client.aang.admins.find().count() == 0:
+                self.user_insert(data)
+                self.add_admin(data['email'])
+
         else:
             print('Using RAM db')
             self.dev = True
@@ -22,13 +31,10 @@ class DB:
             self.responses = []
             self.admins = []
 
-            data = {'email': 'admin@g.c',
-                    'address': 'a',
-                    'name': 'a',
-                    'mobile': '1234567890',
-                    'pwd': 'hash'}
-            self.users.append(data)
-            self.admins.append(data['email'])
+            # add initial admin
+            if len(self.admins) == 0:
+                self.user_insert(data)
+                self.add_admin(data['email'])
 
     def response_submit(self, data):
         "submit a form response"
@@ -154,8 +160,7 @@ class DB:
                     pwd=user['pwd'],
                     name=user['name'],
                     aadhaar=user['address'],
-                    mobile=user['mobile'],
-                    groups=[])
+                    mobile=user['mobile'])
         if not self.user_present(data['email']):
             if not self.dev:  # NOTE: remove this
                 self.client.aang.users.insert_one(data)
