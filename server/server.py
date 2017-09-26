@@ -97,6 +97,16 @@ def enableCORSGenericRoute():
     bottle.response.headers['Access-Control-Allow-Headers'] = string
 
 
+@app.get('/')
+def admin_panel():
+    """
+    Admin panel html
+    """
+    with open('home.html', 'r') as fl:
+        html = fl.read()
+    return html
+
+
 @app.post('/user/login')
 @json_validate
 def user_login():
