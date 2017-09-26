@@ -20,7 +20,32 @@ class DB:
             self.users = []
             self.forms = []
             self.responses = []
-            self.groups = {}
+            self.admins = []
+
+    def is_admin(self, uemail):
+        "Is this member present in the admin list"
+        if self.user_present(uemail):
+            if not self.dev:
+                c = self.client.aang.admins.find({'email': uemail}).count()
+                return c > 0
+            else:
+                return uemail in self.admins
+
+    def add_admin(self, uemail):
+        "Add an admin"
+        if self.user_present(uemail) and not self.is_admin(uemail):
+            if not self.dev:
+                self.client.aang.admins.insert_one({'email': uemail})
+            else:
+                self.admins.append(uemail)
+
+    def delete_admin(self, uemail):
+        "Remove an admin"
+        if self.is_admin(uemail):
+            if not self.dev:
+                self.client.aang.admins.find_one_and_delete({'email': uemail})
+            else:
+                self.admins.remove(uemail)
 
     def form_data(self, formid):
         "Return form for this formid"
@@ -78,7 +103,8 @@ class DB:
     def token_insert(self, token, user_email):
         "Insert user into logged in token base"
         if not self.dev:  # NOTE: remove this
-            self.client.aang.tokens.insert_one(user_email)
+            self.client.aang.tokens.insert_one({'token': token,
+                                                'email': user_email})
         else:
             self.tokens[token] = user_email
 
@@ -89,6 +115,14 @@ class DB:
                 self.client.aang.tokens.find_one_and_delete({"token": token})
             else:
                 self.tokens.pop(token)
+
+    def token_data(self, token):
+        if self.token_present(token):
+            if not self.dev:
+                em = self.client.aang.tokens.find_one({'token': token})
+                return em
+            else:
+                return {'token': token, 'email': self.tokens[token]}
 
     def user_insert(self, user):
         "Insert a user into the database"

@@ -32,8 +32,15 @@ def admin_only(function):
     Raise permission errors if logged in user is not Admin.
     Requires function to have been wrapped in login_required
     """
-    # TODO
-    return function
+    @wraps(function)
+    def fn(*a, **kw):
+        json = bottle.request.json
+        token = json['token']
+        email = db.token_data(token)['email']
+        if not db.is_admin(email):
+            raise bottle.HTTPError(403, 'not admin')
+        return function(*a, **kw)
+    return fn
 
 
 def login_required(function):
