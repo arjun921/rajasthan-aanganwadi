@@ -16,7 +16,7 @@ import bottle
 import utils
 from functools import wraps
 from jsonschema import validate
-__version__ = (0, 0, 6)
+__version__ = (0, 0, 7)
 
 
 app = bottle.Bottle()
