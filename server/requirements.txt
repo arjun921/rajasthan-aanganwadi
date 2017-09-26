@@ -5,4 +5,3 @@ pytest==3.2.2
 requests==2.18.4
 Sphinx==1.6.3
 jsonschema==2.6.0
-whitenoise==3.3.0
