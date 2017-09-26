@@ -30,8 +30,8 @@
                     <label for="email">Username/Email</label>
                 </div>
                 <div class="input-field col s12">
-                    <input id="password" type="password" class="validate">
-                    <label for="password">Password</label>
+                    <input id="password" type="password" class="validate" pattern="^(?:[0-9]+[a-zA-Z]|[a-zA-Z]+[0-9])[a-zA-Z0-9]*$">
+                    <label for="password" data-error="Password must have one letter and number">Password</label>
                 </div>
             </div>
             <div class="row">
