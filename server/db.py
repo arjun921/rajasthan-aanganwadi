@@ -124,6 +124,15 @@ class DB:
             else:
                 return {'token': token, 'email': self.tokens[token]}
 
+    def user_delete(self, email):
+        "Remove a user"
+        if self.user_present(email):
+            if not self.dev:
+                self.client.aang.users.find_one_and_delete({'email': email})
+            else:
+                self.users = [i for i in self.users
+                              if i['email'] != email]
+
     def user_insert(self, user):
         "Insert a user into the database"
         data = dict(email=user['email'],

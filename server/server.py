@@ -16,7 +16,7 @@ import bottle
 import utils
 from functools import wraps
 from jsonschema import validate
-__version__ = (0, 0, 5)
+__version__ = (0, 0, 6)
 
 
 app = bottle.Bottle()
@@ -133,6 +133,33 @@ def user_login():
             raise bottle.HTTPError(422, 'regenerate token')
     else:
         raise bottle.HTTPError(401, 'wrong credentials')
+
+
+@app.post('/user/delete')
+@json_validate
+def user_delete():
+    """
+    POST /user/delete
+
+    ----------
+        {
+            "type"      : "object",
+            "properties":{
+                            "token" : { "type": "string",
+                                        "minLength": 100,
+                                        "maxLength": 100
+                                      },
+                            "email" : {"type":"string",
+                                       "format": "email"}
+                        },
+            "required"  : ["token", "email"]
+        }
+    ----------
+
+    Returns OK in case of successful login
+    """
+    db.user_delete(bottle.request.json['email'])
+    return 'OK'
 
 
 @app.post('/user/logout')

@@ -1,4 +1,5 @@
 import os
+import pytest
 import requests
 
 
@@ -8,10 +9,14 @@ else:
     root = 'http://localhost:8000'
 
 
-testcount = '0'
+def point(url):
+    return root + url
+
+
 active_urls = ['/user/login',
                '/user/logout',
                '/user/create',
+               '/user/delete',
                # '/content/',
                # '/content/create',
                # '/content/list',
@@ -20,531 +25,100 @@ active_urls = ['/user/login',
                # '/content/activate',
                # '/content/deactivate',
                # '/form/',
-               '/form/list',
-               '/form/create',
-               '/form/submit',
-               '/form/delete',
+               # '/form/list',
+               # '/form/create',
+               # '/form/submit',
+               # '/form/delete',
                # '/form/activate'
                ]
-# TODO: Use fixtures to remove the need to testcount
 
 
-# ################################### /form/
-def test_form_submit_fails_on_non_unique_items():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {'formid': '1',
-            'token': (testcount * 100)[:100],
-            'data': [{'id': '1',
-                      'value': 'a'},
-                     {'id': '1',
-                      'value': 'a'},
-                     {'id': '1',
-                      'value': 'a'},
-                     {'id': '1',
-                      'value': 'a'}
-                     ]
-            }
-    url = root + '/form/submit'
-    resp = requests.post(url, json=data)
-    assert resp.status_code == 422, resp.text
+@pytest.fixture
+def user():
+    # create a user
+    data = {'email': 'a@g.c',
+            'address': 'a',
+            'name': 'a',
+            'mobile': '1234567890',
+            'pwd': 'hash'}
+    resp = requests.post(point('/user/create'), json=data)
+    assert resp.status_code == 200, resp.text
+    yield data  # PERFORM TEST
+    data = {'email': 'a@g.c', 'token': 'a'*100}
+    resp = requests.post(point('/user/delete'), json=data)
 
 
-def test_form_submit_fails_on_missing_keys():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {'formid': '1',
-            'token': (testcount * 100)[:100],
-            'data': [{'id': '1',
-                      'value': 'a'},
-                     {'id': '2',
-                      'value': 'a'},
-                     {'id': '3',
-                      'value': 'a'},
-                     {'id': '4',
-                      'value': 'a'}
-                     ]
-            }
-    url = root + '/form/submit'
-    for key in data.keys():
-        d = dict(data)
-        d.pop(key)
-        resp = requests.post(url, json=d)
-        assert resp.status_code == 422, resp.text
+@pytest.fixture
+def loggeduser(user):
+    token = 'a'*100
+    d = {'email': user['email'], 'pwd': user['pwd'], 'token': token}
+    resp = requests.post(point('/user/login'), json=d)
+    assert resp.status_code == 200, resp.text
+    yield d  # do tests
+    d = {'token': token}
+    resp = requests.post(point('/user/logout'), json=d)
 
 
-def test_form_submit_fails_on_non_json():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {'formid': '1',
-            'token': (testcount * 100)[:100],
-            'data': [{'id': '1',
-                      'value': 'a'},
-                     {'id': '2',
-                      'value': 'a'},
-                     {'id': '3',
-                      'value': 'a'},
-                     {'id': '4',
-                      'value': 'a'}
-                     ]
-            }
-    url = root + '/form/submit'
-    resp = requests.post(url, data=data)
-    assert resp.status_code == 422, resp.text
-
-
-def test_form_create_works():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {'formid': 'a',
-            'title': 'b',
-            'fields': [{'id': '1',
-                        'label': 'name',
-                        'kind': 'text',
-                        'misc': []},
-                       {'id': '2',
-                        'label': 'name',
-                        'kind': 'text',
-                        'misc': []},
-                       {'id': '3',
-                        'label': 'name',
-                        'kind': 'text',
-                        'misc': []}
-                       ],
-            'groups': []
-            }
-    url = root + '/form/create'
-    resp = requests.post(url, json=data)
+# TESTS---------------------------------------------------------------
+def test_user_delete_works():
+    # create a user
+    data = {'email': 'a@g.c',
+            'address': 'a',
+            'name': 'a',
+            'mobile': '1234567890',
+            'pwd': 'hash'}
+    resp = requests.post(point('/user/create'), json=data)
+    assert resp.status_code == 200, resp.text
+    # remove
+    data = {'email': 'a@g.c', 'token': 'a'*100}
+    resp = requests.post(point('/user/delete'), json=data)
     assert resp.status_code == 200, resp.text
 
 
-def test_form_create_fails_for_duplicate_fields():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {'formid': 'a',
-            'title': 'b',
-            'fields': [{'id': '1',
-                        'label': 'name',
-                        'kind': 'text',
-                        'misc': []},
-                       {'id': '1',
-                        'label': 'name',
-                        'kind': 'text',
-                        'misc': []},
-                       {'id': '1',
-                        'label': 'name',
-                        'kind': 'text',
-                        'misc': []}
-                       ],
-            'groups': []
-
-            }
-    url = root + '/form/create'
-    resp = requests.post(url, json=data)
-    assert resp.status_code == 422, resp.text
-
-
-def test_form_create_fails_for_missing_keys():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {'formid': 'a',
-            'title': 'b',
-            'fields': [{'id': '1',
-                        'label': 'name',
-                        'kind': 'text',
-                        'misc': []},
-                       {'id': '1',
-                        'label': 'name',
-                        'kind': 'text',
-                        'misc': []},
-                       {'id': '1',
-                        'label': 'name',
-                        'kind': 'text',
-                        'misc': []}
-                       ],
-            'groups': []
-
-            }
-    url = root + '/form/create'
-    for key in data.keys():
-        d = dict(data)
-        d.pop(key)
-        resp = requests.post(url, json=d)
-        assert resp.status_code == 422, resp.text
-
-
-def test_form_create_fails_for_non_json():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {'formid': 'a',
-            'title': 'b',
-            'fields': [{'id': '1',
-                        'label': 'name',
-                        'kind': 'text',
-                        'misc': []},
-                       {'id': '1',
-                        'label': 'name',
-                        'kind': 'text',
-                        'misc': []},
-                       {'id': '1',
-                        'label': 'name',
-                        'kind': 'text',
-                        'misc': []}
-                       ],
-            'groups': []
-
-            }
-    url = root + '/form/create'
-    resp = requests.post(url, data=data)
-    assert resp.status_code == 422, resp.text
-
-
-def test_form_url_fails_for_non_existant_form_id():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    token = (testcount*100)[:100]
-    data = {'token': token, 'formid': 'dummy'}
-    url = root + '/form'
-    resp = requests.post(url, json=data)
-    assert resp.status_code == 404, resp.text
-
-
-def test_form_url_fails_for_missing_keys():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    token = (testcount*100)[:100]
-    data = {'token': token, 'formid': 'dummy'}
-    url = root + '/form'
-    for key in list(data.keys()):
-        d = dict(data)
-        d.pop(key)
-        resp = requests.post(url, json=d)
-        assert resp.status_code == 422, resp.text
-
-
-def test_form_url_fails_for_non_json():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    token = (testcount*100)[:100]
-    data = {'token': token}
-    url = root + '/form'
-    resp = requests.post(url, data=data)
-    assert resp.status_code == 422, resp.text
-
-
-def test_form_url_fails_for_missing_token():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {}
-    url = root + '/form'
-    resp = requests.post(url, json=data)
-    assert resp.status_code == 422, resp.text
-
-
-def test_form_list_works():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    token = (testcount*100)[:100]
-    data = {'token': token}
-    url = root + '/form/list'
-    resp = requests.post(url, json=data)
-    assert resp.status_code == 200, resp.text
-
-
-def test_form_list_fails_for_non_json():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    token = (testcount*100)[:100]
-    data = {'token': token}
-    url = root + '/form/list'
-    resp = requests.post(url, data=data)
-    assert resp.status_code == 422, resp.text
-
-
-def test_form_list_fails_for_missing_token():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {}
-    url = root + '/form/list'
-    resp = requests.post(url, json=data)
-    assert resp.status_code == 422, resp.text
-
-
-def test_form_list_fails_for_invalid_token_len():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    token = (testcount*100)[:99]
-    data = {'token': token}
-    url = root + '/form/list'
-    resp = requests.post(url, data=data)
-    assert resp.status_code == 422, resp.text
-    token = (testcount*101)[:101]
-    data = {'token': token}
-    url = root + '/form/list'
-    resp = requests.post(url, data=data)
-    assert resp.status_code == 422, resp.text
-
-
-def _test_form_list_fails_for_invalid_user():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    assert False, 'NOT IMPLEMENTED'
-
-
-def _test_form_list_fails_for_invalid_token():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    token = (testcount * 100)[:100]
-    data = {'token': token}
-    url = root + '/form/list'
-    resp = requests.post(url, json=data)
-    assert resp.status_code == 403, resp.text
-
-
-def _test_form_create_works():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {
-            'email': 'e@mail'+testcount,
-            'pwd': 'hash',
-            'name': 'dummy',
-            'address': 'addum',
-            'mobile': '1234567890'
-            }
-    url = root + '/user/create'
-    resp = requests.post(url, json=data)  # create a user
-    assert resp.status_code == 200, "user creation not working"
-    # --------------login
-    token = (testcount * 100)[:100]
-    data = {'email': 'e@mail'+testcount,
-            'pwd': 'hash',
-            'token': token}
-    url = root + '/user/login'
-    resp = requests.post(url, json=data)
-    assert resp.status_code == 200, "User login not working"
-    # --------------test for form listing
-    data = {'token': token}
-    url = root + '/form/list'
-    resp = requests.post(url, json=data)
-    assert resp.status_code == 200, resp.text
-
-
-# ################################### /user/create
 def test_user_create_works():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {
-            'email': 'e@mail'+testcount,
-            'pwd': 'hash',
-            'name': 'dummy',
-            'address': 'addum',
-            'mobile': '1234567890'
-            }
-    url = root + '/user/create'
-    resp = requests.post(url, json=data)
+    # create a user
+    data = {'email': 'a@g.c',
+            'address': 'a',
+            'name': 'a',
+            'mobile': '1234567890',
+            'pwd': 'hash'}
+    resp = requests.post(point('/user/create'), json=data)
+    assert resp.status_code == 200, resp.text
+    # remove
+    data = {'email': 'a@g.c', 'token': 'a'*100}
+    resp = requests.post(point('/user/delete'), json=data)
+
+
+def test_user_logout_works(loggeduser):
+    d = {'token': loggeduser['token']}
+    resp = requests.post(point('/user/logout'), json=d)
     assert resp.status_code == 200, resp.text
 
 
-def test_user_create_fails_on_non_json():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {
-            'email': 'e@mail'+testcount,
-            'pwd': 'hash',
-            'name': 'dummy',
-            'address': 'addum',
-            'mobile': '1234567890'
-            }
-    url = root + '/user/create'
-    resp = requests.post(url, data=data)
-    assert resp.status_code == 422, resp.text
-
-
-def test_user_create_fails_for_missing_keys():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {
-            'email': 'e@mail'+testcount,
-            'pwd': 'hash',
-            'name': 'dummy',
-            'address': 'addum',
-            'mobile': '1234567890'
-            }
-    for key in sorted(list(data.keys())):
-        d = dict(data)
-        d.pop(key)
-        url = root + '/user/create'
-        resp = requests.post(url, json=d)
-        assert resp.status_code == 422, resp.text
-
-
-def test_user_create_fails_for_duplicate_email():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {
-            'email': 'e@mail'+testcount,
-            'pwd': 'hash',
-            'name': 'dummy',
-            'address': 'addum',
-            'mobile': '1234567890'
-            }
-    url = root + '/user/create'
-    resp = requests.post(url, json=data)  # send this once to ensure
-    resp2 = requests.post(url, json=data)  # send this once to fail
-    assert resp2.status_code == 422, (resp.text, resp2.text)
-
-
-# ################################### /user/login
-def test_user_login_works():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    # ----- create user
-    data = {
-            'email': 'e@mail'+testcount,
-            'pwd': 'hash',
-            'name': 'dummy',
-            'address': 'addum',
-            'mobile': '1234567890'
-            }
-    url = root + '/user/create'
-    resp = requests.post(url, json=data)  # send this once to ensure
-    # ----------login
-    data = {'email': 'e@mail'+testcount,
-            'pwd': 'hash',
-            'token': 'a'*100}
-    url = root + '/user/login'
-    resp = requests.post(url, json=data)
+def test_user_login_works(user):
+    token = 'a'*100
+    d = {'email': user['email'], 'pwd': user['pwd'], 'token': token}
+    resp = requests.post(point('/user/login'), json=d)
+    assert resp.status_code == 200, resp.text
+    d = {'token': token}
+    resp = requests.post(point('/user/logout'), json=d)
     assert resp.status_code == 200, resp.text
 
 
-def test_user_login_fails_for_unreadable_json():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {'email': 'e@mail'+testcount,
-            'pwd': 'hash',
-            'token': 'a'*100}
-    url = root + '/user/login'
-    resp = requests.post(url, data=data)
-    assert resp.status_code == 422, resp.text
+# --------------------------------------------------common tests
 
-
-def test_user_login_fails_for_missing_keys():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {'email': 'e@mail'+testcount,
-            'pwd': 'hash',
-            'token': 'a'*100}
-    for key in sorted(list(data.keys())):
-        d = dict(data)
-        d.pop(key)
-        url = root + '/user/login'
-        resp = requests.post(url, json=d)
-        assert resp.status_code == 422, resp.text
-
-
-def test_user_login_fails_for_wrong_token_length():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {'email': 'e@mail'+testcount,
-            'pwd': 'hash',
-            'token': 'a'*10}
-    url = root + '/user/login'
-    resp = requests.post(url, json=data)
-    assert resp.status_code == 422, resp.text
-
-
-def test_user_login_fails_for_repeated_token():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {
-            'email': 'e@mail'+testcount,
-            'pwd': 'hash',
-            'name': 'dummy',
-            'address': 'addum',
-            'mobile': '1234567890'
-            }
-    url = root + '/user/create'
-    resp = requests.post(url, json=data)
-    assert resp.status_code == 200, resp.text
-    data = {'email': 'e@mail'+testcount,
-            'pwd': 'hash',
-            'token': 'a'*100}
-    url = root + '/user/login'
-    resp = requests.post(url, json=data)  # once to ensure this happens
-    resp2 = requests.post(url, json=data)  # once to ensure this fails
-    assert resp2.status_code == 422, (resp.text, resp2.text)
-
-
-# ################################### /user/logout
-def test_user_logout_works():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    # -----create
-    data = {
-            'email': 'e@mail'+testcount,
-            'pwd': 'hash',
-            'name': 'dummy',
-            'address': 'addum',
-            'mobile': '1234567890'
-            }
-    url = root + '/user/create'
-    resp = requests.post(url, json=data)
-    assert resp.status_code == 200, resp.text
-    # -----login
-    data = {'email': 'e@mail'+testcount,
-            'pwd': 'hash',
-            'token': 'b'*100}
-    url = root + '/user/login'
-    resp = requests.post(url, json=data)  # login ensure
-    # ---------logout
-    data = {'token': 'b'*100}
-    url = root + '/user/logout'
-    resp = requests.post(url, json=data)
-    assert resp.status_code == 200, resp.text
-
-
-def test_user_logout_fails_for_non_json():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {'token': 'a'*100}
-    url = root + '/user/logout'
-    resp = requests.post(url, data=data)
-    assert resp.status_code == 422, resp.text
-
-
-def test_user_logout_fails_for_missing_keys():
-    global testcount
-    testcount = str(int(testcount) + 1)
-    data = {'token': 'a'*100}
-    url = root + '/user/logout'
-    for key in sorted(list(data.keys())):
-        d = dict(data)
-        d.pop(key)
-        resp = requests.post(url, json=d)
-        assert resp.status_code == 422, resp.text
-
-
-# ################################## CORS tests
-def test_cors_urls():
-    global testcount, active_urls
-    testcount = str(int(testcount) + 1)
+def test_non_json_failure_on_active_url_list():
     for url in active_urls:
-        resp = requests.options(root + url)
-        assert resp.status_code == 200, (url)
-        assert all(i in resp.headers for i in ['Access-Control-Allow-Origin',
-                                               'Access-Control-Allow-Methods',
-                                               'Access-Control-Allow-Headers'])
+        resp = requests.post(point(url))
+        assert resp.status_code == 422, resp.text
+        resp = requests.post(point(url), data={})
+        assert resp.status_code == 422, resp.text
 
 
-def test_endpoints_accept_only_options_and_post():
-    global testcount, active_urls
-    testcount = str(int(testcount) + 1)
+def test_options_on_active_urls():
     for url in active_urls:
-        resp = requests.options(root + url)
-        assert resp.status_code == 200, (url)
-        resp = requests.post(root + url)
-        assert resp.status_code != 405, (url)
-        resp = requests.get(root + url)
-        assert resp.status_code == 405, (url)
-        resp = requests.put(root + url)
-        assert resp.status_code == 405, (url)
+        resp = requests.options(point(url))
+        assert resp.status_code == 200, resp.text
+        assert 'Access-Control-Allow-Origin' in resp.headers
+        assert 'Access-Control-Allow-Methods' in resp.headers
+        assert 'Access-Control-Allow-Headers' in resp.headers
