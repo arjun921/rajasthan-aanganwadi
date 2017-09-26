@@ -106,6 +106,7 @@ def user_login():
     POST /user/login
 
     ----------
+
         {
             "type"      : "object",
             "properties":   {
@@ -121,6 +122,7 @@ def user_login():
         }
 
     ----------
+
     Returns OK in case of successful login
     """
     json = bottle.request.json
@@ -144,6 +146,7 @@ def user_delete():
     POST /user/delete
 
     ----------
+
         {
             "type"      : "object",
             "properties":{
@@ -156,7 +159,9 @@ def user_delete():
                         },
             "required"  : ["token", "email"]
         }
+
     ----------
+
 
     Returns OK in case of successful login
     """
@@ -172,6 +177,7 @@ def user_logout():
     POST /user/logout
 
     ----------
+
         {
             "type"      : "object",
             "properties":{
@@ -182,6 +188,7 @@ def user_logout():
                         },
             "required"  : ["token"]
         }
+
     ----------
 
     Returns OK in case of successful login
@@ -199,7 +206,9 @@ def user_logout():
 def user_create():
     """
     POST /user/create
+
     ----------
+
         {
             "type"      :   "object",
             "properties":   {
@@ -218,6 +227,7 @@ def user_create():
             "required"  : ["email", "address", "name",
                            "mobile", "pwd", "token"]
         }
+
     ----------
 
     returns OK
@@ -248,7 +258,9 @@ def user_create():
 def form_list():
     """
     POST /form/list
+
     ----------
+
         {
             "type"          :   "object",
             "properties"    :   {
@@ -258,7 +270,9 @@ def form_list():
                                 },
             "required"      : ["token"]
         }
+
     ----------
+
     Returns JSON
         {
             'forms': [list of forms ids]
@@ -273,7 +287,9 @@ def form_list():
 def form_formid():
     """
     POST /form
+
     ----------
+
         {
             "type"          :   "object",
             "properties"    :   {
@@ -286,6 +302,7 @@ def form_formid():
         }
 
     ----------
+
     Returns JSON
         {
             "formid"    : <formid>,
@@ -317,6 +334,7 @@ def form_create():
     POST /form/create
 
     ----------
+
     {
         "type"          :   "object",
         "properties"    :   {
@@ -345,6 +363,7 @@ def form_create():
                             },
         "required"      : ["title", "formid", "fields","token"]
     }
+
     ----------
 
         {
@@ -363,6 +382,7 @@ def form_submit():
     POST /form/submit
 
     ----------
+
     {
     "type"      :   "object",
     "properties":   {
@@ -391,10 +411,8 @@ def form_submit():
     }
 
     ----------
-    Returns JSON
-        {
-            'status'    : true
-        }
+
+    returns OK
     """
     email = db.token_data(bottle.request.json['token'])
     data = dict(bottle.request.json)
@@ -410,7 +428,9 @@ def form_submit():
 def form_delete():
     """
     POST /form
+
     ----------
+
         {
             "type"          :   "object",
             "properties"    :   {
@@ -423,6 +443,7 @@ def form_delete():
         }
 
     ----------
+
     Returns OK
     """
     db.form_remove(bottle.request.json['formid'])
