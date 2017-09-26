@@ -34,17 +34,19 @@ active_urls = ['/user/login',
 
 
 @pytest.fixture
-def user():
+def user(admin):
     # create a user
     data = {'email': 'a@g.c',
             'address': 'a',
             'name': 'a',
             'mobile': '1234567890',
-            'pwd': 'hash'}
+            'pwd': 'hash',
+            "token": admin['token']
+            }
     resp = requests.post(point('/user/create'), json=data)
     assert resp.status_code == 200, resp.text
     yield data  # PERFORM TEST
-    data = {'email': 'a@g.c', 'token': 'a'*100}
+    data = {'email': 'a@g.c', 'token': admin['token']}
     resp = requests.post(point('/user/delete'), json=data)
 
 
@@ -59,34 +61,56 @@ def loggeduser(user):
     resp = requests.post(point('/user/logout'), json=d)
 
 
+@pytest.fixture
+def admin():
+    d = {'email': 'admin@g.c', 'pwd': 'hash', 'token': '1'*100}
+    resp = requests.post(point('/user/login'), json=d)
+    assert resp.status_code == 200, resp.text
+    yield d
+    d = {'token': '1'*100}
+    resp = requests.post(point('/user/logout'), json=d)
+
+
 # TESTS---------------------------------------------------------------
-def test_user_delete_works():
+def test_user_delete_fails_for_non_admin(admin, loggeduser):
+    # remove
+    data = {'email': loggeduser['email'], 'token': loggeduser['token']}
+    resp = requests.post(point('/user/delete'), json=data)
+    assert resp.status_code == 403, resp.text
+
+
+def test_user_delete_works(admin, user):
+    # remove
+    data = {'email': user['email'], 'token': admin['token']}
+    resp = requests.post(point('/user/delete'), json=data)
+    assert resp.status_code == 200, resp.text
+
+
+def test_user_create_works(admin):
     # create a user
     data = {'email': 'a@g.c',
             'address': 'a',
             'name': 'a',
             'mobile': '1234567890',
-            'pwd': 'hash'}
+            'pwd': 'hash',
+            'token': admin['token']}
     resp = requests.post(point('/user/create'), json=data)
     assert resp.status_code == 200, resp.text
     # remove
-    data = {'email': 'a@g.c', 'token': 'a'*100}
+    data = {'email': 'a@g.c', 'token': admin['token']}
     resp = requests.post(point('/user/delete'), json=data)
-    assert resp.status_code == 200, resp.text
 
 
-def test_user_create_works():
+def test_user_create_fails_for_non_admin(admin, loggeduser):
     # create a user
-    data = {'email': 'a@g.c',
+    data = {'email': 'a@g.c2',
             'address': 'a',
             'name': 'a',
             'mobile': '1234567890',
-            'pwd': 'hash'}
+            'pwd': 'hash',
+            'token': loggeduser['token']}
     resp = requests.post(point('/user/create'), json=data)
-    assert resp.status_code == 200, resp.text
-    # remove
-    data = {'email': 'a@g.c', 'token': 'a'*100}
-    resp = requests.post(point('/user/delete'), json=data)
+    assert resp.status_code == 403, resp.text
 
 
 def test_user_logout_works(loggeduser):

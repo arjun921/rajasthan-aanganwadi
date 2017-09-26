@@ -22,6 +22,14 @@ class DB:
             self.responses = []
             self.admins = []
 
+            data = {'email': 'admin@g.c',
+                    'address': 'a',
+                    'name': 'a',
+                    'mobile': '1234567890',
+                    'pwd': 'hash'}
+            self.users.append(data)
+            self.admins.append(data['email'])
+
     def is_admin(self, uemail):
         "Is this member present in the admin list"
         if self.user_present(uemail):

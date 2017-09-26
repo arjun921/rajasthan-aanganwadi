@@ -24,7 +24,7 @@ db = utils.db
 UPLOAD_DIR = 'uploads'  # NOTE: Needs to be replaced with amazon s3
 whitelist = 'abcdefghijklmnopqrstuvwxyz1234567890'
 
-# Generic functions #######################################
+# wrappers functions #######################################
 
 
 def admin_only(function):
@@ -35,10 +35,11 @@ def admin_only(function):
     @wraps(function)
     def fn(*a, **kw):
         json = bottle.request.json
+        print(utils.is_json_readable(bottle.request))
         token = json['token']
         email = db.token_data(token)['email']
         if not db.is_admin(email):
-            raise bottle.HTTPError(403, 'not admin')
+            raise bottle.HTTPError(403, body='not admin')
         return function(*a, **kw)
     return fn
 
@@ -51,14 +52,14 @@ def login_required(function):
     @wraps(function)
     def fn(*a, **kw):
         json = bottle.request.json
-        if json is None or 'token' not in json:
-            raise bottle.HTTPError(403, 'please login')
+        if 'token' not in json:
+            raise bottle.HTTPError(403, body='please login')
         token = ''.join(i for i in json['token']
                         if i in whitelist)
         if len(token) != 100:
-            raise bottle.HTTPError(422, 'invalid token')
+            raise bottle.HTTPError(422, body='invalid token')
         if not db.token_present(token):
-            raise bottle.HTTPError(422, 'invalid token')
+            raise bottle.HTTPError(422, body='invalid token')
         return function(*a, **kw)
     return fn
 
@@ -76,17 +77,18 @@ def json_validate(function):
 
     @wraps(function)
     def newfunction(*args, **kwargs):
-        if utils.is_json_readable(bottle.request):
-            try:
-                validate(bottle.request.json, schema)
-            except:
-                raise bottle.HTTPError(422, 'JSON does not satisfy scheme')
-            else:
-                return function(*args, **kwargs)
+        try:
+            if bottle.request.json is None:
+                raise Exception('NO JSON')
+            validate(bottle.request.json, schema)
+        except:
+            raise bottle.HTTPError(422, body='JSON does not satisfy scheme')
         else:
-            raise bottle.HTTPError(422, 'JSON not found')
+            return function(*args, **kwargs)
     return newfunction
 
+
+# ROUTES #########################################
 
 @app.route('/<:re:.*>', method=['OPTIONS'])
 def enableCORSGenericRoute():
@@ -95,8 +97,6 @@ def enableCORSGenericRoute():
     bottle.response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
     string = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
     bottle.response.headers['Access-Control-Allow-Headers'] = string
-
-# USER ROUTES #########################################
 
 
 @app.post('/user/login')
@@ -130,13 +130,15 @@ def user_login():
             db.token_insert(token, email)
             return 'OK'
         else:
-            raise bottle.HTTPError(422, 'regenerate token')
+            raise bottle.HTTPError(422, body='regenerate token')
     else:
-        raise bottle.HTTPError(401, 'wrong credentials')
+        raise bottle.HTTPError(401, body='wrong credentials')
 
 
 @app.post('/user/delete')
 @json_validate
+@login_required
+@admin_only
 def user_delete():
     """
     POST /user/delete
@@ -164,6 +166,7 @@ def user_delete():
 
 @app.post('/user/logout')
 @json_validate
+@login_required
 def user_logout():
     """
     POST /user/logout
@@ -184,13 +187,15 @@ def user_logout():
     Returns OK in case of successful login
     """
     if not db.token_present(bottle.request.json['token']):
-        raise bottle.HTTPError(422, 'invalid token')
+        raise bottle.HTTPError(422, body='invalid token')
     db.token_remove(bottle.request.json['token'])
     return 'OK'
 
 
 @app.post('/user/create')
 @json_validate
+@login_required
+@admin_only
 def user_create():
     """
     POST /user/create
@@ -198,6 +203,9 @@ def user_create():
         {
             "type"      :   "object",
             "properties":   {
+                                "token"     : {"type": "string",
+                                               "minLength": 100,
+                                               "maxLength": 100},
                                 "email"     :   {
                                                     "type": "string",
                                                     "format": "email"
@@ -207,7 +215,8 @@ def user_create():
                                 "mobile"    : {"type": "string"},
                                 "pwd"       : {"type": "string"}
                             },
-            "required"  : ["email", "address", "name", "mobile", "pwd"]
+            "required"  : ["email", "address", "name",
+                           "mobile", "pwd", "token"]
         }
     ----------
 
@@ -215,8 +224,10 @@ def user_create():
     """
     json = bottle.request.json
     if db.user_present(json['email']):
-        raise bottle.HTTPError(422, 'user exists')
-    db.user_insert(json)
+        raise bottle.HTTPError(422, body='user exists')
+    data = dict(json)
+    data.pop('token')
+    db.user_insert(data)
     return 'OK'
 
 # CONTENT ROUTES #########################################
