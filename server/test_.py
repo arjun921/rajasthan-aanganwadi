@@ -12,7 +12,113 @@ testcount = '0'
 # TODO: Use fixtures to remove the need to testcount
 
 
-# ################################### /form/list
+# ################################### /form/
+def test_form_create_works():
+    global testcount
+    testcount = str(int(testcount) + 1)
+    data = {'formid': 'a',
+            'title': 'b',
+            'fields': [{'id': '1',
+                        'label': 'name',
+                        'kind': 'text',
+                        'misc': []},
+                       {'id': '2',
+                        'label': 'name',
+                        'kind': 'text',
+                        'misc': []},
+                       {'id': '3',
+                        'label': 'name',
+                        'kind': 'text',
+                        'misc': []}
+                       ],
+            'groups': []
+            }
+    url = root + '/form/create'
+    resp = requests.post(url, json=data)
+    assert resp.status_code == 200, resp.text
+
+
+def test_form_create_fails_for_duplicate_fields():
+    global testcount
+    testcount = str(int(testcount) + 1)
+    data = {'formid': 'a',
+            'title': 'b',
+            'fields': [{'id': '1',
+                        'label': 'name',
+                        'kind': 'text',
+                        'misc': []},
+                       {'id': '1',
+                        'label': 'name',
+                        'kind': 'text',
+                        'misc': []},
+                       {'id': '1',
+                        'label': 'name',
+                        'kind': 'text',
+                        'misc': []}
+                       ],
+            'groups': []
+
+            }
+    url = root + '/form/create'
+    resp = requests.post(url, json=data)
+    assert resp.status_code == 422, resp.text
+
+
+def test_form_create_fails_for_missing_keys():
+    global testcount
+    testcount = str(int(testcount) + 1)
+    data = {'formid': 'a',
+            'title': 'b',
+            'fields': [{'id': '1',
+                        'label': 'name',
+                        'kind': 'text',
+                        'misc': []},
+                       {'id': '1',
+                        'label': 'name',
+                        'kind': 'text',
+                        'misc': []},
+                       {'id': '1',
+                        'label': 'name',
+                        'kind': 'text',
+                        'misc': []}
+                       ],
+            'groups': []
+
+            }
+    url = root + '/form/create'
+    for key in data.keys():
+        d = dict(data)
+        d.pop(key)
+        resp = requests.post(url, json=d)
+        assert resp.status_code == 422, resp.text
+
+
+def test_form_create_fails_for_non_json():
+    global testcount
+    testcount = str(int(testcount) + 1)
+    data = {'formid': 'a',
+            'title': 'b',
+            'fields': [{'id': '1',
+                        'label': 'name',
+                        'kind': 'text',
+                        'misc': []},
+                       {'id': '1',
+                        'label': 'name',
+                        'kind': 'text',
+                        'misc': []},
+                       {'id': '1',
+                        'label': 'name',
+                        'kind': 'text',
+                        'misc': []}
+                       ],
+            'groups': []
+
+            }
+    url = root + '/form/create'
+    resp = requests.post(url, data=data)
+    assert resp.status_code == 422, resp.text
+
+
 def test_form_url_fails_for_non_existant_form_id():
     global testcount
     testcount = str(int(testcount) + 1)
@@ -354,7 +460,7 @@ def test_cors_urls():
             # '/content/deactivate',
             # '/form/',
             '/form/list',
-            # '/form/create',
+            '/form/create',
             # '/form/submmit',
             # '/form/deactivate',
             # '/form/activate'

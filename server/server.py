@@ -245,42 +245,51 @@ def form_formid():
         raise bottle.HTTPError(404, 'form not found')
 
 
-@app.post('/form/create')
+@endpoint
 def form_create():
     """
-    /form/create
+    POST /form/create
 
-    Expects JSON
-        {
-            'token' : <token of form creator>,
-            'form'  :   {
-                            'formid': <formid>,
-                            'title'     : <title>,
-                            'fields'    :   [
-                                                {
-                                                    'label'     :<field label>,
-                                                    'kind'      :<field kind>,
-                                                    'identifier':<identifier>
-                                                },
-                                                {
-                                                    'label'     :<field label>,
-                                                    'kind'      :<field kind>,
-                                                    'identifier':<identifier>
-                                                }
-                                            ],
-                            'groups'    : [group1, group2, ...]
-                        }
+    ----------
+    {
+        "type"          :   "object",
+        "properties"    :   {
+                                "formid":   {"type" : "string"},
+                                "title" :   {"type" : "string"},
+                                "groups":   {"type": "array",
+                                             "items": {"type": "string"}
+                                            },
+                                "fields":   {
+                                             "type" : "array",
+                                             "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                            "id":{"type":"string"},
+                                                            "label":{"type":"string"},
+                                                            "kind":{"type":"string"},
+                                                            "misc":{
+                                                                    "type":"array",
+                                                                    "items":{
+                                                                      "type":"string"},
+                                                                    "uniqueItems":True}
+                                                               },
+                                                 },
+                                             "uniqueItems": True
+                                            },
+                            },
+        "required"      : ["title", "formid", "fields", "groups"]
+    }
+    ----------
 
-    Returns JSON
         {
             'status': <true/false >,
             'formid': <formid if created>
         }
     """
-    pass
+    db.form_insert(bottle.request.json)
 
 
-def form_submit(formid):
+def form_submit():
     """
     POST /form/submit
 
