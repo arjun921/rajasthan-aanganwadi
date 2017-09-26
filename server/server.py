@@ -35,7 +35,6 @@ def admin_only(function):
     @wraps(function)
     def fn(*a, **kw):
         json = bottle.request.json
-        print(utils.is_json_readable(bottle.request))
         token = json['token']
         email = db.token_data(token)['email']
         if not db.is_admin(email):
@@ -53,13 +52,13 @@ def login_required(function):
     def fn(*a, **kw):
         json = bottle.request.json
         if 'token' not in json:
-            raise bottle.HTTPError(403, body='please login')
+            raise bottle.HTTPError(403, body='please provide a token')
         token = ''.join(i for i in json['token']
                         if i in whitelist)
         if len(token) != 100:
             raise bottle.HTTPError(422, body='invalid token')
         if not db.token_present(token):
-            raise bottle.HTTPError(422, body='invalid token')
+            raise bottle.HTTPError(403, body='user not logged in')
         return function(*a, **kw)
     return fn
 
@@ -106,6 +105,7 @@ def user_login():
     POST /user/login
 
     ----------
+
         {
             "type"      : "object",
             "properties":   {
@@ -121,6 +121,7 @@ def user_login():
         }
 
     ----------
+
     Returns OK in case of successful login
     """
     json = bottle.request.json
@@ -144,6 +145,7 @@ def user_delete():
     POST /user/delete
 
     ----------
+
         {
             "type"      : "object",
             "properties":{
@@ -156,7 +158,9 @@ def user_delete():
                         },
             "required"  : ["token", "email"]
         }
+
     ----------
+
 
     Returns OK in case of successful login
     """
@@ -172,6 +176,7 @@ def user_logout():
     POST /user/logout
 
     ----------
+
         {
             "type"      : "object",
             "properties":{
@@ -182,6 +187,7 @@ def user_logout():
                         },
             "required"  : ["token"]
         }
+
     ----------
 
     Returns OK in case of successful login
@@ -199,7 +205,9 @@ def user_logout():
 def user_create():
     """
     POST /user/create
+
     ----------
+
         {
             "type"      :   "object",
             "properties":   {
@@ -218,6 +226,7 @@ def user_create():
             "required"  : ["email", "address", "name",
                            "mobile", "pwd", "token"]
         }
+
     ----------
 
     returns OK
@@ -248,7 +257,9 @@ def user_create():
 def form_list():
     """
     POST /form/list
+
     ----------
+
         {
             "type"          :   "object",
             "properties"    :   {
@@ -258,7 +269,9 @@ def form_list():
                                 },
             "required"      : ["token"]
         }
+
     ----------
+
     Returns JSON
         {
             'forms': [list of forms ids]
@@ -269,10 +282,13 @@ def form_list():
 
 @app.post('/form')
 @json_validate
+@login_required
 def form_formid():
     """
     POST /form
+
     ----------
+
         {
             "type"          :   "object",
             "properties"    :   {
@@ -285,6 +301,7 @@ def form_formid():
         }
 
     ----------
+
     Returns JSON
         {
             "formid"    : <formid>,
@@ -293,13 +310,9 @@ def form_formid():
                                 {
                                     'label'     : <field label>,
                                     'kind'      : <kind of field>,
-                                    'identifier': <identifier>
+                                    'id'        : <identifier>
+                                    'misc'      : ['item1', 'item2']
                                 },
-                                {
-                                    'label'     : <field label>,
-                                    'kind'      : <kind of field>,
-                                    'identifier': <identifier>
-                                }
                             ]
         }
     """
@@ -320,6 +333,7 @@ def form_create():
     POST /form/create
 
     ----------
+
     {
         "type"          :   "object",
         "properties"    :   {
@@ -348,6 +362,7 @@ def form_create():
                             },
         "required"      : ["title", "formid", "fields","token"]
     }
+
     ----------
 
         {
@@ -366,6 +381,7 @@ def form_submit():
     POST /form/submit
 
     ----------
+
     {
     "type"      :   "object",
     "properties":   {
@@ -394,10 +410,8 @@ def form_submit():
     }
 
     ----------
-    Returns JSON
-        {
-            'status'    : true
-        }
+
+    returns OK
     """
     email = db.token_data(bottle.request.json['token'])
     data = dict(bottle.request.json)
@@ -413,7 +427,9 @@ def form_submit():
 def form_delete():
     """
     POST /form
+
     ----------
+
         {
             "type"          :   "object",
             "properties"    :   {
@@ -426,6 +442,7 @@ def form_delete():
         }
 
     ----------
+
     Returns OK
     """
     db.form_remove(bottle.request.json['formid'])
