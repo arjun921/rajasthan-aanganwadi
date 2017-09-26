@@ -25,11 +25,10 @@ active_urls = ['/user/login',
                # '/content/activate',
                # '/content/deactivate',
                # '/form/',
-               # '/form/list',
-               # '/form/create',
+               '/form/list',
+               '/form/create',
                # '/form/submit',
-               # '/form/delete',
-               # '/form/activate'
+               '/form/delete',
                ]
 
 
@@ -71,7 +70,86 @@ def admin():
     resp = requests.post(point('/user/logout'), json=d)
 
 
+@pytest.fixture
+def form(admin):
+    data = {'formid': 'f1',
+            'title': 'form1',
+            'fields': [
+                        {'id': '1',
+                         'label': 'name',
+                         'kind': 'text', 'misc': []},
+                        {'id': '2',
+                         'label': 'name',
+                         'kind': 'text', 'misc': []},
+                        ],
+            "token": admin['token']
+            }
+    resp = requests.post(point('/form/create'), json=data)
+    assert resp.status_code == 200, resp.text
+    yield data
+    d = {'token': data['token'], 'formid': data['formid']}
+    resp = requests.post(point('/form/delete'), json=d)
+
+
 # TESTS---------------------------------------------------------------
+def test_form_delete_fails_for_non_admin(form, loggeduser):
+    d = {'token': loggeduser['token'], 'formid': form['formid']}
+    resp = requests.post(point('/form/delete'), json=d)
+    assert resp.status_code == 403, resp.text
+
+
+def test_form_delete_works(form):
+    d = {'token': form['token'], 'formid': form['formid']}
+    resp = requests.post(point('/form/delete'), json=d)
+    assert resp.status_code == 200, resp.text
+
+
+def test_form_create_works(admin):
+    data = {'formid': 'f1',
+            'title': 'form1',
+            'fields': [
+                        {'id': '1',
+                         'label': 'name',
+                         'kind': 'text', 'misc': []},
+                        {'id': '2',
+                         'label': 'name',
+                         'kind': 'text', 'misc': []},
+                        ],
+            "token": admin['token']
+            }
+    resp = requests.post(point('/form/create'), json=data)
+    assert resp.status_code == 200, resp.text
+
+
+def test_form_create_fails_for_non_admin(loggeduser):
+    data = {'formid': 'f1',
+            'title': 'form1',
+            'fields': [
+                        {'id': '1',
+                         'label': 'name',
+                         'kind': 'text', 'misc': []},
+                        {'id': '2',
+                         'label': 'name',
+                         'kind': 'text', 'misc': []},
+                        ],
+            "token": loggeduser['token']
+            }
+    resp = requests.post(point('/form/create'), json=data)
+    assert resp.status_code == 403, resp.text
+
+
+def test_form_list_fails_for_unlogged_user():
+    data = {'token': 'b'*100}
+    resp = requests.post(point('/form/list'), json=data)
+    assert resp.status_code == 422, resp.text
+
+
+def test_form_list_works(loggeduser):
+    data = {'token': loggeduser['token']}
+    resp = requests.post(point('/form/list'), json=data)
+    assert resp.status_code == 200, resp.text
+
+
 def test_user_delete_fails_for_non_admin(admin, loggeduser):
     # remove
     data = {'email': loggeduser['email'], 'token': loggeduser['token']}

@@ -244,6 +244,7 @@ def user_create():
 
 @app.post('/form/list')
 @json_validate
+@login_required
 def form_list():
     """
     POST /form/list
@@ -312,6 +313,8 @@ def form_formid():
 
 @app.post('/form/create')
 @json_validate
+@login_required
+@admin_only
 def form_create():
     """
     POST /form/create
@@ -320,11 +323,11 @@ def form_create():
     {
         "type"          :   "object",
         "properties"    :   {
+                                "token" :   {"type" : "string",
+                                             "minLength": 100,
+                                             "maxLength": 100},
                                 "formid":   {"type" : "string"},
                                 "title" :   {"type" : "string"},
-                                "groups":   {"type": "array",
-                                             "items": {"type": "string"}
-                                            },
                                 "fields":   {
                                              "type" : "array",
                                              "items": {
@@ -343,7 +346,7 @@ def form_create():
                                              "uniqueItems": True
                                             },
                             },
-        "required"      : ["title", "formid", "fields", "groups"]
+        "required"      : ["title", "formid", "fields","token"]
     }
     ----------
 
@@ -400,6 +403,8 @@ def form_submit():
 
 @app.post('/form/delete')
 @json_validate
+@login_required
+@admin_only
 def form_delete():
     """
     POST /form
