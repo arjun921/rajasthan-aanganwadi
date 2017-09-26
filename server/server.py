@@ -51,21 +51,6 @@ def json_validate(function):
     return newfunction
 
 
-def endpoint(function):
-    """
-    Wraps a given function and turns it into a JSON endpoint
-    commplete with JSON validation protection as per the
-    provided functions's docstring.
-    """
-    method, uri = function.__doc__.split('----------')[0].strip().split(' ')
-    fn = json_validate(function)
-    if method.lower() == 'post':
-        f = app.post(uri)(fn)
-    elif method.lower() == 'get':
-        f = app.post(uri)(fn)
-    return f
-
-
 @app.route('/<:re:.*>', method=['OPTIONS'])
 def enableCORSGenericRoute():
     "This allows for CORS usage"
@@ -77,7 +62,8 @@ def enableCORSGenericRoute():
 # USER ROUTES #########################################
 
 
-@endpoint
+@app.post('/user/login')
+@json_validate
 def user_login():
     """
     POST /user/login
@@ -112,7 +98,8 @@ def user_login():
         raise bottle.HTTPError(401, 'wrong credentials')
 
 
-@endpoint
+@app.post('/user/logout')
+@json_validate
 def user_logout():
     """
     POST /user/logout
@@ -138,7 +125,8 @@ def user_logout():
     return 'OK'
 
 
-@endpoint
+@app.post('/user/create')
+@json_validate
 def user_create():
     """
     POST /user/create
@@ -179,7 +167,8 @@ def user_create():
 
 # FORM ROUTES #########################################
 
-@endpoint
+@app.post('/form/list')
+@json_validate
 def form_list():
     """
     POST /form/list
@@ -202,7 +191,8 @@ def form_list():
     return db.form_list()  # TODO: user authorize
 
 
-@endpoint
+@app.post('/form')
+@json_validate
 def form_formid():
     """
     POST /form
@@ -245,7 +235,8 @@ def form_formid():
         raise bottle.HTTPError(404, 'form not found')
 
 
-@endpoint
+@app.post('/form/create')
+@json_validate
 def form_create():
     """
     POST /form/create

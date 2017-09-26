@@ -471,3 +471,34 @@ def test_cors_urls():
         assert all(i in resp.headers for i in ['Access-Control-Allow-Origin',
                                                'Access-Control-Allow-Methods',
                                                'Access-Control-Allow-Headers'])
+
+
+def test_endpoints_accept_only_options_and_post():
+    global testcount
+    testcount = str(int(testcount) + 1)
+    urls = ['/user/login',
+            '/user/logout',
+            '/user/create',
+            # '/content/',
+            # '/content/create',
+            # '/content/list',
+            # '/content/access',
+            # '/content/remove',
+            # '/content/activate',
+            # '/content/deactivate',
+            # '/form/',
+            '/form/list',
+            '/form/create',
+            # '/form/submmit',
+            # '/form/deactivate',
+            # '/form/activate'
+            ]
+    for url in urls:
+        resp = requests.options(root + url)
+        assert resp.status_code == 200, (url)
+        resp = requests.post(root + url)
+        assert resp.status_code != 405, (url)
+        resp = requests.get(root + url)
+        assert resp.status_code == 405, (url)
+        resp = requests.put(root + url)
+        assert resp.status_code == 405, (url)
