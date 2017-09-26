@@ -17,13 +17,10 @@ active_urls = ['/user/login',
                '/user/logout',
                '/user/create',
                '/user/delete',
-               # '/content/',
-               # '/content/create',
-               # '/content/list',
-               # '/content/access',
-               # '/content/remove',
-               # '/content/activate',
-               # '/content/deactivate',
+               '/content/create',
+               '/content/list',
+               '/content',
+               '/content/delete',
                '/form',
                '/form/list',
                '/form/create',
@@ -91,7 +88,94 @@ def form(admin):
     resp = requests.post(point('/form/delete'), json=d)
 
 
+@pytest.fixture
+def resource(tmpdir, admin):
+    p = tmpdir.mkdir("sub").join("hello.txt")
+    p.write("content")
+    files = {'upload': p.open('rb')}
+    values = {'token': admin['token']}
+    r = requests.post(point('/content/create'), files=files, data=values)
+    assert r.status_code == 200, r.text
+    yield r.text, p.open('rb'), admin['token']
+    # TODO: remove resource
+    data = {'token': admin['token'], 'fname': r.text}
+    r = requests.post(point('/content/delete'), json=data)
+
+
 # TESTS---------------------------------------------------------------
+def test_resource_retreival_fails_for_unlogged_user(resource):
+    fname, f, tok = resource
+    tok = tok[1:] + 'a'
+    data = {'token': tok, 'fname': fname}
+    r = requests.post(point('/content'), json=data)
+    assert r.status_code == 403, r.text
+
+
+def test_resource_retreival_works(resource, loggeduser):
+    fname, f, tok = resource
+    tok = loggeduser['token']
+    data = {'token': tok, 'fname': fname}
+    r = requests.post(point('/content'), json=data)
+    assert r.status_code == 200, r.text
+    data = r.content.decode()
+    known = f.read().decode()
+    assert isinstance(known, str), type(known)
+
+
+def test_resource_list_lists_resources_when_present(resource, loggeduser):
+    fname, f, tok = resource
+    data = {'token': loggeduser['token']}
+    r = requests.post(point('/content/list'), json=data)
+    assert r.status_code == 200, r.text
+    assert fname in r.json()['contents']
+    data = {'token': tok}
+    r = requests.post(point('/content/list'), json=data)
+    assert r.status_code == 200, r.text
+    assert fname in r.json()['contents']
+
+
+def test_resource_delete_fails_for_non_admin(resource, loggeduser):
+    fname, f, tok = resource
+    data = {'token': loggeduser['token'], 'fname': fname}
+    r = requests.post(point('/content/delete'), json=data)
+    assert r.status_code == 403, r.text
+
+
+def test_resource_delete_works(resource):
+    fname, f, tok = resource
+    data = {'token': tok, 'fname': fname}
+    r = requests.post(point('/content/delete'), json=data)
+    assert r.status_code == 200, r.text
+
+
+def test_resource_create_fails_for_invalid_token(resource):
+    fname, f, tok = resource
+    files = {'upload': f}
+    values = {'token': tok[1:]+'a'}
+    r = requests.post(point('/content/create'), files=files, data=values)
+    assert r.status_code == 403, r.text
+    values = {'token': tok[1:]}
+    r = requests.post(point('/content/create'), files=files, data=values)
+    assert r.status_code == 422, r.text
+
+
+def test_resource_create_fails_for_non_admin(resource, loggeduser):
+    fname, f, tok = resource
+    tok = loggeduser['token']
+    files = {'upload': f}
+    values = {'token': tok}
+    r = requests.post(point('/content/create'), files=files, data=values)
+    assert r.status_code == 403, r.text
+
+
+def test_resource_create_works(resource):
+    fname, f, tok = resource
+    files = {'upload': f}
+    values = {'token': tok}
+    r = requests.post(point('/content/create'), files=files, data=values)
+    assert r.status_code == 200, r.text
+
+
 def test_form_retreival_fails_for_unlogged_user(form, loggeduser):
     data = {'token': loggeduser['token'][1:]+'1', 'formid': form['formid']}
     resp = requests.post(point('/form'), json=data)
