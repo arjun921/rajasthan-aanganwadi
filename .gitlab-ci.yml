@@ -1,9 +1,7 @@
 before_script:
-    - "virtualenv -p python3 venv"
-    - "venv/bin/pip install -r requirements.txt"
-after_script:
-    - "rm -rf venv"
+    - apt-get install -y python3-dev python3-pip
+    - pip3 install -r requirements.txt
 testinglocal:
     script:
-        - "venv/bin/python server/server.py &"
-        - "venv/bin/pytest server/test_.py"
+        - "python3 server/server.py &"
+        - pytest server/test_.py
