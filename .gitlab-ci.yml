@@ -4,7 +4,8 @@ before_script:
     - pip install virtualenv
     - virtualenv -p python venv
     - venv/bin/pip install -r requirements.txt
+    - venv/bin/python --version
 testinglocal:
     script:
-        - "venv/bin/python server/server.py &"
-        - venv/bin/pytest server/test_.py
+        - "cd server && ../venv/bin/python server.py &"
+        - "cd server && ../venv/bin/pytest server/test_.py"
