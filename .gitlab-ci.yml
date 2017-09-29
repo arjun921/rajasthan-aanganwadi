@@ -7,5 +7,3 @@ testinglocal:
     script:
         - "venv/bin/python server/server.py &"
         - "venv/bin/pytest server/test_.py"
-    only:
-        - master
