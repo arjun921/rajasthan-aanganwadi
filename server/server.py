@@ -89,8 +89,13 @@ def json_validate(function):
 # ROUTES #########################################
 
 @app.route('/<:re:.*>', method=['OPTIONS'])
-def enableCORSGenericRoute():
+def enableCORSGenericOptionsRoute():
     "This allows for CORS usage"
+    return 'OK'
+
+
+@app.hook('after_request')
+def add_cors_headers():
     bottle.response.headers['Access-Control-Allow-Origin'] = '*'
     bottle.response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
     string = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
@@ -570,4 +575,4 @@ def form_delete():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8000, reloader=True)
+    app.run(debug=True, port=8000, reloader=True, host='0.0.0.0')
