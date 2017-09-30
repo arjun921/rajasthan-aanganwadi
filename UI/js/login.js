@@ -3,7 +3,7 @@ var currenttoken = '';
 //runs functions to be executed at page load
 $(document).ready(function() {
     $(".button-collapse").sideNav();
-    document.getElementById('submit').classList.add("disabled");
+
 });
 
 //Checks password both same or not
@@ -132,42 +132,4 @@ function validations() {
 }
 
 //signup function, called when clicking sign-up button
-function sign_up() {
-    var name = document.getElementById("name").value;
-    var email = document.getElementById("email").value;
-    var pwd = document.getElementById("password_confirm").value;
-    var addr = document.getElementById("addr").value;
-    var ph = document.getElementById("ph").value;
-    pwd_hash = murmurhash3_32_gc(pwd, 124);
-    var data = {
-        name: name,
-        email: email,
-        pwd: pwd_hash.toString(),
-        address: addr,
-        mobile: ph
-    };
-
-    $.ajax({
-        url: link+'/user/create',
-        type: "POST",
-        dataType: 'json',
-        crossDomain: true,
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function(result, textStatus, xhr) {
-            alert(xhr.status);
-            alert(result);
-            alert(textStatus);
-            // if (xhr.status == 200) {
-            //     Materialize.toast("Sign-Up Success", 4000);
-            // } else {
-            //     // Materialize.toast(xhr.status, 4000);
-            //     // Materialize.toast(ajaxOptions, 4000);
-            //     Materialize.toast(thrownError, 4000);
-            // }
-            // // Materialize.toast(result, 4000);
-            // // Materialize.toast(result.status, 4000);
-        },
-    });
-}
 //register.html end ------------->

@@ -26,22 +26,24 @@
         <div class="container">
             <div class="row">
                 <div class="input-field col s12">
-                    <input id="email" type="email" class="validate">
+                    <input id="emailinput" type="email" class="validate">
                     <label for="email">Username/Email</label>
                 </div>
                 <div class="input-field col s12">
-                    <input id="password" type="password" class="validate" pattern="^(?:[0-9]+[a-zA-Z]|[a-zA-Z]+[0-9])[a-zA-Z0-9]*$">
+                  <input id="pwdinput" type="password" class="validate">
+                    <!-- <input id="pwdinput" type="password" class="validate" pattern="^(?:[0-9]+[a-zA-Z]|[a-zA-Z]+[0-9])[a-zA-Z0-9]*$"> -->
                     <label for="password" data-error="Password must have one letter and number">Password</label>
                 </div>
             </div>
             <div class="row">
-                <a class="waves-effect waves-light btn deep-purple col s8 offset-s2" onclick="Materialize.toast('Login Successful', 4000)">Login</a>
+                <a class="waves-effect waves-light btn deep-purple col s8 offset-s2" onclick="dologin()">Login</a>
             </div>
             <a href="signup.html">Sign Up</a>
         </div>
         <!--Import jQuery before materialize.js-->
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script type="text/javascript" src="js/materialize.min.js"></script>
+        <script type="text/javascript" src="js/login.js"></script>
     </center>
 </body>
 
