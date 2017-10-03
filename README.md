@@ -1,6 +1,10 @@
 Rajasthan
 =========
 
+Component   |   Coverage
+------------|-------------
+Server      |[![pipeline status](https://gitlab.com/theSage21/rajasthan/badges/master/pipeline.svg)](https://gitlab.com/theSage21/rajasthan/commits/master)
+
 
 App and server code for Aanganwadi. Relevand documents like sprint reports can be found on [Google Drive](https://drive.google.com/drive/folders/0B9peBTEXP4UdSWRmR0tKb01zaGM?usp=sharing)
 
