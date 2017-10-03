@@ -38,4 +38,6 @@ def clean_token(token):
 
 def del_uploaded(fname):
     "delete an uploaded file"
-    os.remove(os.path.join(upath, fname))
+    path = os.path.join(upath, fname)
+    if os.path.exists(path):
+        os.remove(path)

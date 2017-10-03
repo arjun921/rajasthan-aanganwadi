@@ -276,7 +276,7 @@ def content_create():
     hasher = hashlib.md5()
     hasher.update(file.file.read())
     name = hasher.hexdigest()
-    fname = name + file.filename.split('.')[-1]
+    fname = name + '.' + file.filename.split('.')[-1]
     savepath = utils.get_savepath(fname)
     file.file.seek(0)
     file.save(savepath, overwrite=True)
