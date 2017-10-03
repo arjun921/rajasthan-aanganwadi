@@ -1,4 +1,8 @@
 test_server_api:
+    only:
+        - tags
+    except:
+        - branches
     image: "python:3.5"
     before_script:
         - cd server
