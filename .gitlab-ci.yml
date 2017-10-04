@@ -1,8 +1,4 @@
 test_server_api:
-    only:
-        - tags
-    except:
-        - branches
     image: "python:3.5"
     before_script:
         - cd server
@@ -11,8 +7,16 @@ test_server_api:
         - venv/bin/pip install -r requirements.txt
         - venv/bin/python --version
     script:
-        - "venv/bin/python server.py &"
-        - "venv/bin/py.test --cov=tests"
+        - "venv/bin/coverage run -p server.py &"
+        - "venv/bin/pytest tests"
+        - "jobs -p|xargs kill -s 2"
+        - "jobs -p|xargs kill -s 2"
+        - "jobs -p|xargs kill -s 2"
+        - jobs
+        - "jobs -p|xargs kill"
+        - "jobs -p|xargs kill -s 9"
+        - coverage commbine
+        - coverage report  --include="./*"
     stage: test
     coverage: '/TOTAL\s*\d+\s*\d+\s*(\d+)\%$/'
     after_script:
