@@ -3,6 +3,7 @@ var currenttoken = '';
 //runs functions to be executed at page load
 $(document).ready(function() {
     $(".button-collapse").sideNav();
+          $("#preloader").hide();
 
 });
 
@@ -88,6 +89,9 @@ var genToken = function() {
 //<------------- Login begin
 
 function dologin(){
+
+    $("#Main_Body").hide();
+    $("#preloader").show();
     var email = $('#emailinput').val();
     var pwd = $("#pwdinput").val();
     var tok = genToken();
@@ -102,34 +106,19 @@ function dologin(){
             // $("#loginbutton").hide();
             // $("#logoutbutton").show();
             // $("#username").text(email);
-            currenttoken = tok;
-            Materialize.toast('Login Successful', 4000)
+            tok;
+            Cookies.set('currenttoken', tok);
+            Cookies.set('email', email);
+            Materialize.toast('Login Successful', 4000);
+            window.open("../UI/activity_bank.html","_self")
+        },
+        error: function(returnval) {
+          Materialize.toast(returnval, 4000);
+          $("#Main_Body").show();
+          $("#preloader").hide();
         }
     });
 
 };
 
 //Login end ------------->
-
-
-//<------------- register.html script begin
-
-//disables signup button until all form fields valid.
-function validations() {
-    if (document.getElementById("name").value != "" && document.getElementById("email").value != "" && document.getElementById("password_confirm").value != "" && document.getElementById("ph").value != "") {
-        if (document.getElementById("name").validationMessage == "" && document.getElementById("email").validationMessage == "" && document.getElementById("password_confirm").validationMessage == "" && document.getElementById("ph").validationMessage == "") {
-            // Materialize.toast("All Fields Valid", 4000);
-            console.log("All Fields Valid");
-            document.getElementById('submit').classList.remove("disabled");
-            // return ("All Fields Valid");
-        }
-    } else {
-        // Materialize.toast("Fields Invalid", 4000);
-        console.log("Fields  inValid");
-        document.getElementById('submit').classList.add("disabled");
-        // return ("Fields Invalid");
-    }
-}
-
-//signup function, called when clicking sign-up button
-//register.html end ------------->

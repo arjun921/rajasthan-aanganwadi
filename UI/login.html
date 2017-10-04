@@ -23,7 +23,7 @@
         <div class="title">
             LOGIN
         </div>
-        <div class="container">
+        <div class="container" id="Main_Body">
             <div class="row">
                 <div class="input-field col s12">
                     <input id="emailinput" type="email" class="validate">
@@ -32,17 +32,65 @@
                 <div class="input-field col s12">
                   <input id="pwdinput" type="password" class="validate">
                     <!-- <input id="pwdinput" type="password" class="validate" pattern="^(?:[0-9]+[a-zA-Z]|[a-zA-Z]+[0-9])[a-zA-Z0-9]*$"> -->
-                    <label for="password" data-error="Password must have one letter and number">Password</label>
+                    <label for="password">Password</label>
                 </div>
             </div>
             <div class="row">
                 <a class="waves-effect waves-light btn deep-purple col s8 offset-s2" onclick="dologin()">Login</a>
             </div>
+
             <a href="signup.html">Sign Up</a>
         </div>
+        <div class="col s12 m5" id="preloader" style="top: 50px;">
+    <div class="card-panel z-depth-5">
+      <div class="preloader-wrapper big active">
+  <div class="spinner-layer spinner-blue">
+    <div class="circle-clipper left">
+      <div class="circle"></div>
+    </div><div class="gap-patch">
+      <div class="circle"></div>
+    </div><div class="circle-clipper right">
+      <div class="circle"></div>
+    </div>
+  </div>
+
+  <div class="spinner-layer spinner-red">
+    <div class="circle-clipper left">
+      <div class="circle"></div>
+    </div><div class="gap-patch">
+      <div class="circle"></div>
+    </div><div class="circle-clipper right">
+      <div class="circle"></div>
+    </div>
+  </div>
+
+  <div class="spinner-layer spinner-yellow">
+    <div class="circle-clipper left">
+      <div class="circle"></div>
+    </div><div class="gap-patch">
+      <div class="circle"></div>
+    </div><div class="circle-clipper right">
+      <div class="circle"></div>
+    </div>
+  </div>
+
+  <div class="spinner-layer spinner-green">
+    <div class="circle-clipper left">
+      <div class="circle"></div>
+    </div><div class="gap-patch">
+      <div class="circle"></div>
+    </div><div class="circle-clipper right">
+      <div class="circle"></div>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </div>
         <!--Import jQuery before materialize.js-->
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script type="text/javascript" src="js/materialize.min.js"></script>
+        <script type="text/javascript" src="js/js.cookie.js"></script>
         <script type="text/javascript" src="js/login.js"></script>
     </center>
 </body>
