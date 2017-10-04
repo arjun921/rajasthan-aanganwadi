@@ -9,15 +9,4 @@ test_server_api:
     script:
         - "venv/bin/coverage run -p server.py &"
         - "venv/bin/pytest tests"
-        - jobs
-        - "jobid=$(jobs|awk '{print $1}'| sed 's/[^0-9]*//g')"
-        - "jobpid=$(jobs -p)"
-        - jobs
-        - echo $jobid $jobpid
-        - "sleep 5s && kill -s 2 $jobpid"
-        - "fg $jobid"
-        - jobs
-        - venv/bin/coverage combine
-        - venv/bin/coverage report  --include="./*"
     stage: test
-    coverage: '/TOTAL\s*\d+\s*\d+\s*(\d+)\%$/'
