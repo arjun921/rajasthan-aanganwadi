@@ -9,12 +9,11 @@ test_server_api:
     script:
         - "venv/bin/coverage run -p server.py &"
         - "venv/bin/pytest tests"
-        - "jobs -p|xargs kill -s 2"
-        - "jobs -p|xargs kill -s 2"
-        - "jobs -p|xargs kill -s 2"
-        - jobs
-        - "jobs -p|xargs kill"
-        - "jobs -p|xargs kill -s 9"
+        - "jobid=$(jobs|awk '{print $1}'| sed 's/[^0-9]*//g')"
+        - "jobpid=$(jobs -p)"
+        - "sleep 5s && kill -s 2 $jobpid"
+        - "fg $jobid"
+        - "jobs"
         - venv/bin/coverage combine
         - venv/bin/coverage report  --include="./*"
     stage: test
