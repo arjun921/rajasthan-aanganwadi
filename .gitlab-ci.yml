@@ -15,9 +15,7 @@ test_server_api:
         - jobs
         - "jobs -p|xargs kill"
         - "jobs -p|xargs kill -s 9"
-        - coverage commbine
-        - coverage report  --include="./*"
+        - venv/bin/coverage combine
+        - venv/bin/coverage report  --include="./*"
     stage: test
     coverage: '/TOTAL\s*\d+\s*\d+\s*(\d+)\%$/'
-    after_script:
-        - kill %-
