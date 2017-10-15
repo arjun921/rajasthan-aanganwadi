@@ -11,44 +11,52 @@ create = {
       'misc': []
     },
     {
+        'id': '12',
+        'label': 'Text Input2',
+        'kind': 'text',
+        'misc': []
+      },
+    {
       'id': '2',
       'label': 'Radio Question',
       'kind': 'radio',
       'misc': [{
-        'subLabel':'Red',
-        'subID':'red'
-      },
-      {
-        'subLabel':'Green',
-        'subID':'green'
-      }
-    ]
+          'subLabel': 'Red',
+          'subID': 'red'
+        },
+        {
+          'subLabel': 'Green',
+          'subID': 'green'
+        }
+      ]
     },
     {
       'id': '3',
       'label': 'name',
       'kind': 'checkbox',
       'misc': [{
-        'subLabel':'Red',
-        'subID':'red'
-      },
-      {
-        'subLabel':'Green',
-        'subID':'green'
-      }]
+          'subLabel': 'Red',
+          'subID': 'red'
+        },
+        {
+          'subLabel': 'Green',
+          'subID': 'green'
+        }
+      ]
     },
     {
       'id': '4',
       'label': 'name',
       'kind': 'dropdown',
       'misc': [{
-        'subLabel':'Red',
-        'subID':'red'
-      },
-      {
-        'subLabel':'Green',
-        'subID':'green'
-      }]
+          'subLabel': 'Red',
+          'subID': 'red'
+        },
+        {
+          'subLabel': 'Green',
+          'subID': 'green'
+        }
+      ]
     },
     {
       'id': '5',
@@ -73,19 +81,18 @@ create = {
 };
 
 formslist = {
-  'forms': [
-    {
+  'forms': [{
       'href': '',
       'formid': 'Form 1'
     },
     {
-        'href': 'http://google.com',
-        'formid': 'Google'
-      },
-      {
-        'href': 'http://facebook.com',
-        'formid': 'Facebook'
-      }
+      'href': 'http://google.com',
+      'formid': 'Google'
+    },
+    {
+      'href': 'http://facebook.com',
+      'formid': 'Facebook'
+    }
   ]
 }
 //Remove in production ---------------------->
@@ -96,14 +103,14 @@ $(document).ready(function() {
   //enables time picker
   $('.timepicker').pickatime({
     default: 'now', // Set default time: 'now', '1:30AM', '16:30'
-    fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
+    fromnow: 0, // set default time to * milliseconds from now (using with default = 'now')
     twelvehour: false, // Use AM/PM or 24-hour format
     donetext: 'OK', // text for done-button
     cleartext: 'Clear', // text for clear-button
     canceltext: 'Cancel', // Text for cancel-button
     autoclose: false, // automatic close timepicker
     ampmclickable: true, // make AM PM clickable
-    aftershow: function(){} //Function for after opening timepicker
+    aftershow: function() {} //Function for after opening timepicker
   });
   //enables datepicker
   $('.datepicker').pickadate({
@@ -166,7 +173,7 @@ function load_list() {
   });
 }
 //creates the form tag with necessary fields
-function createFormTag(){
+function createFormTag() {
   var mydiv = document.getElementById("row");
   var formTag = document.createElement('form');
   formTag.setAttribute('class', "col s12");
@@ -174,49 +181,49 @@ function createFormTag(){
   mydiv.appendChild(formTag);
 }
 
-function create_txtField() {
+function create_txtField(id,label,kind) {
   //create row
-  var mydiv = document.getElementById("form");
-  var rowDiv = document.createElement('div');
-  rowDiv.setAttribute('class', "row");
-  rowDiv.setAttribute('id', 'row_textDiv');
-  mydiv.appendChild(rowDiv);
+  // var mydiv = document.getElementById("form");
+  // var rowDiv = document.createElement('div');
+  // rowDiv.setAttribute('class', "row");
+  // rowDiv.setAttribute('id', 'row_textDiv');
+  // mydiv.appendChild(rowDiv);
 
   //create input div
-  var mydiv = document.getElementById('row_textDiv');
+  var mydiv = document.getElementById('form');
   var textIn = document.createElement('div');
   textIn.setAttribute('class', 'input-field col s12');
-  textIn.setAttribute('id', 'text_div');
+  textIn.setAttribute('id', 'text_div'+id);
   mydiv.appendChild(textIn);
 
   //create input field
-  var mydiv = document.getElementById('text_div');
+  var mydiv = document.getElementById('text_div'+id);
   var txtInput = document.createElement('input');
-  txtInput.setAttribute('id', 'last_name');
-  txtInput.setAttribute('type', 'password');
+  txtInput.setAttribute('id', id);
+  txtInput.setAttribute('type', kind);
   mydiv.appendChild(txtInput);
 
   //Create Label
-  var mydiv = document.getElementById('text_div');
+  var mydiv = document.getElementById('text_div'+id);
   var txtLabel = document.createElement('label');
-  txtLabel.setAttribute('for', 'last_name');
-  txtLabel.innerHTML = "Name";
+  txtLabel.setAttribute('for', id);
+  txtLabel.innerHTML = label;
   mydiv.appendChild(txtLabel);
 }
 //hides all forms list.
-function hide_allForms(){
+function hide_allForms() {
   $("#form_list").hide();
 }
 
-function load_form(formID){
+function load_form(formID) {
   console.log(formID);
   //load form based on id requested
   return create
 }
 //temp variable s, remove in production
 
-function create_form(s){
-$("#row").show();
+function create_form(s) {
+  $("#row").show();
   // console.log("Create Form begins");
   fields_returned = load_form(s);
   //checks if variable is defined
@@ -228,13 +235,18 @@ $("#row").show();
     var hTag = document.createElement('h5');
     hTag.innerHTML = fields_returned.title;
     myContainer.append(hTag);
+    createFormTag();
     for (var i = 0; i < fields_returned.fields.length; i++) {
       fieldIs = fields_returned.fields[i];
       console.log(fieldIs);
+      if (fieldIs.kind == 'text') {
+        console.log(fieldIs.id,fieldIs.label,fieldIs.kind);
+        create_txtField(fieldIs.id,fieldIs.label,fieldIs.kind);
+      }
     }
   }
-  createFormTag();
-  create_txtField();
+
+
 
 }
 
@@ -247,7 +259,7 @@ function create_list(lis) {
     var aTag = document.createElement('a');
     // aTag.setAttribute('href', href);
     aTag.setAttribute('class', "collection-item");
-    aTag.setAttribute('onclick','create_form(this.innerHTML)')
+    aTag.setAttribute('onclick', 'create_form(this.innerHTML)')
     aTag.innerHTML = name;
     mydiv.appendChild(aTag);
 
