@@ -48,9 +48,7 @@
         argscheck.checkArgs('sFF', 'resolveLocalFileSystemURI', arguments);
         // error callback
         var fail = function(error) {
-            if (errorCallback) {
-                errorCallback(new FileError(error));
-            }
+            errorCallback && errorCallback(new FileError(error));
         };
         // sanity check for 'not:valid:filename' or '/not:valid:filename'
         // file.spec.12 window.resolveLocalFileSystemURI should error (ENCODING_ERR) when resolving invalid URI with leading /.

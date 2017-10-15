@@ -20,9 +20,9 @@ package org.apache.cordova.file;
 
 import android.content.res.AssetManager;
 import android.net.Uri;
+import android.util.Log;
 
 import org.apache.cordova.CordovaResourceApi;
-import org.apache.cordova.LOG;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,8 +45,6 @@ public class AssetFilesystem extends Filesystem {
     private static Map<String, String[]> listCache;
     private static Map<String, Long> lengthCache;
 
-    private static final String LOG_TAG = "AssetFilesystem";
-
     private void lazyInitCaches() {
         synchronized (listCacheLock) {
             if (listCache == null) {
@@ -65,12 +63,11 @@ public class AssetFilesystem extends Filesystem {
                         try {
                             ois.close();
                         } catch (IOException e) {
-                            LOG.d(LOG_TAG, e.getLocalizedMessage());
                         }
                     }
                 }
                 if (listCache == null) {
-                    LOG.w("AssetFilesystem", "Asset manifest not found. Recursive copies and directory listing will be slow.");
+                    Log.w("AssetFilesystem", "Asset manifest not found. Recursive copies and directory listing will be slow.");
                     listCache = new HashMap<String, String[]>();
                 }
             }
@@ -119,15 +116,12 @@ public class AssetFilesystem extends Filesystem {
             }
             return length;
         } catch (IOException e) {
-            FileNotFoundException fnfe = new FileNotFoundException("File not found: " + assetPath);
-            fnfe.initCause(e);
-            throw fnfe;
+            throw new FileNotFoundException("File not found: " + assetPath);
         } finally {
             if (offr != null) {
                 try {
                     offr.inputStream.close();
                 } catch (IOException e) {
-                    LOG.d(LOG_TAG, e.getLocalizedMessage());
                 }
             }
         }
@@ -194,9 +188,7 @@ public class AssetFilesystem extends Filesystem {
         try {
             files = listAssets(pathNoSlashes);
         } catch (IOException e) {
-            FileNotFoundException fnfe = new FileNotFoundException();
-            fnfe.initCause(e);
-            throw fnfe;
+            throw new FileNotFoundException();
         }
 
         LocalFilesystemURL[] entries = new LocalFilesystemURL[files.length];
@@ -273,7 +265,7 @@ public class AssetFilesystem extends Filesystem {
 
     @Override
     String filesystemPathForURL(LocalFilesystemURL url) {
-        return new File(rootUri.getPath(), url.path).toString();
+        return null;
     }
 
     @Override

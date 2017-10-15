@@ -28,7 +28,7 @@ var requestFileSystem = function(type, size, successCallback) {
     var success = function(file_system) {
         if (file_system) {
             if (successCallback) {
-                var fs = new FileSystem(file_system.name, file_system.root);
+                fs = new FileSystem(file_system.name, file_system.root);
                 successCallback(fs);
             }
         }

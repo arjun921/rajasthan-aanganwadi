@@ -50,7 +50,10 @@ public class TestContentProvider extends ContentProvider {
         try {
             File f = File.createTempFile("test-content-provider", ".tmp");
             resourceApi.copyResource(Uri.parse("file:///android_asset" + fileName), Uri.fromFile(f));
-            return ParcelFileDescriptor.open(f, ParcelFileDescriptor.MODE_READ_ONLY);
+            FileInputStream fis = new FileInputStream(f);
+            String thisIsDumb = fis.getFD().toString();
+            int fd = Integer.parseInt(thisIsDumb.substring("FileDescriptor[".length(), thisIsDumb.length() - 1));
+            return ParcelFileDescriptor.adoptFd(fd);
         } catch (FileNotFoundException e) {
             throw e;
         } catch (IOException e) {

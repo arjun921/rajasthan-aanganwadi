@@ -20,6 +20,109 @@
 -->
 ## Release Notes for Cordova (Android) ##
 
+### 6.2.1 (Apr 02, 2017)
+* [CB-12621](https://issues.apache.org/jira/browse/CB-12621) reverted elementtree dep to 0.1.6
+
+### 6.2.0 (Mar 28, 2017)
+* [CB-12614](https://issues.apache.org/jira/browse/CB-12614) Adding headers to tests
+* [CB-8978](https://issues.apache.org/jira/browse/CB-8978) Prepare copy `resource-files` from `config.xml`
+* [CB-12605](https://issues.apache.org/jira/browse/CB-12605) Fix a requirements check failure on **Windows**
+* [CB-12595](https://issues.apache.org/jira/browse/CB-12595) This should find an **Android Studio** installation and use the sweet gradle center found inside
+* [CB-12546](https://issues.apache.org/jira/browse/CB-12546) leverage `avdmanager` if `android` warns it is no longer useful, which happens in **Android SDK Tools 25.3.1**. Explicitly set the `CWD` of the spawned emulator process to workaround a recent google android sdk bug. Rename `android_sdk_version.js` to `android_sdk.js`, to better reflect its contents. Have `create.js` copy over the `android_sdk_version` batch file.
+* [CB-12524](https://issues.apache.org/jira/browse/CB-12524) Fix for missing gradle template error. This now fetches the template from inside of the **Android Studio** directory, and falls back to a locally installed Gradle instance
+* [CB-12465](https://issues.apache.org/jira/browse/CB-12465) Writing new JUnit Test Instrumentation to replace tests and retire problmatic tests
+
+### 6.1.2 (Jan 26, 2017)
+* **Security** Change to `https` by default
+* [CB-12018](https://issues.apache.org/jira/browse/CB-12018): updated tests to work with jasmine (promise matcher tests commented out for now)
+* created directories and corresponding images for `xxhdpi` and `xxxhdpi`, both drawables and `mipmaps`
+
+### 6.1.1 (Jan 03, 2017)
+* [CB-12159](https://issues.apache.org/jira/browse/CB-12159) **Android** Keystore password prompt won't show up
+* [CB-12169](https://issues.apache.org/jira/browse/CB-12169) Check for build directory before running a clean
+* Fixed `AndroidStudio` tests to actually run, removed `app/src/main/assets/` as a requirement and added `app/src/main/res` instead, added placeholder for `build/` folder, Removed dupe `gitignore`
+
+### 6.1.0 (Nov 02, 2016)
+* [CB-12108](https://issues.apache.org/jira/browse/CB-12108) Updating gradle files to work with the latest version of Android Studio
+* [CB-12102](https://issues.apache.org/jira/browse/CB-12102) Bump travis to build to API 25
+* Bumping up the version
+* [CB-12101](https://issues.apache.org/jira/browse/CB-12101) Fix so that CLI builds don't conflict with Android Studio builds
+* [CB-12077](https://issues.apache.org/jira/browse/CB-12077) Fix paths for Android icons/splashscreens
+* added framework/build to .ratignore
+* Fix for broken testUrl test
+* Last minute change of test targets
+* Update JS snapshot to version 6.1.0-dev (via coho)
+* Set VERSION to 6.1.0-dev (via coho)
+
+### 6.0.0 (Oct 20, 2016)
+
+This release adds significant functionality, and also introduces a number
+of breaking changes.  Some of the changes to the code base will be of
+particular interest to third party webview plugin developers.
+
+#### Major Changes ####
+* Primary bridge is the EVAL_BRIDGE, which tells the WebView to execute JS directly.  This is more stable than the ONLINE_EVENT bridge
+* Full Support for Android Nougat (API 24)
+* Ice Cream Sandwich Support has been deprecated.  Minimum Supported Android Version is Jellybean (API 16/ Android 4.1)
+* Plugin Installation now CLEANS the build directory, this speeds up gradle build times and allows for CLI develoment to be more predictable
+
+Changes For Third-Party WebView Developers:
+* executeJavascript method added and is an abstract method that must be implemented
+* the EVAL_BRIDGE must be added to the WebView
+
+
+#### Curated Changes from the Git Commit Logs ####
+* Updating the gradle build for test to use the latest
+* [CB-11083](https://issues.apache.org/jira/browse/CB-11083) Fixing syncronous file check and future-proofing the JS for Travis
+* [CB-11083](https://issues.apache.org/jira/browse/CB-11083) Reading files to check for CordovaLib dependency, if so, we exclude CordovaLib to be safe
+* [CB-11083](https://issues.apache.org/jira/browse/CB-11083) Plugin build script for dependencies without a gradle file
+* [CB-11083](https://issues.apache.org/jira/browse/CB-11083) The GradleBuidler can tell the difference between a Cordova Plugin Framework and a regular framework based on the name
+* [CB-11083](https://issues.apache.org/jira/browse/CB-11083) Fix to deal with custom frameworks with their own Gradle configuration
+* [CB-12003](https://issues.apache.org/jira/browse/CB-12003) updated node_modules
+* [CB-11771](https://issues.apache.org/jira/browse/CB-11771) Deep symlink directories to target project instead of linking the directory itself
+* [CB-11880](https://issues.apache.org/jira/browse/CB-11880) android: Fail-safe for cordova.exec()
+* [CB-11999](https://issues.apache.org/jira/browse/CB-11999) add message, catch exception if require fails
+* fix issue with app_name containing apostrophes
+* [CB-8722](https://issues.apache.org/jira/browse/CB-8722) - Move icons from drawable to mipmap
+* [CB-11964](https://issues.apache.org/jira/browse/CB-11964) Call clean after plugin install and mock it in tests
+* Did a try/catch to deal with the unit tests vs actual project environment, code duplication is needed because of builderEnv
+* [CB-11964](https://issues.apache.org/jira/browse/CB-11964) Do a clean when installing a plugin to et around the bug
+* [CB-11921](https://issues.apache.org/jira/browse/CB-11921) - Add github pull request template
+* [CB-11935](https://issues.apache.org/jira/browse/CB-11935) Does a best-effort attempt to pause any processing that can be paused safely, such as animations and geolocation.
+* [CB-11640](https://issues.apache.org/jira/browse/CB-11640) Fixing check_reqs.js so it actually works
+* [CB-11640](https://issues.apache.org/jira/browse/CB-11640) Changing requirements check to ask for Java 8
+* [CB-11869](https://issues.apache.org/jira/browse/CB-11869) Fix cordova-js android exec tests
+* [CB-11907](https://issues.apache.org/jira/browse/CB-11907) Bumping Gradle to work with Android Studio 2.2 and the Android Gradle Plugin
+* Enable background start of Cordova Android apps
+* fixing jshint issues
+* replace Integer.parseInt with BigInteger so that you can use longer Android version codes
+* [CB-11828](https://issues.apache.org/jira/browse/CB-11828) Adding dirty userAgent checking to see if we're running Jellybean or not for bridge modes
+* [CB-11828](https://issues.apache.org/jira/browse/CB-11828) Switching default bridge back to ONLINE_BRIDGE
+* Add gradle build flag to enable dex in process for large projects
+* added ability for cordova activity to be viewed in a real full screen regardless of android version (as was the case in previous cordova versions)
+* Updating travis
+* Adding Static Method to CoreAndroid Plugin so we can get the BuildConfig data from other plugins
+* Bump Target and Min API levels
+* Make evaluateJavaScript brige default
+* Creating an evaluateJavascript branch
+* [CB-11727](https://issues.apache.org/jira/browse/CB-11727) - travis ci setup is still using 0.10.32 node
+* [CB-11726](https://issues.apache.org/jira/browse/CB-11726) - Update appveyor node versions to 4 and 6, so they will always use the latest versions
+* Close invalid PRs
+* [CB-11683](https://issues.apache.org/jira/browse/CB-11683) Fixed linking to directories during plugin installation.
+* fixed [CB-11078](https://issues.apache.org/jira/browse/CB-11078) Empty string for BackgroundColor preference crashes application This closes #316
+* Update JS snapshot to version 5.3.0-dev (via coho)
+* Set VERSION to 5.3.0-dev (via coho)
+* [CB-11626](https://issues.apache.org/jira/browse/CB-11626) Updated RELEASENOTES and Version for release 5.2.2
+* updated cordoova-common to 1.4.0
+* This closes #195
+* Updaing the gradle for the tests to the latest
+* [CB-11550](https://issues.apache.org/jira/browse/CB-11550) Updated RELEASENOTES for release 5.2.1
+* [CB-9489](https://issues.apache.org/jira/browse/CB-9489) Fixed "endless waiting for emulator" issue
+* Update JS snapshot to version 5.3.0-dev (via coho)
+* Set VERSION to 5.3.0-dev (via coho)
+* [CB-11444](https://issues.apache.org/jira/browse/CB-11444) Updated RELEASENOTES and Version for release 5.2.0
+* [CB-11481](https://issues.apache.org/jira/browse/CB-11481) android-library is deprecated use com.android.library instead
+
 ### 5.2.2 (Jul 26, 2016)
 * [CB-11615](https://issues.apache.org/jira/browse/CB-11615) updated `cordoova-common` to `1.4.0`
 

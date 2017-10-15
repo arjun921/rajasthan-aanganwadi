@@ -25,7 +25,7 @@ var actions      = require('./helpers/projectActions.js'),
     platformEdge = { version: getCurrentVersion(), path: '.' };
 
 var DOWNLOAD_TIMEOUT = 2 * 60 * 1000,
-    UPDATE_TIMEOUT   = 60 * 1000,
+    UPDATE_TIMEOUT   = 90 * 1000,
     PLATFORM_GIT_URL = 'https://github.com/apache/cordova-android';
 
 function getCurrentVersion() {
@@ -56,7 +56,7 @@ function testUpdate(projectname, projectid, createfrom, updatefrom, doBuild, don
 
 describe('preparing fixtures', function () {
 
-    it('cloning old platform', function (done) {
+    it('Test#001 : cloning old platform', function (done) {
         var command = util.format('git clone %s --depth=1 --branch %s %s',
             PLATFORM_GIT_URL, platformOld.version, platformOld.path);
         shell.rm('-rf', platformOld.path);
@@ -70,7 +70,7 @@ describe('preparing fixtures', function () {
 
 describe('update', function() {
 
-    it('should update major version and build the project', function(done) {
+    it('Test#002 : should update major version and build the project', function(done) {
         var projectname = 'testupdate';
         var projectid = 'com.test.update.app1';
 
@@ -78,19 +78,11 @@ describe('update', function() {
 
     }, UPDATE_TIMEOUT);
 
-    it('should downgrade major version and build the project', function(done) {
-        var projectname = 'testupdate';
-        var projectid = 'com.test.update.app2';
-
-        testUpdate(projectname, projectid, platformEdge, platformOld, true, done);
-    }, UPDATE_TIMEOUT);
-
-    // TODO: After next Android release, add tests for minor/patch version update
 });
 
 describe('cleanup', function () {
 
-    it('remove cloned old platform', function() {
+    it('Test#004 : remove cloned old platform', function() {
         shell.rm('-rf', platformOld.path);
     });
 

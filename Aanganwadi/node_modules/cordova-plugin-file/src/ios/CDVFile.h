@@ -20,8 +20,8 @@
 #import <Foundation/Foundation.h>
 #import <Cordova/CDVPlugin.h>
 
-extern NSString* const kCDVAssetsLibraryPrefix;
-extern NSString* const kCDVFilesystemURLPrefix;
+NSString* const kCDVAssetsLibraryPrefix;
+NSString* const kCDVFilesystemURLPrefix;
 
 enum CDVFileError {
     NO_ERROR = 0,

@@ -110,7 +110,7 @@ function dologin(){
             Cookies.set('currenttoken', tok);
             Cookies.set('email', email);
             Materialize.toast('Login Successful', 4000);
-            window.open("../UI/activity_bank.html","_self")
+            window.open("index.html","_self")
         },
         error: function(returnval) {
           Materialize.toast(returnval, 4000);
