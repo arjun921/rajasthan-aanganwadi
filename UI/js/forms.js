@@ -1,102 +1,5 @@
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
-//<------ Remove in production BEGIN
-var s = "f1";
-create = {
-  'formid': 'f1',
-  'title': 'Form 1',
-  'fields': [{
-      'id': '1',
-      'label': 'Text Input',
-      'kind': 'text',
-      'misc': []
-    },
-    {
-        'id': '12',
-        'label': 'Text Input2',
-        'kind': 'text',
-        'misc': []
-      },
-    {
-      'id': '2',
-      'label': 'Radio Question',
-      'kind': 'radio',
-      'misc': [{
-          'subLabel': 'Red',
-          'subID': 'red'
-        },
-        {
-          'subLabel': 'Green',
-          'subID': 'green'
-        }
-      ]
-    },
-    {
-      'id': '3',
-      'label': 'name',
-      'kind': 'checkbox',
-      'misc': [{
-          'subLabel': 'Red',
-          'subID': 'red'
-        },
-        {
-          'subLabel': 'Green',
-          'subID': 'green'
-        }
-      ]
-    },
-    {
-      'id': '4',
-      'label': 'name',
-      'kind': 'dropdown',
-      'misc': [{
-          'subLabel': 'Red',
-          'subID': 'red'
-        },
-        {
-          'subLabel': 'Green',
-          'subID': 'green'
-        }
-      ]
-    },
-    {
-      'id': '5',
-      'label': 'name',
-      'kind': 'range',
-      'misc': []
-    },
-    {
-      'id': '6',
-      'label': 'name',
-      'kind': 'datepicker',
-      'misc': []
-    },
-    {
-      'id': '7',
-      'label': 'name',
-      'kind': 'timepicker',
-      'misc': []
-    }
-  ],
-  "token": Cookies.get('currenttoken')
-};
-
-formslist = {
-  'forms': [{
-      'href': '',
-      'formid': 'Form 1'
-    },
-    {
-      'href': 'http://google.com',
-      'formid': 'Google'
-    },
-    {
-      'href': 'http://facebook.com',
-      'formid': 'Facebook'
-    }
-  ]
-}
-//Remove in production ---------------------->
-
+var lastElem = "";
 $(document).ready(function() {
   // hide row container of forms
   $("#row").hide();
@@ -181,20 +84,46 @@ function createFormTag() {
   mydiv.appendChild(formTag);
 }
 
+
+
+function createPara(id,contents){
+  var mydiv = document.getElementById('form');
+  var para = document.createElement('p');
+  para.setAttribute('id', 'rbP'+id);
+  para.innerHTML=(contents);
+  mydiv.appendChild(para);
+  lastElem = 'rbP'+id;
+}
+rb = create.fields[3];
+function createrb(rb) {
+  id = rb.id;
+  content = rb.label;
+  for (var i = 0; i < create.fields[3].misc.length; i++) {
+    console.log(create.fields[3].misc[i]);
+  }
+  // createPara(id,content);
+  // var mydiv = document.getElementById('rbP'+id);
+  // var rb = document.createElement('input');
+  // rb.setAttribute('name',id);
+  // rb.setAttribute('type','radio');
+  // rb.setAttribute('id',id);
+  // var label = document.createElement('label');
+  // label.setAttribute('for',id);
+  // label.innerHTML=("Red");
+  // mydiv.appendChild(rb);
+  // mydiv.appendChild(label);
+  // lastElem = id;
+}
+
+
 function create_txtField(id,label,kind) {
-  //create row
-  // var mydiv = document.getElementById("form");
-  // var rowDiv = document.createElement('div');
-  // rowDiv.setAttribute('class', "row");
-  // rowDiv.setAttribute('id', 'row_textDiv');
-  // mydiv.appendChild(rowDiv);
 
   //create input div
   var mydiv = document.getElementById('form');
-  var textIn = document.createElement('div');
-  textIn.setAttribute('class', 'input-field col s12');
-  textIn.setAttribute('id', 'text_div'+id);
-  mydiv.appendChild(textIn);
+  var inDiv = document.createElement('div');
+  inDiv.setAttribute('class', 'input-field col s12');
+  inDiv.setAttribute('id', 'text_div'+id);
+  mydiv.appendChild(inDiv);
 
   //create input field
   var mydiv = document.getElementById('text_div'+id);
@@ -238,10 +167,11 @@ function create_form(s) {
     createFormTag();
     for (var i = 0; i < fields_returned.fields.length; i++) {
       fieldIs = fields_returned.fields[i];
-      console.log(fieldIs);
       if (fieldIs.kind == 'text') {
-        console.log(fieldIs.id,fieldIs.label,fieldIs.kind);
+        console.log('I am createing a form field'+fieldIs.id)
+        // console.log(fieldIs.id,fieldIs.label,fieldIs.kind);
         create_txtField(fieldIs.id,fieldIs.label,fieldIs.kind);
+        lastElem = fieldIs.id;
       }
     }
   }
