@@ -4,18 +4,13 @@ var s = "f1";
 create = {
   'formid': 'f1',
   'title': 'Form 1',
-  'fields': [{
+  'fields': [
+    {
       'id': '1',
       'label': 'Text Input',
       'kind': 'text',
       'misc': []
     },
-    {
-        'id': '2',
-        'label': 'Text Input2',
-        'kind': 'text',
-        'misc': []
-      },
     {
       'id': '2',
       'label': 'Radio Question',
@@ -28,10 +23,11 @@ create = {
           'subLabel': 'Green',
           'subID': 'green'
         }]
-    },
+    }
+    ,
     {
       'id': '3',
-      'label': 'name',
+      'label': 'Checkbox Question',
       'kind': 'checkbox',
       'misc': [{
           'subLabel': 'Red',
@@ -42,39 +38,41 @@ create = {
           'subID': 'green'
         }
       ]
-    },
-    {
-      'id': '4',
-      'label': 'name',
-      'kind': 'dropdown',
-      'misc': [{
-          'subLabel': 'Red',
-          'subID': 'red'
-        },
-        {
-          'subLabel': 'Green',
-          'subID': 'green'
-        }
-      ]
-    },
-    {
-      'id': '5',
-      'label': 'name',
-      'kind': 'range',
-      'misc': []
-    },
-    {
-      'id': '6',
-      'label': 'name',
-      'kind': 'datepicker',
-      'misc': []
-    },
-    {
-      'id': '7',
-      'label': 'name',
-      'kind': 'timepicker',
-      'misc': []
     }
+    // ,
+    //
+    // {
+    //   'id': '5',
+    //   'label': 'name',
+    //   'kind': 'range',
+    //   'misc': []
+    // },
+    // {
+    //   'id': '6',
+    //   'label': 'name',
+    //   'kind': 'datepicker',
+    //   'misc': []
+    // },
+    // {
+    //   'id': '7',
+    //   'label': 'name',
+    //   'kind': 'timepicker',
+    //   'misc': []
+    // },
+    // {
+    //   'id': '4',
+    //   'label': 'name',
+    //   'kind': 'dropdown',
+    //   'misc': [{
+    //       'subLabel': 'Red',
+    //       'subID': 'red'
+    //     },
+    //     {
+    //       'subLabel': 'Green',
+    //       'subID': 'green'
+    //     }
+    //   ]
+    // }
   ],
   "token": Cookies.get('currenttoken')
 };

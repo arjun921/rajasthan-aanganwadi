@@ -1,8 +1,12 @@
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
 var lastElem = "";
 $(document).ready(function() {
+  $('select').material_select();
   // hide row container of forms
   $("#row").hide();
+  $("#radio0").hide();
+  $("#checkbox0").hide();
+  $("#range0").hide();
   //enables time picker
   $('.timepicker').pickatime({
     default: 'now', // Set default time: 'now', '1:30AM', '16:30'
@@ -87,20 +91,26 @@ function createFormTag() {
 
 
 function createPara(id,contents){
-  var mydiv = document.getElementById('form');
-  var para = document.createElement('p');
-  para.setAttribute('id', 'rbP'+id);
-  para.innerHTML=(contents);
-  mydiv.appendChild(para);
+    var mydiv = document.getElementById('form');
+    var para = document.createElement('p');
+    para.setAttribute('id', 'rbP'+id);
+    para.innerHTML=(contents);
+    mydiv.appendChild(para);
   lastElem = 'rbP'+id;
 }
-rb = create.fields[3];
-function createrb(rb) {
-  id = rb.id;
-  content = rb.label;
-  for (var i = 0; i < create.fields[3].misc.length; i++) {
-    console.log(create.fields[3].misc[i]);
-  }
+var i = 0;
+
+function duplicate(id) {
+  $("#"+id + i).hide();
+  var original = document.getElementById(id + i);
+  var clone = original.cloneNode(true); // "deep" clone
+ clone.id = "duplicater" + ++i; // there can only be one element with an ID
+  clone.onclick = duplicate; // event handlers are not cloned
+  original.parentNode.appendChild(clone);
+}
+
+function create_rb() {
+
   // createPara(id,content);
   // var mydiv = document.getElementById('rbP'+id);
   // var rb = document.createElement('input');
@@ -167,11 +177,18 @@ function create_form(s) {
     createFormTag();
     for (var i = 0; i < fields_returned.fields.length; i++) {
       fieldIs = fields_returned.fields[i];
+      console.log(fieldIs);
       if (fieldIs.kind == 'text') {
-        console.log('I am createing a form field'+fieldIs.id)
         // console.log(fieldIs.id,fieldIs.label,fieldIs.kind);
         create_txtField(fieldIs.id,fieldIs.label,fieldIs.kind);
         lastElem = fieldIs.id;
+      }
+      else if (fieldIs.kind == 'radio') {
+        console.log("Creating Radio Buttons");
+        create_rb(fieldIs.id, fieldIs.label, fieldIs.misc);
+        lastElem = fieldIs.id;
+        // create_rb()
+
       }
     }
   }
