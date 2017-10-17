@@ -523,12 +523,24 @@ def form_submit():
                                "type"  : "array",
                                "uniqueItems": True,
                                "items" : {
-                                           "type": "object",
-                                           "properties":{
-                                               "id":{"type": "string"},
-                                               "value":{"type": "string"}
-                                           },
-                                           "required": ["id", "value"]
+                                   "type": "object",
+                                   "properties":{
+                                       "id"   : {"type": "string"},
+                                       "value": {"type": "string"},
+                                       "misc" : {
+                                          "type"  : "array",
+                                          "uniqueItems": True,
+                                          "items" : {
+                                            "type": "object",
+                                            "properties":{
+                                             "id":{"type": "string"},
+                                             "value":{"type": "string"}
+                                            },
+                                            "required": ["id", "value"]
+                                            }
+                                      }
+                                   },
+                                   "required": ["id", "value"]
                                    }
                                }
                     },
