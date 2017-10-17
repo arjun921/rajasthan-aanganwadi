@@ -4,7 +4,7 @@ $(document).ready(function() {
   $('select').material_select();
 
   // $("#checkbox").hide();
-  $("#dropdown").hide();
+  // $("#dropdown").hide();
   $("#range").hide();
   $("#datepicker").hide();
   $("#timepicker").hide();
@@ -63,9 +63,18 @@ function create_newElem(field) {
     for (var i = 0; i < field.misc.length; i++) {
       cbv = field.misc[i];
       s = "<p><input type=\"checkbox\" id="+cbv.subID+" /><label for="+cbv.subID+">"+cbv.subLabel+"</label></p>"
-      console.log(s);
-      // s = "<p><input type=\"checkbox\" id="+cbv.subID+"/><label for="+cbv.subID+">"+cbv.subLabel+"</label></p>"
       $('#'+lastElem).append(s);
+    }
+  }
+  else if (field.kind=='select') {
+    console.log(field.id);
+    s = "<select id="+field.id+"><option value=\"\" disabled selected>Choose your option</option></select>"
+    $('#'+lastElem).append(s);
+    for (var i = 0; i < field.misc.length; i++) {
+      vs = field.misc[i];
+      op = "<option value="+vs.val+">"+vs.subLabel+"</option>"
+      $('#'+field.id).append(op);
+      // console.log(field.misc[i]);
     }
   }
 

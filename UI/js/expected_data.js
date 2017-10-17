@@ -4,7 +4,20 @@ var s = "f1";
 create = {
   'formid': 'f1',
   'title': 'Form 1',
-  'fields': [
+  'fields': [{
+    'id': '21',
+    'label': 'name',
+    'kind': 'select',
+    'misc': [{
+        'subLabel': 'Select 1',
+        'val': '1'
+      },
+      {
+        'subLabel': 'Green',
+        'val': 'green'
+      }
+    ]
+  },
     {
       'id': '1',
       'label': 'Text Input',
@@ -48,14 +61,14 @@ create = {
     ,{
       'id': '4',
       'label': 'name',
-      'kind': 'dropdown',
+      'kind': 'select',
       'misc': [{
-          'subLabel': 'Red',
-          'subID': 'red'
+          'subLabel': 'Select 1',
+          'val': '1'
         },
         {
           'subLabel': 'Green',
-          'subID': 'green'
+          'val': 'green'
         }
       ]
     },
