@@ -66,7 +66,7 @@ function load_form(formID) {
 }
 //temp variable s, remove in production
 
-//called on click of form name from list. 
+//called on click of form name from list.
 function create_form(s) {
   // console.log("Create Form begins");
   fields_returned = load_form(s);
@@ -81,6 +81,8 @@ function create_form(s) {
     for (var i = 0; i < fields_returned.fields.length; i++) {
       create_newElem(fields_returned.fields[i]);
     }
+    but = "<button style=\"padding-bottom:20px;\" class=\"btn waves-effect waves-light\"onclick=\"doSubmit()\">Submit<i class=\"material-icons right\">send</i></button>"
+    $('#'+lastElem).append(but);
     //enables time picker
     $('.timepicker').pickatime({
       default: 'now', // Set default time: 'now', '1:30AM', '16:30'
@@ -105,6 +107,7 @@ function create_form(s) {
     //enables select
    $('select').material_select();
   }
+
 
 }
 
@@ -196,8 +199,11 @@ function logout() {
         Cookies.remove('currenttoken');
         Cookies.remove('email');
       }
-
     }
   });
+} // ---------------------------------logout----------
 
-}; // ---------------------------------logout----------
+
+function doSubmit() {
+  alert("Submit Succes");
+}
