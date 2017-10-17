@@ -9,7 +9,13 @@ create = {
       'id': '1',
       'label': 'Text Input',
       'kind': 'text',
-      'misc': []
+      'misc': [{'spec':'text'}]
+    },
+    {
+      'id': '2',
+      'label': 'Password Input',
+      'kind': 'text',
+      'misc': [{'spec':'password'}]
     },
     {
       'id': '2',
@@ -39,40 +45,40 @@ create = {
         }
       ]
     }
-    // ,
-    //
-    // {
-    //   'id': '5',
-    //   'label': 'name',
-    //   'kind': 'range',
-    //   'misc': []
-    // },
-    // {
-    //   'id': '6',
-    //   'label': 'name',
-    //   'kind': 'datepicker',
-    //   'misc': []
-    // },
-    // {
-    //   'id': '7',
-    //   'label': 'name',
-    //   'kind': 'timepicker',
-    //   'misc': []
-    // },
-    // {
-    //   'id': '4',
-    //   'label': 'name',
-    //   'kind': 'dropdown',
-    //   'misc': [{
-    //       'subLabel': 'Red',
-    //       'subID': 'red'
-    //     },
-    //     {
-    //       'subLabel': 'Green',
-    //       'subID': 'green'
-    //     }
-    //   ]
-    // }
+    ,{
+      'id': '4',
+      'label': 'name',
+      'kind': 'dropdown',
+      'misc': [{
+          'subLabel': 'Red',
+          'subID': 'red'
+        },
+        {
+          'subLabel': 'Green',
+          'subID': 'green'
+        }
+      ]
+    },
+
+    {
+      'id': '5',
+      'label': 'name',
+      'kind': 'range',
+      'misc': []
+    },
+    {
+      'id': '6',
+      'label': 'name',
+      'kind': 'datepicker',
+      'misc': []
+    },
+    {
+      'id': '7',
+      'label': 'name',
+      'kind': 'timepicker',
+      'misc': []
+    }
+
   ],
   "token": Cookies.get('currenttoken')
 };
