@@ -21,7 +21,7 @@ create = {
       }]
     },
     {
-      'id': '2',
+      'id': '3',
       'label': 'Radio Question',
       'kind': 'radio',
       'misc': [{
@@ -35,7 +35,7 @@ create = {
       ]
     },
     {
-      'id': '3',
+      'id': '4',
       'label': 'Checkbox Question',
       'kind': 'checkbox',
       'misc': [{
@@ -49,7 +49,7 @@ create = {
       ]
     },
     {
-      'id': '4',
+      'id': '5',
       'label': 'Question for Select/Dropwdown',
       'kind': 'select',
       'misc': [{
@@ -63,7 +63,7 @@ create = {
       ]
     },
     {
-      'id': '5',
+      'id': '6',
       'label': 'Question for Range',
       'kind': 'range',
       'misc': [{
@@ -72,13 +72,13 @@ create = {
       }]
     },
     {
-      'id': '6',
+      'id': '7',
       'label': 'Question for Datepicker',
       'kind': 'datepicker',
       'misc': []
     },
     {
-      'id': '7',
+      'id': '8',
       'label': 'Q for time picker',
       'kind': 'timepicker',
       'misc': []

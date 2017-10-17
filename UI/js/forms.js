@@ -60,7 +60,6 @@ function hide_allForms() {
 }
 
 function load_form(formID) {
-  console.log(formID);
   //load form based on id requested
   return create
 }
@@ -68,21 +67,20 @@ function load_form(formID) {
 
 //called on click of form name from list.
 function create_form(s) {
-  // console.log("Create Form begins");
   fields_returned = load_form(s);
-  console.log(fields_returned);
+  Cookies.set('fields_returned', fields_returned);
   //checks if variable is defined
   if (typeof fields_returned !== 'undefined') {
     //hides all forms list
     hide_allForms();
     //dynamically generates forms in same view
-    h = "<h5>"+fields_returned.title+"</h5>"
-    $('#'+lastElem).append(h);
+    h = "<h5>" + fields_returned.title + "</h5>"
+    $('#' + lastElem).append(h);
     for (var i = 0; i < fields_returned.fields.length; i++) {
       create_newElem(fields_returned.fields[i]);
     }
     but = "<button style=\"padding-bottom:20px;\" class=\"btn waves-effect waves-light\"onclick=\"doSubmit()\">Submit<i class=\"material-icons right\">send</i></button>"
-    $('#'+lastElem).append(but);
+    $('#' + lastElem).append(but);
     //enables time picker
     $('.timepicker').pickatime({
       default: 'now', // Set default time: 'now', '1:30AM', '16:30'
@@ -105,7 +103,7 @@ function create_form(s) {
       closeOnSelect: false // Close upon selecting a date,
     });
     //enables select
-   $('select').material_select();
+    $('select').material_select();
   }
 
 
@@ -128,59 +126,50 @@ function create_list(lis) {
 }
 
 function create_newElem(field) {
-  if (field.kind=='text') {
-    s = "<div class=\"input-field col s6\"><input id="+field.id+" type="+field.misc[0].spec+"><label for="+field.id+">"+field.label+"</label></div>"
-    $('#'+lastElem).append(s);
-  }
-  else if (field.kind=='radio') {
-    p = "<p>"+field.label+"</p>"
-    $('#'+lastElem).append(p);
+  if (field.kind == 'text') {
+    s = "<div class=\"input-field col s6\"><input id=" + field.id + " type=" + field.misc[0].spec + "><label for=" + field.id + ">" + field.label + "</label></div>"
+    $('#' + lastElem).append(s);
+  } else if (field.kind == 'radio') {
+    p = "<p>" + field.label + "</p>"
+    $('#' + lastElem).append(p);
     for (var i = 0; i < field.misc.length; i++) {
       va = field.misc[i];
-      prb = "<p>  <input name="+field.id+" type=\"radio\" id="+va.subID+" value="+va.subID+" />  <label for="+va.subID+">"+va.subLabel+"</label></p>"
-      $('#'+lastElem).append(prb);
+      prb = "<p>  <input name=" + field.id + " type=\"radio\" id=" + va.subID + " value=" + va.subID + " />  <label for=" + va.subID + ">" + va.subLabel + "</label></p>"
+      $('#' + lastElem).append(prb);
     }
-  }
-  else if (field.kind=='checkbox') {
-    p = "<p>"+field.label+"</p>"
-    $('#'+lastElem).append(p);
+  } else if (field.kind == 'checkbox') {
+    p = "<p>" + field.label + "</p>"
+    $('#' + lastElem).append(p);
     for (var i = 0; i < field.misc.length; i++) {
       cbv = field.misc[i];
-      s = "<p><input type=\"checkbox\" id="+cbv.subID+" /><label for="+cbv.subID+">"+cbv.subLabel+"</label></p>"
-      $('#'+lastElem).append(s);
+      s = "<p><input type=\"checkbox\" id=" + cbv.subID + " /><label for=" + cbv.subID + ">" + cbv.subLabel + "</label></p>"
+      $('#' + lastElem).append(s);
     }
-  }
-  else if (field.kind=='select') {
-    p = "<p>"+field.label+"</p>"
-    $('#'+lastElem).append(p);
-    s = "<select id="+field.id+"><option value=\"\" disabled selected>Choose your option</option></select>"
-    $('#'+lastElem).append(s);
+  } else if (field.kind == 'select') {
+    p = "<p>" + field.label + "</p>"
+    $('#' + lastElem).append(p);
+    s = "<select id=" + field.id + "><option value=\"\" disabled selected>Choose your option</option></select>"
+    $('#' + lastElem).append(s);
     for (var i = 0; i < field.misc.length; i++) {
       vs = field.misc[i];
-      op = "<option value="+vs.subVal+">"+vs.subLabel+"</option>"
-      $('#'+field.id).append(op);
-      // console.log(field.misc[i]);
+      op = "<option value=" + vs.subVal + ">" + vs.subLabel + "</option>"
+      $('#' + field.id).append(op);
     }
-  }
-  else if (field.kind=='range') {
-    s = "<p>"+field.label+"</p>"
-    $('#'+lastElem).append(s);
-    sp = "<p class=\"range-field\"><input type=\"range\" id="+field.id+" min="+field.misc[0].min+" max="+field.misc[0].max+" /></p>"
-    $('#'+lastElem).append(sp);
-  }
-  else if (field.kind=='datepicker') {
-    s = "<p>"+field.label+"</p>"
-    $('#'+lastElem).append(s);
-    pic = "<input type=\"text\" class=\"datepicker\" id="+field.id+" placeholder=\"Choose Date\">"
-    $('#'+lastElem).append(pic);
-    console.log(field);
-  }
-  else if (field.kind == 'timepicker') {
-    s = "<p>"+field.label+"</p>"
-    $('#'+lastElem).append(s);
-    pic = "<input type=\"text\" class=\"timepicker\" id="+field.id+" placeholder=\"Select Time\">"
-    $('#'+lastElem).append(pic);
-    console.log(field);
+  } else if (field.kind == 'range') {
+    s = "<p>" + field.label + "</p>"
+    $('#' + lastElem).append(s);
+    sp = "<p class=\"range-field\"><input type=\"range\" id=" + field.id + " min=" + field.misc[0].min + " max=" + field.misc[0].max + " /></p>"
+    $('#' + lastElem).append(sp);
+  } else if (field.kind == 'datepicker') {
+    s = "<p>" + field.label + "</p>"
+    $('#' + lastElem).append(s);
+    pic = "<input type=\"text\" class=\"datepicker\" id=" + field.id + " placeholder=\"Choose Date\">"
+    $('#' + lastElem).append(pic);
+  } else if (field.kind == 'timepicker') {
+    s = "<p>" + field.label + "</p>"
+    $('#' + lastElem).append(s);
+    pic = "<input type=\"text\" class=\"timepicker\" id=" + field.id + " placeholder=\"Select Time\">"
+    $('#' + lastElem).append(pic);
   }
 }
 //<Logout begins
@@ -205,5 +194,76 @@ function logout() {
 
 
 function doSubmit() {
-  alert("Submit Succes");
+  fields_returned = JSON.parse(Cookies.get('fields_returned'));
+  dataRet = {}
+  data = []
+  dataRet['token'] = Cookies.get('currenttoken');
+  dataRet['formid'] = fields_returned.formid;
+  for (var i = 0; i < fields_returned.fields.length; i++) {
+    temp = fields_returned.fields[i];
+    id = temp.id;
+    val = {}
+    if ((temp.kind == 'text') || (temp.kind == 'select') || (temp.kind == 'range') || (temp.kind == 'datepicker') || (temp.kind == 'timepicker')) {
+      val['id'] = id;
+      val['value'] = document.getElementById(id).value;
+
+    }
+    if (temp.kind == 'radio') {
+      s = "input[name='" + id + "']:checked"
+      val['id'] = id;
+      val['value'] = $(s).val();
+
+    } else if (temp.kind == 'checkbox') {
+      te = []
+      for (var j = 0; j < temp.misc.length; j++) {
+        myVals = {};
+        myVals["id"] = temp.misc[j].subID;
+        myVals["value"] = document.getElementById(temp.misc[j].subID).checked;
+        te.push(myVals);
+      }
+      val['id'] = id;
+      val['value'] = "";
+      console.log(te);
+      val['misc'] = te;
+
+    }
+    data.push(val)
+
+  }
+  dataRet['data'] = data;
+  if (typeof Cookies.get('currenttoken') !== 'undefined') {
+    $.ajax({
+      url: (link + '/form/submit'),
+      type: 'post',
+      contentType: 'application/json',
+      data: JSON.stringify(dataRet),
+      success: function(data, st, xhr) {
+        alert(data);
+        alert(st);
+        alert(xhr);
+        alert(xhr.status);
+        // if (xhr.status==200) {
+        //   Materialize.toast("User Logout Successful", 4000);
+        //   Cookies.remove('currenttoken');
+        //   Cookies.remove('email');
+        // }
+
+      }
+    });
+  }
+
+  console.log(JSON.stringify(dataRet));
+}
+
+sentDataJson = {
+  "token": "alyosn4w4apq683i221kd9ia37l3e3sh693gjd4yasijw2l99bgfi4mr8s27w2gpkkit3h6f2n1fpgtofgd6672mtyrd7tdrgxah",
+  "formid": "f1",
+  "data": [{"id": "1","value": "asasdaasda"},
+  {"id": "2","value": "123123123123asdas"},
+  {"id": "3","value": "red"},
+  {"id": "4","value": "","misc": [{"id": "red1","value": true}, {"id": "green1","value": false}]},
+  {"id": "5","value": "green"},
+  {"id": "6","value": "15"},
+  {"id": "7","value": "17 October, 2017"},
+  {"id": "8","value": "03:20"}]
 }
