@@ -66,6 +66,7 @@ function load_form(formID) {
 }
 //temp variable s, remove in production
 
+//called on click of form name from list. 
 function create_form(s) {
   // console.log("Create Form begins");
   fields_returned = load_form(s);

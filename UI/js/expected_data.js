@@ -4,18 +4,21 @@ var s = "f1";
 create = {
   'formid': 'f1',
   'title': 'Form 1',
-  'fields': [
-    {
+  'fields': [{
       'id': '1',
       'label': 'Text Input',
       'kind': 'text',
-      'misc': [{'spec':'text'}]
+      'misc': [{
+        'spec': 'text'
+      }]
     },
     {
       'id': '2',
       'label': 'Password Input',
       'kind': 'text',
-      'misc': [{'spec':'password'}]
+      'misc': [{
+        'spec': 'password'
+      }]
     },
     {
       'id': '2',
@@ -28,9 +31,9 @@ create = {
         {
           'subLabel': 'Green',
           'subID': 'green'
-        }]
-    }
-    ,
+        }
+      ]
+    },
     {
       'id': '3',
       'label': 'Checkbox Question',
@@ -44,8 +47,8 @@ create = {
           'subID': 'green1'
         }
       ]
-    }
-    ,{
+    },
+    {
       'id': '4',
       'label': 'Question for Select/Dropwdown',
       'kind': 'select',
@@ -63,8 +66,10 @@ create = {
       'id': '5',
       'label': 'Question for Range',
       'kind': 'range',
-      'misc': [{'min':'0',
-      'max':'100'}]
+      'misc': [{
+        'min': '0',
+        'max': '100'
+      }]
     },
     {
       'id': '6',
@@ -78,7 +83,6 @@ create = {
       'kind': 'timepicker',
       'misc': []
     }
-
   ],
   "token": Cookies.get('currenttoken')
 };
