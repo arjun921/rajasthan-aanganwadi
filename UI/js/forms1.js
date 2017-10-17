@@ -2,10 +2,6 @@ var link = 'https://rajasthan-aanganwadi.herokuapp.com';
 var lastElem = "form";
 $(document).ready(function() {
   $('select').material_select();
-
-  // $("#checkbox").hide();
-  // $("#dropdown").hide();
-  $("#range").hide();
   $("#datepicker").hide();
   $("#timepicker").hide();
   //create form begins
@@ -67,15 +63,21 @@ function create_newElem(field) {
     }
   }
   else if (field.kind=='select') {
-    console.log(field.id);
     s = "<select id="+field.id+"><option value=\"\" disabled selected>Choose your option</option></select>"
     $('#'+lastElem).append(s);
     for (var i = 0; i < field.misc.length; i++) {
       vs = field.misc[i];
-      op = "<option value="+vs.val+">"+vs.subLabel+"</option>"
+      op = "<option value="+vs.subVal+">"+vs.subLabel+"</option>"
       $('#'+field.id).append(op);
       // console.log(field.misc[i]);
     }
+  }
+  else if (field.kind=='range') {
+    s = "<p>"+field.label+"</p>"
+    $('#'+lastElem).append(s);
+    sp = "<p class=\"range-field\"><input type=\"range\" id="+field.id+" min="+field.misc[0].min+" max="+field.misc[0].max+" /></p>"
+    $('#'+lastElem).append(sp);
+    console.log(field.misc[0].max);
   }
 
 
