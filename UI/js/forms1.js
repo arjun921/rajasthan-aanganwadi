@@ -77,8 +77,15 @@ function create_newElem(field) {
     $('#'+lastElem).append(s);
     sp = "<p class=\"range-field\"><input type=\"range\" id="+field.id+" min="+field.misc[0].min+" max="+field.misc[0].max+" /></p>"
     $('#'+lastElem).append(sp);
-    console.log(field.misc[0].max);
   }
+  else if (field.kind=='datepicker') {
+    s = "<p>"+field.label+"</p>"
+    $('#'+lastElem).append(s);
+    pic = "<input type=\"text\" class=\"datepicker\" id="+field.id+" placeholder=\"Choose Date\">"
+    $('#'+lastElem).append(pic);
+    console.log(field);
+  }
+  
 
 
 }

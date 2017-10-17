@@ -68,13 +68,13 @@ create = {
     },
     {
       'id': '6',
-      'label': 'name',
+      'label': 'Question for Datepicker',
       'kind': 'datepicker',
       'misc': []
     },
     {
       'id': '7',
-      'label': 'name',
+      'label': 'Q for time picker',
       'kind': 'timepicker',
       'misc': []
     }
