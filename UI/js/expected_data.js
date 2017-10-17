@@ -37,17 +37,17 @@ create = {
       'kind': 'checkbox',
       'misc': [{
           'subLabel': 'Red',
-          'subID': 'red'
+          'subID': 'red1'
         },
         {
           'subLabel': 'Green',
-          'subID': 'green'
+          'subID': 'green1'
         }
       ]
     }
     ,{
       'id': '4',
-      'label': 'name',
+      'label': 'Question for Select/Dropwdown',
       'kind': 'select',
       'misc': [{
           'subLabel': 'Select 1',

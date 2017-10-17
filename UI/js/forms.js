@@ -1,33 +1,7 @@
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
-var lastElem = "";
+var lastElem = "form";
 $(document).ready(function() {
   $('select').material_select();
-  // hide row container of forms
-  $("#row").hide();
-  $("#radio0").hide();
-  $("#checkbox0").hide();
-  $("#range0").hide();
-  //enables time picker
-  $('.timepicker').pickatime({
-    default: 'now', // Set default time: 'now', '1:30AM', '16:30'
-    fromnow: 0, // set default time to * milliseconds from now (using with default = 'now')
-    twelvehour: false, // Use AM/PM or 24-hour format
-    donetext: 'OK', // text for done-button
-    cleartext: 'Clear', // text for clear-button
-    canceltext: 'Cancel', // Text for cancel-button
-    autoclose: false, // automatic close timepicker
-    ampmclickable: true, // make AM PM clickable
-    aftershow: function() {} //Function for after opening timepicker
-  });
-  //enables datepicker
-  $('.datepicker').pickadate({
-    selectMonths: true, // Creates a dropdown to control month
-    selectYears: 15, // Creates a dropdown of 15 years to control year,
-    today: 'Today',
-    clear: 'Clear',
-    close: 'Ok',
-    closeOnSelect: false // Close upon selecting a date,
-  });
   //enables nav
   $(".button-collapse").sideNav();
   //generates forms list
@@ -79,76 +53,7 @@ function load_list() {
     }
   });
 }
-//creates the form tag with necessary fields
-function createFormTag() {
-  var mydiv = document.getElementById("row");
-  var formTag = document.createElement('form');
-  formTag.setAttribute('class', "col s12");
-  formTag.setAttribute('id', 'form');
-  mydiv.appendChild(formTag);
-}
 
-
-
-function createPara(id,contents){
-    var mydiv = document.getElementById('form');
-    var para = document.createElement('p');
-    para.setAttribute('id', 'rbP'+id);
-    para.innerHTML=(contents);
-    mydiv.appendChild(para);
-  lastElem = 'rbP'+id;
-}
-var i = 0;
-
-function duplicate(id) {
-  $("#"+id + i).hide();
-  var original = document.getElementById(id + i);
-  var clone = original.cloneNode(true); // "deep" clone
- clone.id = "duplicater" + ++i; // there can only be one element with an ID
-  clone.onclick = duplicate; // event handlers are not cloned
-  original.parentNode.appendChild(clone);
-}
-
-function create_rb() {
-
-  // createPara(id,content);
-  // var mydiv = document.getElementById('rbP'+id);
-  // var rb = document.createElement('input');
-  // rb.setAttribute('name',id);
-  // rb.setAttribute('type','radio');
-  // rb.setAttribute('id',id);
-  // var label = document.createElement('label');
-  // label.setAttribute('for',id);
-  // label.innerHTML=("Red");
-  // mydiv.appendChild(rb);
-  // mydiv.appendChild(label);
-  // lastElem = id;
-}
-
-
-function create_txtField(id,label,kind) {
-
-  //create input div
-  var mydiv = document.getElementById('form');
-  var inDiv = document.createElement('div');
-  inDiv.setAttribute('class', 'input-field col s12');
-  inDiv.setAttribute('id', 'text_div'+id);
-  mydiv.appendChild(inDiv);
-
-  //create input field
-  var mydiv = document.getElementById('text_div'+id);
-  var txtInput = document.createElement('input');
-  txtInput.setAttribute('id', id);
-  txtInput.setAttribute('type', kind);
-  mydiv.appendChild(txtInput);
-
-  //Create Label
-  var mydiv = document.getElementById('text_div'+id);
-  var txtLabel = document.createElement('label');
-  txtLabel.setAttribute('for', id);
-  txtLabel.innerHTML = label;
-  mydiv.appendChild(txtLabel);
-}
 //hides all forms list.
 function hide_allForms() {
   $("#form_list").hide();
@@ -162,38 +67,43 @@ function load_form(formID) {
 //temp variable s, remove in production
 
 function create_form(s) {
-  $("#row").show();
   // console.log("Create Form begins");
   fields_returned = load_form(s);
+  console.log(fields_returned);
   //checks if variable is defined
   if (typeof fields_returned !== 'undefined') {
     //hides all forms list
     hide_allForms();
     //dynamically generates forms in same view
-    var myContainer = document.getElementById("row");
-    var hTag = document.createElement('h5');
-    hTag.innerHTML = fields_returned.title;
-    myContainer.append(hTag);
-    createFormTag();
+    h = "<h5>"+fields_returned.title+"</h5>"
+    $('#'+lastElem).append(h);
     for (var i = 0; i < fields_returned.fields.length; i++) {
-      fieldIs = fields_returned.fields[i];
-      console.log(fieldIs);
-      if (fieldIs.kind == 'text') {
-        // console.log(fieldIs.id,fieldIs.label,fieldIs.kind);
-        create_txtField(fieldIs.id,fieldIs.label,fieldIs.kind);
-        lastElem = fieldIs.id;
-      }
-      else if (fieldIs.kind == 'radio') {
-        console.log("Creating Radio Buttons");
-        create_rb(fieldIs.id, fieldIs.label, fieldIs.misc);
-        lastElem = fieldIs.id;
-        // create_rb()
-
-      }
+      create_newElem(fields_returned.fields[i]);
     }
+    //enables time picker
+    $('.timepicker').pickatime({
+      default: 'now', // Set default time: 'now', '1:30AM', '16:30'
+      fromnow: 0, // set default time to * milliseconds from now (using with default = 'now')
+      twelvehour: false, // Use AM/PM or 24-hour format
+      donetext: 'OK', // text for done-button
+      cleartext: 'Clear', // text for clear-button
+      canceltext: 'Cancel', // Text for cancel-button
+      autoclose: false, // automatic close timepicker
+      ampmclickable: true, // make AM PM clickable
+      aftershow: function() {} //Function for after opening timepicker
+    });
+    //enables datepicker
+    $('.datepicker').pickadate({
+      selectMonths: true, // Creates a dropdown to control month
+      selectYears: 15, // Creates a dropdown of 15 years to control year,
+      today: 'Today',
+      clear: 'Clear',
+      close: 'Ok',
+      closeOnSelect: false // Close upon selecting a date,
+    });
+    //enables select
+   $('select').material_select();
   }
-
-
 
 }
 
@@ -213,7 +123,62 @@ function create_list(lis) {
   }
 }
 
-
+function create_newElem(field) {
+  if (field.kind=='text') {
+    s = "<div class=\"input-field col s6\"><input id="+field.id+" type="+field.misc[0].spec+"><label for="+field.id+">"+field.label+"</label></div>"
+    $('#'+lastElem).append(s);
+  }
+  else if (field.kind=='radio') {
+    p = "<p>"+field.label+"</p>"
+    $('#'+lastElem).append(p);
+    for (var i = 0; i < field.misc.length; i++) {
+      va = field.misc[i];
+      prb = "<p>  <input name="+field.id+" type=\"radio\" id="+va.subID+" value="+va.subID+" />  <label for="+va.subID+">"+va.subLabel+"</label></p>"
+      $('#'+lastElem).append(prb);
+    }
+  }
+  else if (field.kind=='checkbox') {
+    p = "<p>"+field.label+"</p>"
+    $('#'+lastElem).append(p);
+    for (var i = 0; i < field.misc.length; i++) {
+      cbv = field.misc[i];
+      s = "<p><input type=\"checkbox\" id="+cbv.subID+" /><label for="+cbv.subID+">"+cbv.subLabel+"</label></p>"
+      $('#'+lastElem).append(s);
+    }
+  }
+  else if (field.kind=='select') {
+    p = "<p>"+field.label+"</p>"
+    $('#'+lastElem).append(p);
+    s = "<select id="+field.id+"><option value=\"\" disabled selected>Choose your option</option></select>"
+    $('#'+lastElem).append(s);
+    for (var i = 0; i < field.misc.length; i++) {
+      vs = field.misc[i];
+      op = "<option value="+vs.subVal+">"+vs.subLabel+"</option>"
+      $('#'+field.id).append(op);
+      // console.log(field.misc[i]);
+    }
+  }
+  else if (field.kind=='range') {
+    s = "<p>"+field.label+"</p>"
+    $('#'+lastElem).append(s);
+    sp = "<p class=\"range-field\"><input type=\"range\" id="+field.id+" min="+field.misc[0].min+" max="+field.misc[0].max+" /></p>"
+    $('#'+lastElem).append(sp);
+  }
+  else if (field.kind=='datepicker') {
+    s = "<p>"+field.label+"</p>"
+    $('#'+lastElem).append(s);
+    pic = "<input type=\"text\" class=\"datepicker\" id="+field.id+" placeholder=\"Choose Date\">"
+    $('#'+lastElem).append(pic);
+    console.log(field);
+  }
+  else if (field.kind == 'timepicker') {
+    s = "<p>"+field.label+"</p>"
+    $('#'+lastElem).append(s);
+    pic = "<input type=\"text\" class=\"timepicker\" id="+field.id+" placeholder=\"Select Time\">"
+    $('#'+lastElem).append(pic);
+    console.log(field);
+  }
+}
 //<Logout begins
 function logout() {
   $.ajax({

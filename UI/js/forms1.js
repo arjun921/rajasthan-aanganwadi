@@ -2,8 +2,7 @@ var link = 'https://rajasthan-aanganwadi.herokuapp.com';
 var lastElem = "form";
 $(document).ready(function() {
   $('select').material_select();
-  $("#datepicker").hide();
-  $("#timepicker").hide();
+
   //create form begins
   h = "<h5>"+create.title+"</h5>"
   $('#'+lastElem).append(h);
@@ -31,15 +30,15 @@ $(document).ready(function() {
     close: 'Ok',
     closeOnSelect: false // Close upon selecting a date,
   });
+  //enables select
+ $('select').material_select();
   //enables nav
   $(".button-collapse").sideNav();
- $('select').material_select();
+
 });
 
 
 function create_newElem(field) {
-
-
   if (field.kind=='text') {
     s = "<div class=\"input-field col s6\"><input id="+field.id+" type="+field.misc[0].spec+"><label for="+field.id+">"+field.label+"</label></div>"
     $('#'+lastElem).append(s);
@@ -92,9 +91,6 @@ function create_newElem(field) {
     $('#'+lastElem).append(pic);
     console.log(field);
   }
-
-
-
 }
 
 // function create_newElem(field){
