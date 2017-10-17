@@ -85,7 +85,14 @@ function create_newElem(field) {
     $('#'+lastElem).append(pic);
     console.log(field);
   }
-  
+  else if (field.kind == 'timepicker') {
+    s = "<p>"+field.label+"</p>"
+    $('#'+lastElem).append(s);
+    pic = "<input type=\"text\" class=\"timepicker\" id="+field.id+" placeholder=\"Select Time\">"
+    $('#'+lastElem).append(pic);
+    console.log(field);
+  }
+
 
 
 }
