@@ -251,19 +251,4 @@ function doSubmit() {
       }
     });
   }
-
-  console.log(JSON.stringify(dataRet));
-}
-
-sentDataJson = {
-  "token": "alyosn4w4apq683i221kd9ia37l3e3sh693gjd4yasijw2l99bgfi4mr8s27w2gpkkit3h6f2n1fpgtofgd6672mtyrd7tdrgxah",
-  "formid": "f1",
-  "data": [{"id": "1","value": "asasdaasda"},
-  {"id": "2","value": "123123123123asdas"},
-  {"id": "3","value": "red"},
-  {"id": "4","value": "","misc": [{"id": "red1","value": true}, {"id": "green1","value": false}]},
-  {"id": "5","value": "green"},
-  {"id": "6","value": "15"},
-  {"id": "7","value": "17 October, 2017"},
-  {"id": "8","value": "03:20"}]
 }

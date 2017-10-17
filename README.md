@@ -93,7 +93,7 @@ Expected Json for creating forms:
 }
 ```
 
-Object being sent for `form\submit`
+Object being sent for `form/submit`
 
 `Token cut short to accomodate`
 
