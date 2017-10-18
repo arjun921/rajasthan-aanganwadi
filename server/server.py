@@ -312,6 +312,7 @@ def content_delete():
     fname = bottle.request.json['fname']
     # TODO: should clean this path
     utils.del_uploaded(fname)
+    return 'OK'
 
 
 @app.post('/content/list')
@@ -403,7 +404,8 @@ def form_list():
             'forms': [list of forms ids]
         }
     """
-    return db.form_list()  # TODO: user authorize
+    x = db.form_list()  # TODO: user authorize
+    return {'forms': x}
 
 
 @app.post('/form')
