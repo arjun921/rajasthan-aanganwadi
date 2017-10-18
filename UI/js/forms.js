@@ -71,7 +71,7 @@ function hide_allForms() {
   $("#form_list").hide();
 }
 
-function load_form(formID,data) {
+function load_form(formID) {
   console.log(formID);
   $.ajax({
     url: (link + '/form'),
@@ -79,7 +79,6 @@ function load_form(formID,data) {
     contentType: 'application/json',
     data: JSON.stringify({"token": Cookies.get('currenttoken'),'formid':formID}),
     success: function(data, st, xhr) {
-      Cookies.set('fields_returned', data);
       return data
       // console.log(data);
     }
@@ -92,8 +91,7 @@ function load_form(formID,data) {
 //called on click of form name from list.
 function create_form(s) {
   fields_returned = load_form(s);
-  console.log(fields_returned);
-  // Cookies.set('fields_returned', fields_returned);
+  Cookies.set('fields_returned', fields_returned);
   //checks if variable is defined
   if (typeof fields_returned !== 'undefined') {
     //hides all forms list
