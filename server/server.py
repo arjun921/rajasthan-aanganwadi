@@ -23,8 +23,22 @@ __version__ = (0, 0, 9)
 app = bottle.Bottle()
 db = utils.db
 UPLOAD_DIR = 'uploads'  # NOTE: Needs to be replaced with amazon s3
+string = 'Origin, Accept , Content-Type, X-Requested-With, X-CSRF-Token'
+CORS_HEADERS = {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, OPTIONS',
+                'Access-Control-Allow-Headers': string
+                }
 
 # wrappers functions #######################################
+
+
+def raisehttp(code, body):
+    """
+    Raise an HTTP error and add access control headers to it.
+    This is necessary since hooks don't get called if an ERROR is raised
+    """
+    raise bottle.HTTPError(code, body=body, headers=CORS_HEADERS)
 
 
 def admin_only(function):
@@ -38,7 +52,7 @@ def admin_only(function):
         token = json['token']
         email = db.token_data(token)['email']
         if not db.is_admin(email):
-            raise bottle.HTTPError(403, body='not admin')
+            raise raisehttp(403, body='not admin')
         return function(*a, **kw)
     return fn
 
@@ -52,12 +66,12 @@ def login_required(function):
     def fn(*a, **kw):
         json = bottle.request.json
         if 'token' not in json:
-            raise bottle.HTTPError(403, body='please provide a token')
+            raise raisehttp(403, body='please provide a token')
         token = utils.clean_token(json['token'])
         if len(token) != 100:
-            raise bottle.HTTPError(422, body='invalid token')
+            raise raisehttp(422, body='invalid token')
         if not db.token_present(token):
-            raise bottle.HTTPError(403, body='user not logged in')
+            raise raisehttp(403, body='user not logged in')
         return function(*a, **kw)
     return fn
 
@@ -80,7 +94,7 @@ def json_validate(function):
                 raise Exception('NO JSON')
             validate(bottle.request.json, schema)
         except:
-            raise bottle.HTTPError(422, body='JSON does not satisfy scheme')
+            raise raisehttp(422, body='JSON does not satisfy scheme')
         else:
             return function(*args, **kwargs)
     return newfunction
@@ -96,10 +110,8 @@ def enableCORSGenericOptionsRoute():
 
 @app.hook('after_request')
 def add_cors_headers():
-    bottle.response.headers['Access-Control-Allow-Origin'] = '*'
-    bottle.response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
-    string = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
-    bottle.response.headers['Access-Control-Allow-Headers'] = string
+    for key, val in CORS_HEADERS.items():
+        bottle.response.headers[key] = val
 
 
 @app.get('/')
@@ -145,9 +157,9 @@ def user_login():
             db.token_insert(token, email)
             return 'OK'
         else:
-            raise bottle.HTTPError(422, body='regenerate token')
+            raise raisehttp(422, body='regenerate token')
     else:
-        raise bottle.HTTPError(401, body='wrong credentials')
+        raise raisehttp(401, body='wrong credentials')
 
 
 @app.post('/user/delete')
@@ -207,7 +219,7 @@ def user_logout():
     Returns OK in case of successful login
     """
     if not db.token_present(bottle.request.json['token']):
-        raise bottle.HTTPError(422, body='invalid token')
+        raise raisehttp(422, body='invalid token')
     db.token_remove(bottle.request.json['token'])
     return 'OK'
 
@@ -247,7 +259,7 @@ def user_create():
     """
     json = bottle.request.json
     if db.user_present(json['email']):
-        raise bottle.HTTPError(422, body='user exists')
+        raise raisehttp(422, body='user exists')
     data = dict(json)
     data.pop('token')
     db.user_insert(data)
@@ -262,15 +274,15 @@ def content_create():
     """
     token = bottle.request.forms.get('token')
     if token is None:
-        raise bottle.HTTPError(422, body='invalid token')
+        raise raisehttp(422, body='invalid token')
     token = utils.clean_token(token)
     if len(token) != 100:
-        raise bottle.HTTPError(422, body='invalid token')
+        raise raisehttp(422, body='invalid token')
     if not db.token_present(token):
-        raise bottle.HTTPError(403, body='user not logged in')
+        raise raisehttp(403, body='user not logged in')
     email = db.token_data(token)['email']
     if not db.is_admin(email):
-        raise bottle.HTTPError(403, body='not admin')
+        raise raisehttp(403, body='not admin')
     # --------------alel ok
     file = bottle.request.files.get('upload')
     hasher = hashlib.md5()
@@ -449,7 +461,7 @@ def form_formid():
     if db.form_present(formid):
         return db.form_data(formid)
     else:
-        raise bottle.HTTPError(404, 'form not found')
+        raise raisehttp(404, 'form not found')
 
 
 @app.post('/form/create')
