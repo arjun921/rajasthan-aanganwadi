@@ -87,17 +87,20 @@ create = {
   "token": Cookies.get('currenttoken')
 };
 
+forma = {
+    "forms": [
+        "CandyForm",
+        "f1"
+    ]
+}
 formslist = {
   'forms': [{
-      'href': '',
       'formid': 'Form 1'
     },
     {
-      'href': 'http://google.com',
       'formid': 'Google'
     },
     {
-      'href': 'http://facebook.com',
       'formid': 'Facebook'
     }
   ]

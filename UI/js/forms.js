@@ -1,11 +1,34 @@
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
 var lastElem = "form";
+var formslist = [];
+
+function create_list() {
+  $.ajax({
+    url: (link + '/form/list'),
+    type: 'post',
+    contentType: 'application/json',
+    data: JSON.stringify({"token": Cookies.get('currenttoken')}),
+    success: function(data, st, xhr) {
+      for (var i = 0; i < data.forms.length; i++) {
+        name = data.forms[i]
+        var mydiv = document.getElementById("form_list");
+        var aTag = document.createElement('a');
+        // aTag.setAttribute('href', href);
+        aTag.setAttribute('class', "collection-item");
+        aTag.setAttribute('onclick', 'create_form(this.innerHTML)')
+        aTag.innerHTML = name;
+        mydiv.appendChild(aTag);
+      }
+    }
+  });
+}
+
 $(document).ready(function() {
   $('select').material_select();
   //enables nav
   $(".button-collapse").sideNav();
   //generates forms list
-  create_list(formslist);
+  create_list();
   //hides login/login based on cookie present/absent
   $("#loggedIn").show();
   $("#noLogin").hide();
@@ -36,20 +59,9 @@ function load_list() {
     url: (link + '/form/list'),
     type: 'post',
     contentType: 'application/json',
-    data: JSON.stringify({
-      "token": Cookies.get('currenttoken')
-    }),
+    data: JSON.stringify({"token": Cookies.get('currenttoken')}),
     success: function(data, st, xhr) {
-      //run this code when forms list available from webservice
-      alert(data);
-      alert(st);
-      alert(xhr);
-      // if (xhr.status==200) {
-      //   Materialize.toast("User Logout Successful", 4000);
-      //   Cookies.remove('currenttoken');
-      //   Cookies.remove('email');
-      // }
-
+      formslist = data;
     }
   });
 }
@@ -59,16 +71,29 @@ function hide_allForms() {
   $("#form_list").hide();
 }
 
-function load_form(formID) {
+function load_form(formID,data) {
+  console.log(formID);
+  $.ajax({
+    url: (link + '/form'),
+    type: 'post',
+    contentType: 'application/json',
+    data: JSON.stringify({"token": Cookies.get('currenttoken'),'formid':formID}),
+    success: function(data, st, xhr) {
+      Cookies.set('fields_returned', data);
+      return data
+      // console.log(data);
+    }
+  });
   //load form based on id requested
-  return create
+  // return create
 }
 //temp variable s, remove in production
 
 //called on click of form name from list.
 function create_form(s) {
   fields_returned = load_form(s);
-  Cookies.set('fields_returned', fields_returned);
+  console.log(fields_returned);
+  // Cookies.set('fields_returned', fields_returned);
   //checks if variable is defined
   if (typeof fields_returned !== 'undefined') {
     //hides all forms list
@@ -105,25 +130,10 @@ function create_form(s) {
     //enables select
     $('select').material_select();
   }
-
-
 }
 
 
-function create_list(lis) {
-  for (var i = 0; i < lis.forms.length; i++) {
-    href = lis.forms[i].href;
-    name = lis.forms[i].formid;
-    var mydiv = document.getElementById("form_list");
-    var aTag = document.createElement('a');
-    // aTag.setAttribute('href', href);
-    aTag.setAttribute('class', "collection-item");
-    aTag.setAttribute('onclick', 'create_form(this.innerHTML)')
-    aTag.innerHTML = name;
-    mydiv.appendChild(aTag);
 
-  }
-}
 
 function create_newElem(field) {
   if (field.kind == 'text') {
