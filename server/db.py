@@ -35,6 +35,27 @@ class DB:
             if len(self.admins) == 0:
                 self.user_insert(data)
                 self.add_admin(data['email'])
+            if len(self.forms) == 0:
+                data = {'formid': 'CandyForm',
+                        'title': 'CandyForm',
+                        'fields': [
+                                    {'id': '1',
+                                     'label': 'name',
+                                     'kind': 'text'},
+                                    {'id': '2',
+                                     'label': 'email',
+                                     'kind': 'email'},
+                                    {'id': '3',
+                                     'label': 'what candies do you want?',
+                                     'kind': 'checkbox',
+                                     'misc': ['candy1', 'candy2']},
+                                    {'id': '4',
+                                     'label': 'how do you want to pay?',
+                                     'kind': 'radio',
+                                     'misc': ['card', 'cash', 'dishes']},
+                                    ],
+                        }
+                self.form_insert(data)
 
     def response_submit(self, data):
         "submit a form response"
