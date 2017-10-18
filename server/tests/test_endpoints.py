@@ -345,10 +345,20 @@ def test_non_json_failure_on_active_url_list():
 
 def test_cors_on_active_urls():
     for url in active_urls:
+        # for OPTIONS
         resp = requests.options(point(url))
-        assert resp.status_code == 200, resp.text
-        assert 'Access-Control-Allow-Origin' in resp.headers
-        assert resp.headers['Access-Control-Allow-Origin'] == '*'
-        assert 'Access-Control-Allow-Methods' in resp.headers
-        assert resp.headers['Access-Control-Allow-Methods'] == 'POST, OPTIONS'
-        assert 'Access-Control-Allow-Headers' in resp.headers
+        data = (url, resp.status_code, resp.text)
+        assert resp.status_code == 200, data
+        assert 'Access-Control-Allow-Origin' in resp.headers, data
+        assert resp.headers['Access-Control-Allow-Origin'] == '*', data
+        assert 'Access-Control-Allow-Methods' in resp.headers, data
+        assert resp.headers['Access-Control-Allow-Methods'] == 'POST, OPTIONS', data
+        assert 'Access-Control-Allow-Headers' in resp.headers, data
+        # for POST
+        resp = requests.post(point(url))
+        data = (url, resp.status_code, resp.text)
+        assert 'Access-Control-Allow-Origin' in resp.headers, data
+        assert resp.headers['Access-Control-Allow-Origin'] == '*', data
+        assert 'Access-Control-Allow-Methods' in resp.headers, data
+        assert resp.headers['Access-Control-Allow-Methods'] == 'POST, OPTIONS', data
+        assert 'Access-Control-Allow-Headers' in resp.headers, data
