@@ -36,10 +36,10 @@ To test heroku environment.
 
 ```bash
 cd server && python server.py
-export TEST_HEROKU='true' && pytest test_.py
+export TEST_HEROKU='true' && pytest tests
 ```
 
-To test the local app `pytest test_.py`
+To test the local app `pytest tests`
 
 
 DOCS
