@@ -5219,7 +5219,7 @@ small {
 }
 
 .btn:hover, .btn-large:hover {
-  background-color: #2bbbad;
+  background-color: #4f22ff;
 }
 
 .btn-floating {
@@ -5965,7 +5965,7 @@ button:focus {
 
 label {
   font-size: 0.8rem;
-  color: #9e9e9e;
+  color: #000000;
 }
 
 /* Text Inputs + Textarea
@@ -7418,7 +7418,7 @@ input[type=range]:focus::-ms-fill-upper {
 }
 
 .side-nav li > a.btn:hover, .side-nav li > a.btn-large:hover, .side-nav li > a.btn-large:hover {
-  background-color: #2bbbad;
+  background-color: #4f22ff;
 }
 
 .side-nav li > a.btn-floating:hover {

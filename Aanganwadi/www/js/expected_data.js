@@ -88,10 +88,10 @@ create = {
 };
 
 forma = {
-    "forms": [
-        "CandyForm",
-        "f1"
-    ]
+  "forms": [
+    "CandyForm",
+    "f1"
+  ]
 }
 formslist = {
   'forms': [{
@@ -115,3 +115,10 @@ formslist = {
 // []range
 // []datepicker
 // []timepicker
+
+sent = {
+  id: "4",
+  label: "how do you want to pay?",
+  kind: "radio",
+  misc: ["card", "cash", "dishes"]
+}
