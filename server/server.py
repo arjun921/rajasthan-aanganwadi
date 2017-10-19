@@ -459,7 +459,8 @@ def form_formid():
     # TODO: user authorization
     formid = bottle.request.json['formid']
     if db.form_present(formid):
-        return db.form_data(formid)
+        x = db.form_data(formid)
+        return x
     else:
         raise raisehttp(404, 'form not found')
 
@@ -601,4 +602,4 @@ def form_delete():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8000, host='0.0.0.0')
+    app.run(debug=True, port=8000, host='0.0.0.0', reloader=True)
