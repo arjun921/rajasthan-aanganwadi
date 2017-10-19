@@ -1,4 +1,5 @@
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
+// var link = 'http://192.168.225.163:8000';
 var currenttoken = '';
 //runs functions to be executed at page load
 $(document).ready(function() {
@@ -110,7 +111,7 @@ function dologin(){
             Cookies.set('currenttoken', tok);
             Cookies.set('email', email);
             Materialize.toast('Login Successful', 4000);
-            window.open("activity_bank.html","_self")
+            window.open("../UI/activity_bank.html","_self")
         },
         error: function(returnval) {
           Materialize.toast(returnval, 4000);
