@@ -1,6 +1,5 @@
-// var link = 'https://rajasthan-aanganwadi.herokuapp.com';
-var link = 'http://192.168.225.163:8000';
-// http://192.168.225.163:8000
+var link = 'https://rajasthan-aanganwadi.herokuapp.com';
+// var link = 'http://192.168.225.163:8000';
 var currenttoken = '';
 //runs functions to be executed at page load
 $(document).ready(function() {

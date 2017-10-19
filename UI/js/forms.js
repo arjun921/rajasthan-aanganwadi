@@ -1,5 +1,5 @@
-// var link = 'https://rajasthan-aanganwadi.herokuapp.com';
-var link = 'http://192.168.225.163:8000';
+var link = 'https://rajasthan-aanganwadi.herokuapp.com';
+// var link = 'http://192.168.225.163:8000';
 var lastElem = "form";
 var formslist = [];
 var data;
