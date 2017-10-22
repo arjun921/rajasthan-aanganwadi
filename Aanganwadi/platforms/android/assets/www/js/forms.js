@@ -1,4 +1,5 @@
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
+// var link = 'http://192.168.225.163:8000';
 var lastElem = "form";
 var formslist = [];
 var data;
@@ -8,7 +9,9 @@ function create_list() {
     url: (link + '/form/list'),
     type: 'post',
     contentType: 'application/json',
-    data: JSON.stringify({"token": Cookies.get('currenttoken')}),
+    data: JSON.stringify({
+      "token": Cookies.get('currenttoken')
+    }),
     success: function(data, st, xhr) {
       for (var i = 0; i < data.forms.length; i++) {
         name = data.forms[i]
@@ -60,7 +63,9 @@ function load_list() {
     url: (link + '/form/list'),
     type: 'post',
     contentType: 'application/json',
-    data: JSON.stringify({"token": Cookies.get('currenttoken')}),
+    data: JSON.stringify({
+      "token": Cookies.get('currenttoken')
+    }),
     success: function(data, st, xhr) {
       formslist = data;
     }
@@ -71,10 +76,11 @@ function load_list() {
 function hide_allForms() {
   $("#form_list").hide();
 }
+
 function create_newElem(field) {
   console.log(field);
   if (field.kind == 'text') {
-    s = "<div class=\"input-field col s6\"><input id=" + field.id + " type=\"text\" "  + "><label for=" + field.id + ">" + field.label + "</label></div>"
+    s = "<div class=\"input-field col s6\"><input id=" + field.id + " type=\"text\" " + "><label for=" + field.id + ">" + field.label + "</label></div>"
     // s = "<div class=\"input-field col s6\"><input id=" + field.id + " type=" + field.misc[0].spec + "><label for=" + field.id + ">" + field.label + "</label></div>"
     $('#' + lastElem).append(s);
   } else if (field.kind == 'radio') {
@@ -126,7 +132,10 @@ function load_form(formID) {
     url: (link + '/form'),
     type: 'post',
     contentType: 'application/json',
-    data: JSON.stringify({"token": Cookies.get('currenttoken'),'formid':formID}),
+    data: JSON.stringify({
+      "token": Cookies.get('currenttoken'),
+      'formid': formID
+    }),
     success: function(data, st, xhr) {
       data = data;
       create_form(data);
@@ -218,8 +227,7 @@ function doSubmit() {
       val['id'] = id;
       val['value'] = document.getElementById(id).value;
 
-    }
-    if (temp.kind == 'radio') {
+    } else if (temp.kind == 'radio') {
       s = "input[name='" + id + "']:checked"
       val['id'] = id;
       val['value'] = $(s).val();
@@ -229,7 +237,7 @@ function doSubmit() {
       for (var j = 0; j < temp.misc.length; j++) {
         myVals = {};
         myVals["id"] = temp.misc[j].subID;
-        myVals["value"] = document.getElementById(temp.misc[j].subID).checked;
+        myVals["value"] = String(document.getElementById(temp.misc[j].subID).checked);
         te.push(myVals);
       }
       val['id'] = id;
@@ -262,4 +270,29 @@ function doSubmit() {
       }
     });
   }
+}
+
+s = {
+  "token": "vceqn54u56pavkx5cofycezrom5lbylzwq7r22tk1xpvty0raomd9vbzuico7tljcyssjxeh87dog2chd782sc7l14uu7c3hrvpr",
+  "formid": "CandyForm",
+  "data": [{
+    "id": "1",
+    "value": "asdasd"
+  }, {
+    "id": "2",
+    "value": "arjoonn.94@gmail.com"
+  }, {
+    "id": "3",
+    "value": "",
+    "misc": [{
+      "id": "candy1",
+      "value": true
+    }, {
+      "id": "candy2",
+      "value": false
+    }]
+  }, {
+    "id": "4",
+    "value": "4_candy1"
+  }]
 }

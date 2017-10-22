@@ -6,7 +6,7 @@ var data;
 
 function create_list() {
   $.ajax({
-    url: (link + '/form/list'),
+    url: (link + '/content/list'),
     type: 'post',
     contentType: 'application/json',
     data: JSON.stringify({
@@ -56,7 +56,6 @@ function out_changes() {
   $("#name_menu").text(" ");
   $("#noLogin").show();
 }
-
 
 
 //hides all forms list.
