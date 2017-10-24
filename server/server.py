@@ -351,7 +351,8 @@ def list_content():
 
     { 'contents': []}
     """
-    return {'contents': utils.os.listdir(utils.upath)}
+    return {'contents': [{'fname': fid, 'title': 'File '+str(i), 'meta': []}
+                         for i, fid in enumerate(utils.os.listdir(utils.upath))]}
 
 
 @app.post('/content')
@@ -359,7 +360,7 @@ def list_content():
 @login_required
 def content_retreive():
     """
-    POST /content/list
+    POST /content/
 
     ----------
 
@@ -380,12 +381,9 @@ def content_retreive():
     """
     fname = bottle.request.json['fname']
     # TODO: clean filename
+    # TODO: Permissions
     return bottle.static_file(fname, root=utils.upath)
 
-# '/content'
-# '/content/<contentid>/remove'
-# '/content/<contentid>/activate'
-# '/content/<contentid>/deactivate'
 
 # FORM ROUTES #########################################
 
