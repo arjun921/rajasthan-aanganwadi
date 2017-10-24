@@ -127,11 +127,11 @@ def test_resource_list_lists_resources_when_present(resource, loggeduser):
     data = {'token': loggeduser['token']}
     r = requests.post(point('/content/list'), json=data)
     assert r.status_code == 200, r.text
-    assert fname in r.json()['contents']
+    assert fname in [i['fname'] for i in r.json()['contents']]
     data = {'token': tok}
     r = requests.post(point('/content/list'), json=data)
     assert r.status_code == 200, r.text
-    assert fname in r.json()['contents']
+    assert fname in [i['fname'] for i in r.json()['contents']]
 
 
 def test_resource_delete_fails_for_non_admin(resource, loggeduser):
