@@ -1,6 +1,14 @@
 import os
 import pytest
 import requests
+import socket
+
+
+while True:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    result = sock.connect_ex(('127.0.0.1', 8000))
+    if result == 0:
+        break
 
 
 if os.environ.get('TEST_HEROKU'):
@@ -352,7 +360,7 @@ def test_cors_on_active_urls():
         assert 'Access-Control-Allow-Origin' in resp.headers, data
         assert resp.headers['Access-Control-Allow-Origin'] == '*', data
         assert 'Access-Control-Allow-Methods' in resp.headers, data
-        assert resp.headers['Access-Control-Allow-Methods'] == 'POST, OPTIONS', data
+        assert resp.headers['Access-Control-Allow-Methods'] == 'POST, OPTIONS'
         assert 'Access-Control-Allow-Headers' in resp.headers, data
         # for POST
         resp = requests.post(point(url))
@@ -360,5 +368,5 @@ def test_cors_on_active_urls():
         assert 'Access-Control-Allow-Origin' in resp.headers, data
         assert resp.headers['Access-Control-Allow-Origin'] == '*', data
         assert 'Access-Control-Allow-Methods' in resp.headers, data
-        assert resp.headers['Access-Control-Allow-Methods'] == 'POST, OPTIONS', data
+        assert resp.headers['Access-Control-Allow-Methods'] == 'POST, OPTIONS'
         assert 'Access-Control-Allow-Headers' in resp.headers, data
