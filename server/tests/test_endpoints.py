@@ -1,14 +1,6 @@
 import os
 import pytest
 import requests
-import socket
-
-
-while True:
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    result = sock.connect_ex(('127.0.0.1', 8000))
-    if result == 0:
-        break
 
 
 if os.environ.get('TEST_HEROKU'):
