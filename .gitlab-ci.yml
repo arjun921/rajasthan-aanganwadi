@@ -8,5 +8,5 @@ test_server_api:
         - venv/bin/python --version
     script:
         - "venv/bin/coverage run -p server.py &"
-        - "venv/bin/pytest tests"
+        - "sleep 10s && venv/bin/pytest tests"
     stage: test
