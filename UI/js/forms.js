@@ -40,19 +40,23 @@ $(document).ready(function() {
   if (Cookies.get('currenttoken')) {
     $("#email_menu").text(Cookies.get('email'));
     $("#name_menu").text("Arjoonn Sharma");
-    $("#profile_pic").attr('src', "https://avatars3.githubusercontent.com/u/7693265?v=4&s=400");
+    $("#profile_pic").attr('src',"https://avatars3.githubusercontent.com/u/7693265?v=4&s=400");
     $("#login_menu_but").hide();
-  } else {
+    $("#login_menu_butD").hide();
+  }
+  else {
     out_changes();
   }
 
 });
 
 function out_changes() {
-  $("#profile_pic").attr('src', "images/empty-profile.gif");
+  $("#profile_pic").attr('src',"images/empty-profile.gif");
   $("#loggedIn").hide();
   $("#logout_menu_but").hide();
+  $("#logout_menu_butD").hide();
   $("#login_menu_but").show();
+  $("#login_menu_butD").show();
   $("#name_menu").text(" ");
   $("#noLogin").show();
 }
