@@ -22,6 +22,11 @@ class DB:
             if self.client.aang.admins.find().count() == 0:
                 self.user_insert(data)
                 self.add_admin(data['email'])
+            for k in ['tokens', 'users', 'forms', 'responses',
+                      'admins', 'content_links']:
+                d = {'column': 'initiator'}
+                self.client.aang[k].insert_one(d)
+                self.client.aang[k].find_one_and_delete(d)
 
         else:
             print('Using RAM db')
@@ -37,35 +42,35 @@ class DB:
             if len(self.admins) == 0:
                 self.user_insert(data)
                 self.add_admin(data['email'])
-            if len(self.forms) == 0:
-                data = {'formid': 'CandyForm',
-                        'title': 'CandyForm',
-                        'fields': [
-                                    {'id': '1',
-                                     'label': 'name',
-                                     'kind': 'text'},
-                                    {'id': '2',
-                                     'label': 'email',
-                                     'kind': 'text'},
-                                    {'id': '3',
-                                     'label': 'what candies do you want?',
-                                     'kind': 'checkbox',
-                                     'misc': [{'subLabel': 'candy1',
-                                               'subID': 'candy1'},
-                                              {'subLabel': 'candy2',
-                                               'subID': 'candy2'}]},
-                                    {'id': '4',
-                                     'label': 'how do you want to pay?',
-                                     'kind': 'radio',
-                                     'misc': [{'subLabel': 'cash',
-                                               'subID': '4_candy1'},
-                                              {'subLabel': 'dishes',
-                                               'subID': '4_candy2'},
-                                              {'subLabel': 'card',
-                                               'subID': '4_candy3'}]},
-                                    ],
-                        }
-                self.form_insert(data)
+        if len(self.form_list()) == 0:
+            data = {'formid': 'CandyForm',
+                    'title': 'CandyForm',
+                    'fields': [
+                                {'id': '1',
+                                 'label': 'name',
+                                 'kind': 'text'},
+                                {'id': '2',
+                                 'label': 'email',
+                                 'kind': 'text'},
+                                {'id': '3',
+                                 'label': 'what candies do you want?',
+                                 'kind': 'checkbox',
+                                 'misc': [{'subLabel': 'candy1',
+                                           'subID': 'candy1'},
+                                          {'subLabel': 'candy2',
+                                           'subID': 'candy2'}]},
+                                {'id': '4',
+                                 'label': 'how do you want to pay?',
+                                 'kind': 'radio',
+                                 'misc': [{'subLabel': 'cash',
+                                           'subID': '4_candy1'},
+                                          {'subLabel': 'dishes',
+                                           'subID': '4_candy2'},
+                                          {'subLabel': 'card',
+                                           'subID': '4_candy3'}]},
+                                ],
+                    }
+            self.form_insert(data)
 
     def response_submit(self, data):
         "submit a form response"
@@ -103,7 +108,9 @@ class DB:
         "Return form for this formid"
         if self.form_present(formid):
             if not self.dev:
-                return self.client.aang.forms.find_one({'formid': formid})
+                f = self.client.aang.forms.find_one({'formid': formid})
+                F = {k: v for k, v in f.items() if k[0] != '_'}
+                return F
             else:
                 return [f for f in self.forms
                         if f['formid'] == formid][0]
@@ -147,7 +154,7 @@ class DB:
         "Is the token available in the database?"
         if not self.dev:  # NOTE: remove this
             count = self.client.aang.tokens.find({'token': token}).count()
-            return count == 0
+            return count != 0
         else:
             token = self.tokens.get(token)
             return token is not None
@@ -225,8 +232,8 @@ class DB:
         fname = None
         if not self.dev:  # NOTE: remove this
             q = {'newlink': link}
-            fnames = self.client.aang.content_links.find(q)
-            if len(fnames) == 1:
+            fnames = list(self.client.aang.content_links.find(q))
+            if len(fnames) >= 1:
                 self.client.aang.content_links.find_one_and_delete(q)
                 fname = fnames[0]['fname']
         else:

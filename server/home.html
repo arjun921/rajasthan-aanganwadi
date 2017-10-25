@@ -46,7 +46,8 @@
 			  </div><!--/.nav-collapse -->
 			</div><!--/.container-fluid -->
 		  </nav>
-
+          <div class='container' id='main_content'>
+          </div>
         <script>
             var root = '';
             var currenttoken = '';
@@ -105,6 +106,27 @@
                 $("#loginbutton").click(function(){
                     dologin();
                 });  // login onclick
+                $("#forms_button").click(function(){
+                    console.log('forms');
+                    $.ajax({
+                            url: (root+'/form/list'),
+                            type: 'post',
+                            contentType: 'application/json',
+                            data: JSON.stringify( {"token": currenttoken} ),
+                            success: function(data, st, xhr){
+                                $("#main_content").empty();
+                                var arrlen = data['forms'].length;
+                                for(var i=0; i<arrlen; i++){
+                                    var ident = data['forms'][i];
+                                    var item = $("<button id='"+ident+"' class='col-md-4 btn btn-default' style='margin: 5px;'>"+ident+"</button>");
+                                    $("#main_content").append(item);
+                                }// loop
+                            }
+                        })  // end of ajax
+                });  // forms button
+                // ----------------------- TODO: REMOVE AFTER THIS
+                $("#emailinput").text('arjoonn.94@gmail.com');
+                // ----------------------- TODO: REMOVE BEFORE THIS
             });  // document ready
         </script>
     </body>

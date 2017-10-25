@@ -17,7 +17,7 @@ import utils
 import hashlib
 from functools import wraps
 from jsonschema import validate
-__version__ = (0, 0, 10)
+__version__ = (0, 0, 11)
 
 
 app = bottle.Bottle()
@@ -604,6 +604,7 @@ def form_delete():
 def staticfiles(link):
     fname = db.content_get_fname_for_link(link)
     if fname is not None:
+        print(link, 'fname found', fname)
         return bottle.static_file(fname, root=utils.upath)
     else:
         return raisehttp(404, 'Perhaps this link has been used already')

@@ -9,6 +9,8 @@ if os.environ.get('TEST_HEROKU'):
 else:
     root = 'http://localhost:8000'
 
+os.system('cp -r UPLOAD TEMP')
+
 
 def point(url):
     return root + url
@@ -357,7 +359,7 @@ def test_dummy_file_retreival(loggeduser):
         with open(fname, 'wb') as handle:
             for block in r.iter_content(1024):
                 handle.write(block)
-        assert filecmp.cmp(fname, 'UPLOAD/'+fname)
+        assert filecmp.cmp(fname, 'TEMP/'+fname)
         os.remove(fname)
 
 
@@ -374,7 +376,7 @@ def test_dummy_file_retreival_fails_for_dual_use_of_link(loggeduser):
         with open(fname, 'wb') as handle:
             for block in r.iter_content(1024):
                 handle.write(block)
-        assert filecmp.cmp(fname, 'UPLOAD/'+fname)
+        assert filecmp.cmp(fname, 'TEMP/'+fname)
         os.remove(fname)
         r = requests.get(point(r1.json()['url']))
         assert r.status_code == 404
