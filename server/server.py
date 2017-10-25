@@ -382,8 +382,8 @@ def content_retreive():
     fname = bottle.request.json['fname']
     # TODO: clean filename
     # TODO: Permissions
-    # TODO: temp file name
-    return {'url': '/static/'+fname}
+    link = db.generate_content_url(fname)
+    return {'url': '/static/'+link}
 
 
 # FORM ROUTES #########################################
@@ -600,11 +600,13 @@ def form_delete():
     db.form_remove(bottle.request.json['formid'])
 
 
-@app.get('/static/<fname>')
-def staticfiles(fname):
-    fl = bottle.static_file(fname, root=utils.upath)
-    print(fl)
-    return fl
+@app.get('/static/<link>')
+def staticfiles(link):
+    fname = db.content_get_fname_for_link(link)
+    if fname is not None:
+        return bottle.static_file(fname, root=utils.upath)
+    else:
+        return raisehttp(404, 'Perhaps this link has been used already')
 
 
 if __name__ == '__main__':

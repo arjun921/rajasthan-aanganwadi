@@ -1,4 +1,5 @@
 import os
+import random
 from pymongo import MongoClient
 
 
@@ -30,6 +31,7 @@ class DB:
             self.forms = []
             self.responses = []
             self.admins = []
+            self.content_links = []
 
             # add initial admin
             if len(self.admins) == 0:
@@ -206,6 +208,34 @@ class DB:
         else:
             return len(list(1 for i in self.users
                        if i['email'] == user_email)) > 0
+
+    def generate_content_url(self, fname):
+        "Generate a one time download link for the file"
+        newlink = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz')
+                          for _ in range(50)) +'.'+ fname.split('.')[-1]
+        data = {'fname': fname, 'newlink': newlink}
+        if not self.dev:  # NOTE: remove this
+            self.client.aang['content_links'].insert_one(data)
+        else:
+            self.content_links.append(data)
+        return data['newlink']
+
+    def content_get_fname_for_link(self, link):
+        "Get the filename for this link and remove it from database"
+        fname = None
+        if not self.dev:  # NOTE: remove this
+            q = {'newlink': link}
+            fnames = self.client.aang.content_links.find(q)
+            if len(fnames) == 1:
+                self.client.aang.content_links.find_one_and_delete(q)
+                fname = fnames[0]['fname']
+        else:
+            fnames = [i for i in self.content_links if i['newlink'] == link]
+            if len(fnames) == 1:
+                self.content_links = [i for i in self.content_links
+                                      if i['newlink'] != link]
+                fname = fnames[0]['fname']
+        return fname
 
     def user_pwd_present(self, email, pwd):
         "Is this user pwd combo present?"

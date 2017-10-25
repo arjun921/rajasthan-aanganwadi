@@ -361,6 +361,25 @@ def test_dummy_file_retreival(loggeduser):
         os.remove(fname)
 
 
+def test_dummy_file_retreival_fails_for_dual_use_of_link(loggeduser):
+    token = loggeduser['token']
+    r = requests.post(point('/content/list'),
+                      json={'token': token})
+    assert r.status_code == 200, r.text
+    for data in r.json()['contents']:
+        fname = data['fname']
+        json = {'token': token, 'fname': fname}
+        r1 = requests.post(point('/content'), json=json)
+        r = requests.get(point(r1.json()['url']))
+        with open(fname, 'wb') as handle:
+            for block in r.iter_content(1024):
+                handle.write(block)
+        assert filecmp.cmp(fname, 'UPLOAD/'+fname)
+        os.remove(fname)
+        r = requests.get(point(r1.json()['url']))
+        assert r.status_code == 404
+
+
 def test_cors_on_active_urls():
     for url in active_urls:
         # for OPTIONS
