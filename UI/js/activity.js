@@ -29,7 +29,7 @@ function create_list() {
     },
     error: function(returnval) {
       if (returnval.status!=200) {
-        Materialize.toast('I am a toast', 4000,'',function(){window.open("../UI/login.html","_self")})
+        Materialize.toast('You need to be logged in to view this', 4000,'',function(){window.open("../UI/login.html","_self")})
       }
     }
   });
@@ -86,11 +86,14 @@ function load_content(contentID) {
       Cookies.set('fileUrl', link+data.url);
       if (ftype == "mp4") {
         $("#content_list").hide();
-        p = "<audio controls=\"controls\" style=\"width:100%; padding-top: 25px;\" id = \"player\"><source src = "+Cookies.get("fileUrl")+" /></audio>"
+        p = "<video class=\"responsive-video\" style=\"width:100%; padding-top: 25px;\" controls><source src="+link+data.url+" type=\"video/mp4\"></video>"
         $('#content').append(p);
         console.log("My video player works!");
       }
       else if (ftype=="mp3") {
+        $("#content_list").hide();
+        p = "<audio controls=\"controls\" style=\"width:100%; padding-top: 25px;\" id = \"player\"><source src = "+link+data.url+" /></audio>"
+        $('#content').append(p);
         console.log("My music player works!");
       }
       else if (ftype=="pdf") {
