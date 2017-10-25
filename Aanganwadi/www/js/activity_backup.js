@@ -38,24 +38,22 @@ function out_changes() {
 }
 
 
-//<------------- Login begin
-function logout(){
-                $.ajax({
-                    url: (link+'/user/logout'),
-                    type: 'post',
-                    contentType: 'application/json',
-                    data: JSON.stringify( {"token": Cookies.get('currenttoken')} ),
-                    success: function(data, st, xhr){
-                        out_changes();
-                        if (xhr.status==200) {
-                          Materialize.toast("User Logout Successful", 4000);
-                          Cookies.remove('currenttoken');
-                          Cookies.remove('email');
-                        }
-
-                    }
-                });
-
-            }; // ---------------------------------logout----------
-
-//Login end ------------->
+//<------------- Logout begin
+function logout() {
+  $.ajax({
+    url: (link + '/user/logout'),
+    type: 'post',
+    contentType: 'application/json',
+    data: JSON.stringify({
+      "token": Cookies.get('currenttoken')
+    }),
+    success: function(data, st, xhr) {
+      out_changes();
+      if (xhr.status == 200) {
+        Cookies.remove('currenttoken');
+        Cookies.remove('email');
+        Materialize.toast('User Logout Successful', 4000,'',function(){window.open("activity_bank.html","_self")})
+      }
+    }
+  });} 
+  // ---------------------------------logout---------->

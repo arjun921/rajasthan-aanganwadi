@@ -119,10 +119,10 @@ function logout() {
     success: function(data, st, xhr) {
       out_changes();
       if (xhr.status == 200) {
-        Materialize.toast("User Logout Successful", 4000);
         Cookies.remove('currenttoken');
         Cookies.remove('email');
+        Materialize.toast('User Logout Successful', 4000,'',function(){window.open("../UI/activity_bank.html","_self")})
       }
     }
-  });
-} // ---------------------------------logout----------
+  });}
+// ---------------------------------logout----------

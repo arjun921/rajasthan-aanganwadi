@@ -202,13 +202,13 @@ function logout() {
     success: function(data, st, xhr) {
       out_changes();
       if (xhr.status == 200) {
-        Materialize.toast("User Logout Successful", 4000);
         Cookies.remove('currenttoken');
         Cookies.remove('email');
+        Materialize.toast('User Logout Successful', 4000,'',function(){window.open("../UI/activity_bank.html","_self")})
       }
     }
-  });
-} // ---------------------------------logout----------
+  });}
+ // ---------------------------------logout----------
 
 
 function doSubmit() {
@@ -255,42 +255,15 @@ function doSubmit() {
       contentType: 'application/json',
       data: JSON.stringify(dataRet),
       success: function(data, st, xhr) {
-        alert(data);
-        alert(st);
-        alert(xhr);
-        alert(xhr.status);
-        // if (xhr.status==200) {
-        //   Materialize.toast("User Logout Successful", 4000);
-        //   Cookies.remove('currenttoken');
-        //   Cookies.remove('email');
-        // }
-
+        if (xhr.status==200) {
+          Materialize.toast('Form Submitted Succesfully', 4000,'',function(){window.open("../UI/activity_bank.html","_self")})
+        }
+      },
+      error: function(returnval) {
+        if (returnval.status!=200) {
+          Materialize.toast('Form Submit Failed', 4000,'',function(){window.open("../UI/activity_bank.html","_self")})
+        }
       }
     });
   }
-}
-
-s = {
-  "token": "vceqn54u56pavkx5cofycezrom5lbylzwq7r22tk1xpvty0raomd9vbzuico7tljcyssjxeh87dog2chd782sc7l14uu7c3hrvpr",
-  "formid": "CandyForm",
-  "data": [{
-    "id": "1",
-    "value": "asdasd"
-  }, {
-    "id": "2",
-    "value": "arjoonn.94@gmail.com"
-  }, {
-    "id": "3",
-    "value": "",
-    "misc": [{
-      "id": "candy1",
-      "value": true
-    }, {
-      "id": "candy2",
-      "value": false
-    }]
-  }, {
-    "id": "4",
-    "value": "4_candy1"
-  }]
 }
