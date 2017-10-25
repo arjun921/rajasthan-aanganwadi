@@ -13,14 +13,16 @@ function create_list() {
       "token": Cookies.get('currenttoken')
     }),
     success: function(data, st, xhr) {
-      for (var i = 0; i < data.forms.length; i++) {
-        name = data.forms[i]
-        var mydiv = document.getElementById("form_list");
+      console.log(data.contents);
+      for (var i = 0; i < data.contents.length; i++) {
+        title = data.contents[i].title;
+        fname = data.contents[i].fname;
+        var mydiv = document.getElementById("content_list");
         var aTag = document.createElement('a');
         // aTag.setAttribute('href', href);
         aTag.setAttribute('class', "collection-item");
         aTag.setAttribute('onclick', 'load_form(this.innerHTML)')
-        aTag.innerHTML = name;
+        aTag.innerHTML = title;
         mydiv.appendChild(aTag);
       }
     }
@@ -62,60 +64,8 @@ function out_changes() {
 }
 
 
-//hides all forms list.
-function hide_allForms() {
-  $("#form_list").hide();
-}
 
-function create_newElem(field) {
-  console.log(field);
-  if (field.kind == 'text') {
-    s = "<div class=\"input-field col s6\"><input id=" + field.id + " type=\"text\" " + "><label for=" + field.id + ">" + field.label + "</label></div>"
-    // s = "<div class=\"input-field col s6\"><input id=" + field.id + " type=" + field.misc[0].spec + "><label for=" + field.id + ">" + field.label + "</label></div>"
-    $('#' + lastElem).append(s);
-  } else if (field.kind == 'radio') {
-    p = "<p>" + field.label + "</p>"
-    $('#' + lastElem).append(p);
-    for (var i = 0; i < field.misc.length; i++) {
-      va = field.misc[i];
-      prb = "<p>  <input name=" + field.id + " type=\"radio\" id=" + va.subID + " value=" + va.subID + " />  <label for=" + va.subID + ">" + va.subLabel + "</label></p>"
-      $('#' + lastElem).append(prb);
-    }
-  } else if (field.kind == 'checkbox') {
-    p = "<p>" + field.label + "</p>"
-    $('#' + lastElem).append(p);
-    for (var i = 0; i < field.misc.length; i++) {
-      cbv = field.misc[i];
-      s = "<p><input type=\"checkbox\" id=" + cbv.subID + " /><label for=" + cbv.subID + ">" + cbv.subLabel + "</label></p>"
-      $('#' + lastElem).append(s);
-    }
-  } else if (field.kind == 'select') {
-    p = "<p>" + field.label + "</p>"
-    $('#' + lastElem).append(p);
-    s = "<select id=" + field.id + "><option value=\"\" disabled selected>Choose your option</option></select>"
-    $('#' + lastElem).append(s);
-    for (var i = 0; i < field.misc.length; i++) {
-      vs = field.misc[i];
-      op = "<option value=" + vs.subVal + ">" + vs.subLabel + "</option>"
-      $('#' + field.id).append(op);
-    }
-  } else if (field.kind == 'range') {
-    s = "<p>" + field.label + "</p>"
-    $('#' + lastElem).append(s);
-    sp = "<p class=\"range-field\"><input type=\"range\" id=" + field.id + " min=" + field.misc[0].min + " max=" + field.misc[0].max + " /></p>"
-    $('#' + lastElem).append(sp);
-  } else if (field.kind == 'datepicker') {
-    s = "<p>" + field.label + "</p>"
-    $('#' + lastElem).append(s);
-    pic = "<input type=\"text\" class=\"datepicker\" id=" + field.id + " placeholder=\"Choose Date\">"
-    $('#' + lastElem).append(pic);
-  } else if (field.kind == 'timepicker') {
-    s = "<p>" + field.label + "</p>"
-    $('#' + lastElem).append(s);
-    pic = "<input type=\"text\" class=\"timepicker\" id=" + field.id + " placeholder=\"Select Time\">"
-    $('#' + lastElem).append(pic);
-  }
-}
+
 
 function load_form(formID) {
   $.ajax({
@@ -134,49 +84,7 @@ function load_form(formID) {
   //load form based on id requested
   // return create
 }
-//temp variable s, remove in production
 
-//called on click of form name from list.
-function create_form(s) {
-  fields_returned = s
-  Cookies.set('fields_returned', fields_returned);
-  //checks if variable is defined
-  if (typeof fields_returned !== 'undefined') {
-    //hides all forms list
-    hide_allForms();
-    //dynamically generates forms in same view
-    h = "<h5>" + fields_returned.title + "</h5>"
-    $('#' + lastElem).append(h);
-    for (var i = 0; i < fields_returned.fields.length; i++) {
-      create_newElem(fields_returned.fields[i]);
-    }
-    but = "<button style=\"padding-bottom:20px;\" class=\"btn waves-effect waves-light\"onclick=\"doSubmit()\">Submit<i class=\"material-icons right\">send</i></button>"
-    $('#' + lastElem).append(but);
-    //enables time picker
-    $('.timepicker').pickatime({
-      default: 'now', // Set default time: 'now', '1:30AM', '16:30'
-      fromnow: 0, // set default time to * milliseconds from now (using with default = 'now')
-      twelvehour: false, // Use AM/PM or 24-hour format
-      donetext: 'OK', // text for done-button
-      cleartext: 'Clear', // text for clear-button
-      canceltext: 'Cancel', // Text for cancel-button
-      autoclose: false, // automatic close timepicker
-      ampmclickable: true, // make AM PM clickable
-      aftershow: function() {} //Function for after opening timepicker
-    });
-    //enables datepicker
-    $('.datepicker').pickadate({
-      selectMonths: true, // Creates a dropdown to control month
-      selectYears: 15, // Creates a dropdown of 15 years to control year,
-      today: 'Today',
-      clear: 'Clear',
-      close: 'Ok',
-      closeOnSelect: false // Close upon selecting a date,
-    });
-    //enables select
-    $('select').material_select();
-  }
-}
 
 
 
@@ -260,29 +168,4 @@ function doSubmit() {
       }
     });
   }
-}
-
-s = {
-  "token": "vceqn54u56pavkx5cofycezrom5lbylzwq7r22tk1xpvty0raomd9vbzuico7tljcyssjxeh87dog2chd782sc7l14uu7c3hrvpr",
-  "formid": "CandyForm",
-  "data": [{
-    "id": "1",
-    "value": "asdasd"
-  }, {
-    "id": "2",
-    "value": "arjoonn.94@gmail.com"
-  }, {
-    "id": "3",
-    "value": "",
-    "misc": [{
-      "id": "candy1",
-      "value": true
-    }, {
-      "id": "candy2",
-      "value": false
-    }]
-  }, {
-    "id": "4",
-    "value": "4_candy1"
-  }]
 }
