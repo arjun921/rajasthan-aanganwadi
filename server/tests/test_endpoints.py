@@ -1,5 +1,6 @@
 import os
 import pytest
+import filecmp
 import requests
 
 
@@ -341,6 +342,22 @@ def test_non_json_failure_on_active_url_list():
         assert resp.status_code == 422, resp.text
         resp = requests.post(point(url), data={})
         assert resp.status_code == 422, resp.text
+
+
+def test_dummy_file_retreival(loggeduser):
+    token = loggeduser['token']
+    r = requests.post(point('/content/list'),
+                      json={'token': token})
+    assert r.status_code == 200, r.text
+    for data in r.json()['contents']:
+        fname = data['fname']
+        json = {'token': token, 'fname': fname}
+        r = requests.post(point('/content'), json=json)
+        with open(fname, 'wb') as handle:
+            for block in r.iter_content(1024):
+                handle.write(block)
+        assert filecmp.cmp(fname, 'UPLOAD/'+fname)
+        os.remove(fname)
 
 
 def test_cors_on_active_urls():
