@@ -382,7 +382,9 @@ def content_retreive():
     fname = bottle.request.json['fname']
     # TODO: clean filename
     # TODO: Permissions
-    return bottle.static_file(fname, root=utils.upath)
+    fl = bottle.static_file(fname, root=utils.upath)
+    print(fl)
+    return fl
 
 
 # FORM ROUTES #########################################
