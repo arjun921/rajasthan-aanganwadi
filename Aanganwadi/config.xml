@@ -97,6 +97,9 @@
     <allow-navigation href="https://rajasthan-aanganwadi.herokuapp.com/*" />
     <allow-intent href="https://rajasthan-aanganwadi.herokuapp.com/*" />
     <access origin="https://rajasthan-aanganwadi.herokuapp.com/*" />
+    <allow-navigation href="https://docs.google.com/*" />
+    <allow-intent href="https://docs.google.com/*" />
+    <access origin="https://docs.google.com/*" />
     <engine name="android" spec="^6.2.2" />
     <plugin name="cordova-plugin-battery-status" spec="~1.1.1" />
     <plugin name="cordova-plugin-camera" spec="~2.1.1" />
@@ -106,6 +109,7 @@
     <plugin name="cordova-plugin-device-motion" spec="~1.2.0" />
     <plugin name="cordova-plugin-device-orientation" spec="~1.0.2" />
     <plugin name="cordova-plugin-dialogs" spec="~1.2.0" />
+    <plugin name="cordova-plugin-document-viewer" spec="^0.9.5" />
     <plugin name="cordova-plugin-file" spec="~4.1.1" />
     <plugin name="cordova-plugin-file-transfer" spec="~1.5.0" />
     <plugin name="cordova-plugin-geolocation" spec="~2.1.0" />

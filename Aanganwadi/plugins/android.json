@@ -63,6 +63,9 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.arjoonn.aanganwadi"
+        },
+        "cordova-plugin-document-viewer": {
+            "PACKAGE_NAME": "com.arjoonn.aanganwadi"
         }
     },
     "dependent_plugins": {

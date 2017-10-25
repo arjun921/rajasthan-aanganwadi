@@ -23,6 +23,11 @@ function create_list() {
         aTag.innerHTML = name;
         mydiv.appendChild(aTag);
       }
+    },
+    error: function(returnval) {
+      if (returnval.status!=200) {
+        Materialize.toast('You need to be logged in to view this.', 4000,'',function(){window.open("login.html","_self")})
+      }
     }
   });
 }
@@ -40,37 +45,28 @@ $(document).ready(function() {
   if (Cookies.get('currenttoken')) {
     $("#email_menu").text(Cookies.get('email'));
     $("#name_menu").text("Arjoonn Sharma");
-    $("#profile_pic").attr('src', "https://avatars3.githubusercontent.com/u/7693265?v=4&s=400");
+    $("#profile_pic").attr('src',"https://avatars3.githubusercontent.com/u/7693265?v=4&s=400");
     $("#login_menu_but").hide();
-  } else {
+    $("#login_menu_butD").hide();
+  }
+  else {
     out_changes();
   }
 
 });
 
 function out_changes() {
-  $("#profile_pic").attr('src', "images/empty-profile.gif");
+  $("#profile_pic").attr('src',"images/empty-profile.gif");
   $("#loggedIn").hide();
   $("#logout_menu_but").hide();
+  $("#logout_menu_butD").hide();
   $("#login_menu_but").show();
+  $("#login_menu_butD").show();
   $("#name_menu").text(" ");
   $("#noLogin").show();
 }
 
 
-function load_list() {
-  $.ajax({
-    url: (link + '/form/list'),
-    type: 'post',
-    contentType: 'application/json',
-    data: JSON.stringify({
-      "token": Cookies.get('currenttoken')
-    }),
-    success: function(data, st, xhr) {
-      formslist = data;
-    }
-  });
-}
 
 //hides all forms list.
 function hide_allForms() {
@@ -157,6 +153,8 @@ function create_form(s) {
     //dynamically generates forms in same view
     h = "<h5>" + fields_returned.title + "</h5>"
     $('#' + lastElem).append(h);
+    di = "<div class=\"divider\"></div>"
+    // $('#' + lastElem).append(di);
     for (var i = 0; i < fields_returned.fields.length; i++) {
       create_newElem(fields_returned.fields[i]);
     }

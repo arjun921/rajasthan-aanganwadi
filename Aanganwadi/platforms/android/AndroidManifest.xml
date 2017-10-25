@@ -9,6 +9,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider android:authorities="com.arjoonn.aanganwadi.DocumentViewerPlugin.fileprovider" android:exported="false" android:grantUriPermissions="true" android:name="de.sitewaerts.cordova.documentviewer.FileProvider">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/documentviewer_file_paths" />
+        </provider>
     </application>
     <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="25" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -23,4 +26,5 @@
     <uses-permission android:name="android.permission.RECORD_VIDEO" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 </manifest>

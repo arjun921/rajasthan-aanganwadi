@@ -62,6 +62,9 @@
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="SitewaertsDocumentViewer">
+        <param name="android-package" value="de.sitewaerts.cordova.documentviewer.DocumentViewerPlugin" />
+    </feature>
     <name>Aanganwadi</name>
     <description>
         Hello World sample application that responds to the deviceready event.
@@ -80,6 +83,9 @@
     <allow-navigation href="https://rajasthan-aanganwadi.herokuapp.com/*" />
     <allow-intent href="https://rajasthan-aanganwadi.herokuapp.com/*" />
     <access origin="https://rajasthan-aanganwadi.herokuapp.com/*" />
+    <allow-navigation href="https://docs.google.com/*" />
+    <allow-intent href="https://docs.google.com/*" />
+    <access origin="https://docs.google.com/*" />
     <icon density="ldpi" src="www/res/icon/android/drawable-ldpi-icon.png" />
     <icon density="mdpi" src="www/res/icon/android/drawable-mdpi-icon.png" />
     <icon density="hdpi" src="www/res/icon/android/drawable-hdpi-icon.png" />

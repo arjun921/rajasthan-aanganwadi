@@ -83,7 +83,7 @@ function load_content(contentID) {
     success: function(data, st, xhr) {
       data = data;
       ftype = (data.url.split('.').pop());
-      Cookies.set('fileUrl', link+data.url);
+
       if (ftype == "mp4") {
         $("#content_list").hide();
         p = "<video class=\"responsive-video\" style=\"width:100%; padding-top: 25px;\" controls><source src="+link+data.url+" type=\"video/mp4\"></video>"
@@ -97,9 +97,10 @@ function load_content(contentID) {
         console.log("My music player works!");
       }
       else if (ftype=="pdf") {
+        window.open('https://docs.google.com/viewer?url='+link+data.url, '_self', 'location=yes');
         console.log("My pdf is loading!!!!!!!!!!");
       }
-      console.log(Cookies.get("fileUrl"));
+
     }
   });
   //load form based on id requested
