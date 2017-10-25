@@ -26,13 +26,7 @@ function create_list() {
     },
     error: function(returnval) {
       if (returnval.status!=200) {
-
-        setTimeout(function(){
-        window.open("../UI/login.html","_self")
-    }, 5000);
-Materialize.toast("Please Login to view Forms", 4000);
-
-
+        Materialize.toast('I am a toast', 4000,'',function(){window.open("../UI/login.html","_self")})
       }
     }
   });
