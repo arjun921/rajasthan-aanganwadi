@@ -23,6 +23,17 @@ function create_list() {
         aTag.innerHTML = name;
         mydiv.appendChild(aTag);
       }
+    },
+    error: function(returnval) {
+      if (returnval.status!=200) {
+
+        setTimeout(function(){
+        window.open("../UI/login.html","_self")
+    }, 5000);
+Materialize.toast("Please Login to view Forms", 4000);
+
+
+      }
     }
   });
 }
@@ -148,6 +159,8 @@ function create_form(s) {
     //dynamically generates forms in same view
     h = "<h5>" + fields_returned.title + "</h5>"
     $('#' + lastElem).append(h);
+    di = "<div class=\"divider\"></div>"
+    // $('#' + lastElem).append(di);
     for (var i = 0; i < fields_returned.fields.length; i++) {
       create_newElem(fields_returned.fields[i]);
     }
