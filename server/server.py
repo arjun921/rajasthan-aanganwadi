@@ -17,7 +17,7 @@ import utils
 import hashlib
 from functools import wraps
 from jsonschema import validate
-__version__ = (0, 0, 9)
+__version__ = (0, 0, 10)
 
 
 app = bottle.Bottle()
@@ -382,10 +382,8 @@ def content_retreive():
     fname = bottle.request.json['fname']
     # TODO: clean filename
     # TODO: Permissions
-    fl = bottle.static_file(fname, root=utils.upath)
-    print(fl)
-    print(bottle.request.json)
-    return fl
+    # TODO: temp file name
+    return {'url': '/static/'+fname}
 
 
 # FORM ROUTES #########################################
@@ -600,6 +598,13 @@ def form_delete():
     Returns OK
     """
     db.form_remove(bottle.request.json['formid'])
+
+
+@app.get('/static/<fname>')
+def staticfiles(fname):
+    fl = bottle.static_file(fname, root=utils.upath)
+    print(fl)
+    return fl
 
 
 if __name__ == '__main__':

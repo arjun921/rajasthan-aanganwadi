@@ -353,6 +353,7 @@ def test_dummy_file_retreival(loggeduser):
         fname = data['fname']
         json = {'token': token, 'fname': fname}
         r = requests.post(point('/content'), json=json)
+        r = requests.get(point(r.json()['url']))
         with open(fname, 'wb') as handle:
             for block in r.iter_content(1024):
                 handle.write(block)
