@@ -384,6 +384,7 @@ def content_retreive():
     # TODO: Permissions
     fl = bottle.static_file(fname, root=utils.upath)
     print(fl)
+    print(bottle.request.json)
     return fl
 
 
