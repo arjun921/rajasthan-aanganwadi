@@ -68,7 +68,12 @@ function load_content() {
     },
     error: function(returnval) {
       if (returnval.status!=200) {
-        Materialize.toast('You need to be logged in to view this', 4000,'',function(){window.open("../UI/login.html","_self")})
+        Materialize.toast('You need to be logged in to view this', 4000,'',function(){
+          Cookies.remove('currenttoken');
+          Cookies.remove('email');
+          window.location.reload(true);
+          // window.open("../UI/login.html","_self")
+        })
       }
     }
   });
@@ -91,7 +96,12 @@ function load_forms(){
     },
     error: function(returnval) {
       if (returnval.status!=200) {
-        Materialize.toast('You need to be logged in to view this', 4000,'',function(){window.open("../UI/login.html","_self")})
+        Materialize.toast('You need to be logged in to view this', 4000,'',function(){
+          Cookies.remove('currenttoken');
+          Cookies.remove('email');
+          window.location.reload(true);
+          // window.open("../UI/login.html","_self")
+        })
       }
     }
   });
@@ -145,6 +155,7 @@ $("#contUploadDiv").hide();
 
 function contentPushPage() {
   $("#contentList").hide();
+  $("#tokenIn").hide();
   $("#contentTitle").text("Content > Upload");
   $("#contUploadDiv").show();
 }

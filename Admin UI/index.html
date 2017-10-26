@@ -12,15 +12,28 @@
 </head>
 
 <body>
+  <!-- <nav>
+    <div class="nav-wrapper">
+
+      <ul class="right">
+        <li><a href="#!">Forms</a></li>
+        <li><a href="#!">Content</a></li>
+        <li><a href="#!" onclick="logout()" id="logout_menu_butD">Logout</a></li>
+        <li><a href="login.html" id="login_menu_butD">Login</a></li>
+      </ul>
+
+    </div>
+
+  </nav> -->
   <ul id="dropdown1" class="dropdown-content">
-    <li><a href="#!" onclick="Materialize.toast('Whoops, seems like you stumbled across something thats not working!', 4000);">arjoonn.94@gmail.com</a></li>
-    <li><a href="#!" onclick="Materialize.toast('Whoops, seems like you stumbled across something thats not working!', 4000);">Account Settings</a></li>
+    <li><a href="#!">arjoonn.94@gmail.com</a></li>
+    <li><a href="#!">Account Settings</a></li>
     <li class="divider"></li>
     <li><a href="#!" onclick="logout()" id="logout_menu_but">Logout</a></li>
   </ul>
   <ul id="dropdown2" class="dropdown-content">
-    <li><a href="#!" onclick="Materialize.toast('Whoops, seems like you stumbled across something thats not working!', 4000);">arjoonn.94@gmail.com</a></li>
-    <li><a href="#!" onclick="Materialize.toast('Whoops, seems like you stumbled across something thats not working!', 4000);">Account Settings</a></li>
+    <li><a href="#!">arjoonn.94@gmail.com</a></li>
+    <li><a href="#!" onclick="Materialize.toast(\" \ ")">Account Settings</a></li>
     <li class="divider"></li>
     <li><a href="#!" onclick="logout()" id="logout_menu_but">Logout</a></li>
   </ul>
@@ -74,7 +87,7 @@
       </ul>
     </div>
     <div class="fixed-action-btn">
-      <a class="btn-floating btn-large red"  onclick="Materialize.toast('Aye, stop pressing my buttons. That don\'t work!', 4000);">
+      <a class="btn-floating btn-large red">
         <i class="large material-icons">add</i>
       </a>
       <!-- <ul>
@@ -96,20 +109,36 @@
 
       </ul>
       <div class="" id="contUploadDiv">
-
+        <div class="input-field col s12">
+          <select>
+            <option value="" disabled selected>Choose your option</option>
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+            <option value="3">Option 3</option>
+          </select>
+        </div>
+        <form action="https://rajasthan-aanganwadi.herokuapp.com/content/create"  method="post" enctype="multipart/form-data">
           <div class="file-field input-field">
             <div class="btn">
               <span>File</span>
-              <input type="file" id="file">
+              <input type="file" name="upload" id="upload" value="upload">
             </div>
             <div class="file-path-wrapper">
-              <input class="file-path validate" id="filePath" type="text">
+              <input class="file-path validate" type="text">
             </div>
           </div>
-          <button class="btn waves-effect waves-light" type="submit" onclick="contentUpload()">Submit
+          <input type="hidden" name="token" id="tokenSend"/>
+          <button class="btn waves-effect waves-light" onclick="$('#tokenSend').val(Cookies.get('currenttoken'))"  type="submit" name="action">Submit
             <i class="material-icons right">send</i>
           </button>
+          <!-- <input onclick="$('#tokenSend').val(Cookies.get('currenttoken'))" type="submit" value="Start upload" /> -->
+        </form>
 
+<!-- <form action="https://rajasthan-aanganwadi.herokuapp.com/content/create" method="post" enctype="multipart/form-data">
+    Category:      <input type="hidden" name="token" id="tokenSend"/>
+    Select a file: <input type="file" name="upload" />
+    <input onclick="$('#tokenSend').val(Cookies.get('currenttoken'))" type="submit" value="Start upload" />
+</form> -->
       </div>
     </div>
     <div class="fixed-action-btn">
