@@ -15,7 +15,7 @@ class DB:
                     address='india',
                     mobile='123')
         if os.environ.get('USE_MONGO'):
-            MONGO_URL = os.environ.get('MONGO_URL')
+            MONGO_URL = os.environ.get('MONGODB_URI')
             self.client = MongoClient(MONGO_URL)
             self.dev = False
             print('Using mongo')

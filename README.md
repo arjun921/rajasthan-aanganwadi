@@ -44,7 +44,7 @@ To test the local app `pytest tests`
 To make the server use Mongo as a server instead of the in-ram database invoke the `server.py` file with proper environment variables set.
 
 ```bash
-cd server && USE_MONGO=1 MONGO_URL=mongodb://127.0.0.1:27017 python server.py
+cd server && USE_MONGO=1 MONGODB_URI=mongodb://127.0.0.1:27017 python server.py
 ```
 
 DOCS
