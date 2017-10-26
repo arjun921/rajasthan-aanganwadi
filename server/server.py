@@ -12,12 +12,13 @@ The first part defines the endpoint method and url separated by a single space,
 the second defines the acceptable input JSON schema. Since this schema is used
 in the code please do not make changes unless you know what you are doing.
 '''
+import os
 import bottle
 import utils
 import hashlib
 from functools import wraps
 from jsonschema import validate
-__version__ = (0, 0, 11)
+__version__ = (0, 0, 12)
 
 
 app = bottle.Bottle()
@@ -36,13 +37,14 @@ CORS_HEADERS = {
 def raisehttp(code, body):
     """
     Raise an HTTP error and add access control headers to it.
-    This is necessary since hooks don't get called if an ERROR is raised
+    This is necessary since hooks don't get called if an ERROR is raised.
     """
     raise bottle.HTTPError(code, body=body, headers=CORS_HEADERS)
 
 
 def admin_only(function):
     """
+    This is an endpoint wrapper.
     Raise permission errors if logged in user is not Admin.
     Requires function to have been wrapped in login_required
     """
@@ -59,6 +61,7 @@ def admin_only(function):
 
 def login_required(function):
     """
+    This is an endpoint wrapper.
     Detect a valid token in the json of the request.
     Requires function to be wrapped in json_validate
     """
@@ -78,6 +81,7 @@ def login_required(function):
 
 def json_validate(function):
     """
+    This is an endpoint wrapper.
     Perform JSON schema validation using the schema present in function's
     docstring.
 
@@ -104,12 +108,13 @@ def json_validate(function):
 
 @app.route('/<:re:.*>', method=['OPTIONS'])
 def enableCORSGenericOptionsRoute():
-    "This allows for CORS usage"
+    "This allows for CORS usage of the APIs"
     return 'OK'
 
 
 @app.hook('after_request')
 def add_cors_headers():
+    "Add cors headers to all outgoing responses"
     for key, val in CORS_HEADERS.items():
         bottle.response.headers[key] = val
 
@@ -117,7 +122,7 @@ def add_cors_headers():
 @app.get('/')
 def admin_panel():
     """
-    Admin panel html
+    Admin panel html. This is the only admin interface.
     """
     with open('home.html', 'r') as fl:
         html = fl.read()
@@ -352,7 +357,7 @@ def list_content():
     { 'contents': []}
     """
     return {'contents': [{'fname': fid, 'title': 'File '+str(i), 'meta': []}
-                         for i, fid in enumerate(utils.os.listdir(utils.upath))]}
+                         for i, fid in enumerate(os.listdir(utils.upath))]}
 
 
 @app.post('/content')
