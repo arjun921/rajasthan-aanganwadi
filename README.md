@@ -32,7 +32,7 @@ Working API
 TESTS
 -----
 
-To test heroku environment.
+To test heroku environment. We have to export the variable otherwise pytest does not pick it up.
 
 ```bash
 cd server && python server.py
@@ -41,6 +41,11 @@ export TEST_HEROKU='true' && pytest tests
 
 To test the local app `pytest tests`
 
+To make the server use Mongo as a server instead of the in-ram database invoke the `server.py` file with proper environment variables set.
+
+```bash
+cd server && USE_MONGO=1 MONGO_URL=mongodb://127.0.0.1:27017 python server.py
+```
 
 DOCS
 ----
