@@ -356,7 +356,9 @@ def list_content():
 
     { 'contents': []}
     """
-    return {'contents': [{'fname': fid, 'title': 'File '+str(i), 'meta': []}
+    return {'contents': [{'fname': fid,
+                          'title': fid + ' content '+str(i),
+                          'meta': []}
                          for i, fid in enumerate(os.listdir(utils.upath))]}
 
 

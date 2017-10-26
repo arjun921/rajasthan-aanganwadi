@@ -43,8 +43,8 @@ class DB:
                 self.user_insert(data)
                 self.add_admin(data['email'])
         if len(self.form_list()) == 0:
-            data = {'formid': 'CandyForm',
-                    'title': 'CandyForm',
+            data = {'formid': 'Dummy Form',
+                    'title': 'Dummy Form 1',
                     'fields': [
                                 {'id': '1',
                                  'label': 'name',
@@ -53,21 +53,20 @@ class DB:
                                  'label': 'email',
                                  'kind': 'text'},
                                 {'id': '3',
-                                 'label': 'what candies do you want?',
+                                 'label': 'What do you need at school?',
                                  'kind': 'checkbox',
-                                 'misc': [{'subLabel': 'candy1',
-                                           'subID': 'candy1'},
-                                          {'subLabel': 'candy2',
-                                           'subID': 'candy2'}]},
+                                 'misc': [{'subLabel': 'more books',
+                                           'subID': 'books'},
+                                          {'subLabel': 'access to internet',
+                                           'subID': 'internet'}]},
                                 {'id': '4',
-                                 'label': 'how do you want to pay?',
+                                 'label': 'is aanganwadi regular?',
                                  'kind': 'radio',
-                                 'misc': [{'subLabel': 'cash',
-                                           'subID': '4_candy1'},
-                                          {'subLabel': 'dishes',
-                                           'subID': '4_candy2'},
-                                          {'subLabel': 'card',
-                                           'subID': '4_candy3'}]},
+                                 'misc': [{'subLabel': 'yes',
+                                           'subID': 'yes'},
+                                          {'subLabel': 'no',
+                                           'subID': 'no'},
+                                           ]},
                                 ],
                     }
             self.form_insert(data)
