@@ -83,6 +83,7 @@ function load_content(contentID) {
     success: function(data, st, xhr) {
       data = data;
       ftype = (data.url.split('.').pop());
+
       if (ftype == "mp4") {
         $("#content_list").hide();
         p = "<video class=\"responsive-video\" style=\"width:100%; padding-top: 25px;\" controls><source src="+link+data.url+" type=\"video/mp4\"></video>"
@@ -99,13 +100,14 @@ function load_content(contentID) {
         window.open('https://docs.google.com/viewer?url='+link+data.url, '_self', 'location=yes');
         console.log("My pdf is loading!!!!!!!!!!");
       }
+
     }
   });
   //load form based on id requested
   // return create
 }
 
-//<------------- Logout begin
+//<Logout begins
 function logout() {
   $.ajax({
     url: (link + '/user/logout'),
@@ -122,5 +124,5 @@ function logout() {
         Materialize.toast('User Logout Successful', 4000,'',function(){window.open("activity_bank.html","_self")})
       }
     }
-  });} 
-  // ---------------------------------logout---------->
+  });}
+// ---------------------------------logout----------

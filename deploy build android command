@@ -1,0 +1,1 @@
+phonegap build android --release  -- --keystore="/Users/arjun921/working_directory/rajasthan/key/Aanganwadi.keystore" --storePassword=aanganwadi --alias=aanganwadi

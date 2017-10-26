@@ -26,7 +26,7 @@ function create_list() {
     },
     error: function(returnval) {
       if (returnval.status!=200) {
-        Materialize.toast('I am a toast', 4000,'',function(){window.open("../UI/login.html","_self")})
+        Materialize.toast('You need to be logged in to view this', 4000,'',function(){window.open("../UI/login.html","_self")})
       }
     }
   });

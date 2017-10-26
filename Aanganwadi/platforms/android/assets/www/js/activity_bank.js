@@ -29,7 +29,7 @@ function out_changes() {
 }
 
 
-//<------------- Logout begin
+//<------------- Login begin
 function logout() {
   $.ajax({
     url: (link + '/user/logout'),
@@ -46,6 +46,7 @@ function logout() {
         Materialize.toast('User Logout Successful', 4000,'',function(){window.open("activity_bank.html","_self")})
       }
     }
-  });} 
-  // ---------------------------------logout---------->
+  });}
+ // ---------------------------------logout----------
 
+//Login end ------------->

@@ -26,7 +26,7 @@ function create_list() {
     },
     error: function(returnval) {
       if (returnval.status!=200) {
-        Materialize.toast('You need to be logged in to view this.', 4000,'',function(){window.open("login.html","_self")})
+        Materialize.toast('You need to be logged in to view this', 4000,'',function(){window.open("login.html","_self")})
       }
     }
   });
@@ -190,7 +190,7 @@ function create_form(s) {
 
 
 
-//<------------- Logout begin
+//<Logout begins
 function logout() {
   $.ajax({
     url: (link + '/user/logout'),
@@ -207,8 +207,9 @@ function logout() {
         Materialize.toast('User Logout Successful', 4000,'',function(){window.open("activity_bank.html","_self")})
       }
     }
-  });} 
-  // ---------------------------------logout---------->
+  });}
+ // ---------------------------------logout----------
+
 
 function doSubmit() {
   fields_returned = JSON.parse(Cookies.get('fields_returned'));
