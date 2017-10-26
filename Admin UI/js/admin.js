@@ -9,6 +9,7 @@ var genToken = function() {
                 }
                 return text;
 }
+
 function REinit() {
   $(".button-collapse").sideNav();
   $("#loggedIn").show();
@@ -28,6 +29,26 @@ function REinit() {
   else {
     out_changes();
   }
+  $( '#fileUploadForm' ).submit( function( e ) {
+    $.ajax( {
+      url: link+'/content/create',
+      type: 'POST',
+      data: new FormData( this ),
+      processData: false,
+      contentType: false,
+      success: function () {
+        Materialize.toast('Upload Successful', 4000,'',function(){
+          window.location.reload(true);
+        })
+      },
+      error: function(){
+        Materialize.toast('Upload Failed', 4000,'',function(){
+          window.location.reload(true);
+        })
+      }
+    } );
+    e.preventDefault();
+  } );
 }
 
 $(document).ready(function() {
