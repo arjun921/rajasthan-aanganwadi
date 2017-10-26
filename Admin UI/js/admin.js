@@ -22,11 +22,37 @@ $(document).ready(function() {
       $("#form_tab").show();
       $("#tabs").show();
       $("#loginDiv").hide();
+      load_forms();
     }
     else {
       out_changes();
     }
 });
+
+function load_forms(){
+  $.ajax({
+    url: (link + '/form/list'),
+    type: 'post',
+    contentType: 'application/json',
+    data: JSON.stringify({
+      "token": Cookies.get('currenttoken')
+    }),
+    success: function(data, st, xhr) {
+      console.log(data);
+      for (var i = 0; i < data.forms.length; i++) {
+        name = data.forms[i];
+        s = "<li><div class=\"collapsible-header\"><i class=\"material-icons\">assessment</i>"+name+"</div><div class=\"collapsible-body\"><div class=\"collection\"><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">October 25, 2017</span>Date Published</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">October 31, 2017</span>Expiry</a><a href=\"#!\" class=\"collection-item\"><span class=\"new badge\">21</span>Number of responses</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\"><i class=\"material-icons\">edit</i></span>Edit</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\"><i class=\"material-icons\">delete</i></span>Delete</a></div></div></li>"
+        $('#formList').append(s);
+        console.log(name);
+      }
+    },
+    error: function(returnval) {
+      if (returnval.status!=200) {
+        Materialize.toast('You need to be logged in to view this', 4000,'',function(){window.open("../UI/login.html","_self")})
+      }
+    }
+  });
+}
 
 function out_changes() {
   $("#tabs").hide();
