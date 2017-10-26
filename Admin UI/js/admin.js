@@ -9,25 +9,70 @@ var genToken = function() {
                 }
                 return text;
 }
+function REinit() {
+  $(".button-collapse").sideNav();
+  $("#loggedIn").show();
+  $("#noLogin").hide();
+  //sets navigation menu profile content
+  // var currenttoken = Cookies.get('currenttoken');
+  if (Cookies.get('currenttoken')) {
+    $("#email_menu").text(Cookies.get('email'));
+    $("#name_menu").text("Arjoonn Sharma");
+    $("#profile_pic").attr('src',"https://avatars3.githubusercontent.com/u/7693265?v=4&s=400");
+    $("#form_tab").show();
+    $("#tabs").show();
+    $("#loginDiv").hide();
+    load_forms();
+    load_content();
+  }
+  else {
+    out_changes();
+  }
+}
+
 $(document).ready(function() {
-    $(".button-collapse").sideNav();
-    $("#loggedIn").show();
-    $("#noLogin").hide();
-    //sets navigation menu profile content
-    // var currenttoken = Cookies.get('currenttoken');
-    if (Cookies.get('currenttoken')) {
-      $("#email_menu").text(Cookies.get('email'));
-      $("#name_menu").text("Arjoonn Sharma");
-      $("#profile_pic").attr('src',"https://avatars3.githubusercontent.com/u/7693265?v=4&s=400");
-      $("#form_tab").show();
-      $("#tabs").show();
-      $("#loginDiv").hide();
-      load_forms();
-    }
-    else {
-      out_changes();
-    }
+  REinit();
 });
+
+
+function load_content() {
+  $.ajax({
+    url: (link + '/content/list'),
+    type: 'post',
+    contentType: 'application/json',
+    data: JSON.stringify({
+      "token": Cookies.get('currenttoken')
+    }),
+    success: function(data, st, xhr) {
+
+      for (var i = 0; i < data.contents.length; i++) {
+        content = data.contents[i];
+        title = content.title;
+        ftype = (content.fname.split('.').pop());
+        icon = ""
+        if (ftype=="mp4") {
+          ftype="Video";
+          icon="movie";
+        }
+        else if (ftype=="mp3") {
+          ftype="Audio";
+          icon="music_note";
+        }
+        else if (ftype=="pdf") {
+          ftype="PDF";
+          icon="picture_as_pdf";
+        }
+        s = "<li><div class=\"collapsible-header\"><i class=\"material-icons\">"+icon+"</i>"+title+"</div><div class=\"collapsible-body\"><div class=\"collection\"><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">October 25, 2017</span>Date Published</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">"+ftype+"</span>Content Type</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\"><i class=\"material-icons\">delete</i></span>Delete</a></div></div></li>"
+        $('#contentList').append(s);
+      }
+    },
+    error: function(returnval) {
+      if (returnval.status!=200) {
+        Materialize.toast('You need to be logged in to view this', 4000,'',function(){window.open("../UI/login.html","_self")})
+      }
+    }
+  });
+}
 
 function load_forms(){
   $.ajax({
@@ -38,12 +83,10 @@ function load_forms(){
       "token": Cookies.get('currenttoken')
     }),
     success: function(data, st, xhr) {
-      console.log(data);
       for (var i = 0; i < data.forms.length; i++) {
         name = data.forms[i];
         s = "<li><div class=\"collapsible-header\"><i class=\"material-icons\">assessment</i>"+name+"</div><div class=\"collapsible-body\"><div class=\"collection\"><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">October 25, 2017</span>Date Published</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">October 31, 2017</span>Expiry</a><a href=\"#!\" class=\"collection-item\"><span class=\"new badge\">21</span>Number of responses</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\"><i class=\"material-icons\">edit</i></span>Edit</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\"><i class=\"material-icons\">delete</i></span>Delete</a></div></div></li>"
         $('#formList').append(s);
-        console.log(name);
       }
     },
     error: function(returnval) {
@@ -60,6 +103,8 @@ function out_changes() {
   $("#loginDiv").show();
   $("#nav-mobile").hide();
   $("#sideLogin").hide();
+  $("#contentList").hide();
+  $("#content_tab").hide();
 
 
   // $("#logout_menu_but").hide();
@@ -86,10 +131,29 @@ function dologin(){
             $("#loginDiv").hide();
             $("#nav-mobile").show();
             $("#sideLogin").show();
+            window.location.reload(true);
         }
     });
 
 };
+
+function contentShow() {
+  $("#contentTitle").text("Content");
+$("#contentList").show();
+$("#contUploadDiv").hide();
+}
+
+function contentPushPage() {
+  $("#contentList").hide();
+  $("#contentTitle").text("Content > Upload");
+  $("#contUploadDiv").show();
+}
+
+function contentUpload() {
+
+  Materialize.toast($("#file").val(),4000);
+  Materialize.toast($("#filePath").val(),4000);
+}
 
 //<------------- Login begin
 function logout() {
