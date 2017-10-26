@@ -102,12 +102,6 @@ function dologin(){
         contentType: 'application/json',
         data: JSON.stringify( { "email": email, "pwd": pwd, "token": tok} ),
         success: function(data, st, xhr){
-            // $('#emailinput').hide();
-            // $("#pwdinput").hide();
-            // $("#loginbutton").hide();
-            // $("#logoutbutton").show();
-            // $("#username").text(email);
-            tok;
             Cookies.set('currenttoken', tok);
             Cookies.set('email', email);
             Materialize.toast('Login Successful', 4000);
