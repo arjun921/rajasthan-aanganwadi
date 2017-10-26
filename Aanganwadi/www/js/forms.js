@@ -26,7 +26,8 @@ function create_list() {
     },
     error: function(returnval) {
       if (returnval.status!=200) {
-        Materialize.toast('You need to be logged in to view this', 4000,'',function(){window.open("login.html","_self")})
+        var $toastContent = $('<span>You need to be logged in to view this</span>').add($('<a href="login.html"><button class="btn-flat toast-action">OK</button></a>'));
+Materialize.toast($toastContent, 4000,'',function(){window.open("login.html","_self")})
       }
     }
   });
