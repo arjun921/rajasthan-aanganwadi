@@ -275,6 +275,11 @@ def user_create():
 def content_create():
     """
     File upload to create content.
+
+    Expects a normal html multipart form with
+        token       : a string signifying user token
+        upload      : the file being uploaded
+
     Returns file name on successful creation
     """
     token = bottle.request.forms.get('token')
