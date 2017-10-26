@@ -34,6 +34,22 @@ $(document).ready(function() {
   REinit();
 });
 
+function deleteCont(fname) {
+  tok = Cookies.get('currenttoken');
+  $.ajax({
+      url: (link+'/content/delete'),
+      type: 'post',
+      contentType: 'application/json',
+      data: JSON.stringify( { "fname": fname, "token": tok} ),
+      success: function(data, st, xhr){
+        Materialize.toast('Delete Successful', 4000,'',function(){
+          window.location.reload(true);
+          // window.open("../UI/login.html","_self")
+        })
+
+      }
+  });
+}
 
 function load_content() {
   $.ajax({
@@ -48,6 +64,7 @@ function load_content() {
       for (var i = 0; i < data.contents.length; i++) {
         content = data.contents[i];
         title = content.title;
+        fname = content.fname;
         ftype = (content.fname.split('.').pop());
         icon = ""
         if (ftype=="mp4") {
@@ -62,7 +79,7 @@ function load_content() {
           ftype="PDF";
           icon="picture_as_pdf";
         }
-        s = "<li><div class=\"collapsible-header\"><i class=\"material-icons\">"+icon+"</i>"+title+"</div><div class=\"collapsible-body\"><div class=\"collection\"><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">October 25, 2017</span>Date Published</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">"+ftype+"</span>Content Type</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\"><i class=\"material-icons\">delete</i></span>Delete</a></div></div></li>"
+        s = "<li><div class=\"collapsible-header\"><i class=\"material-icons\">"+icon+"</i>"+title+"</div><div class=\"collapsible-body\"><div class=\"collection\"><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">October 25, 2017</span>Date Published</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">"+ftype+"</span>Content Type</a><a onclick=\"deleteCont(this.id)\" id=\""+fname+"\" class=\"collection-item\"><span class=\"badge\"><i class=\"material-icons\">delete</i></span>Delete</a></div></div></li>"
         $('#contentList').append(s);
       }
     },
