@@ -198,13 +198,6 @@ function contentPushPage() {
   $("#contUploadDiv").show();
 }
 
-function contentUpload() {
-
-  Materialize.toast($("#file").val(),4000);
-  Materialize.toast($("#filePath").val(),4000);
-}
-
-//<------------- Login begin
 function logout() {
   $.ajax({
     url: (link + '/user/logout'),
@@ -222,6 +215,3 @@ function logout() {
       }
     }
   });}
- // ---------------------------------logout----------
-
-//Login end ------------->
