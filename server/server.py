@@ -622,6 +622,27 @@ def staticfiles(link):
         return raisehttp(404, 'Perhaps this link has been used already')
 
 
+@app.post('/category/create')
+@json_validate
+@login_required
+@admin_only
+def category_create():
+    """
+    POST /category/create
+
+    ----------
+    {
+        "type"          : "object",
+        "properties"    : {
+                          }
+    }
+
+    ----------
+
+    Returns OK
+    """
+
+
 @app.post('/category')
 @json_validate
 def category_list():
