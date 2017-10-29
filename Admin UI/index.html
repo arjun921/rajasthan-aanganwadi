@@ -128,11 +128,21 @@
                 <form class="col s12">
                   <div class="row">
                     <div class="input-field col s10">
-                      <input id="first_name" type="text" class="validate">
-                      <label for="first_name">Enter Question</label>
+                      <input id="radioQues" type="text" class="validate">
+                      <label for="radioQues">Enter Question</label>
+                    </div>
+                    <div class="input-field col s10">
+                        <input id="NumRadioOpt" type="text" class="validate" onkeyup="updateRadioQ()">
+                      <label for="NumRadioOpt">Number of Radio Buttons(2 or more)</label>
+                    </div>
+                    <div id="RadioSub">
+                      <!-- <div class="input-field col s10 offset-s1">
+                        <input id="radioQues" type="text" class="validate">
+                        <label for="radioQues">Enter Options</label>
+                      </div> -->
                     </div>
                   </div>
-                  <button class="btn waves-effect waves-light" onclick="updateForm()">Update
+                  <button class="btn waves-effect waves-light" onclick="addRadio()">Update
                     <i class="material-icons right">update</i>
                   </button>
                 </form>
@@ -144,11 +154,21 @@
                 <form class="col s12">
                   <div class="row">
                     <div class="input-field col s10">
-                      <input id="first_name" type="text" class="validate">
-                      <label for="first_name">Enter Question</label>
+                      <input id="CBQues" type="text" class="validate">
+                      <label for="CBQues">Enter Question</label>
+                    </div>
+                    <div class="input-field col s10">
+                        <input id="NumCBOpt" type="text" class="validate" onkeyup="updateCBQ()">
+                      <label for="NumCBOpt">Number of Check Boxes Buttons(2 or more)</label>
+                    </div>
+                    <div id="CBSub">
+                      <!-- <div class="input-field col s10 offset-s1">
+                        <input id="radioQues" type="text" class="validate">
+                        <label for="radioQues">Enter Options</label>
+                      </div> -->
                     </div>
                   </div>
-                  <button class="btn waves-effect waves-light" onclick="updateForm()">Update
+                  <button class="btn waves-effect waves-light" onclick="addCB()">Update
                     <i class="material-icons right">update</i>
                   </button>
                 </form>

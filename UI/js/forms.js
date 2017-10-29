@@ -261,7 +261,7 @@ function doSubmit() {
       data: JSON.stringify(dataRet),
       success: function(data, st, xhr) {
         if (xhr.status==200) {
-          Materialize.toast('Form Submitted Succesfully', 4000,'',function(){window.open("../UI/activity_bank.html","_self")})
+          // Materialize.toast('Form Submitted Succesfully', 4000,'',function(){window.open("../UI/activity_bank.html","_self")})
         }
       },
       error: function(returnval) {

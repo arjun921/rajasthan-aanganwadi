@@ -329,6 +329,7 @@ function load_form(formID) {
 function create_formView(s) {
   $('#formView').html('');
   fields_returned = s;
+
   Cookies.set('fields_returned', fields_returned);
   //checks if variable is defined
   if (typeof fields_returned !== 'undefined') {
@@ -424,46 +425,6 @@ var formJson = {
     "title": "Dummy Form 1",
     "fields": [
         {
-            "id": "1",
-            "label": "name",
-            "kind": "text"
-        },
-        {
-            "id": "2",
-            "label": "email",
-            "kind": "text"
-        },
-        {
-            "id": "3",
-            "label": "What do you need at school?",
-            "kind": "checkbox",
-            "misc": [
-                {
-                    "subLabel": "more books",
-                    "subID": "books"
-                },
-                {
-                    "subLabel": "access to internet",
-                    "subID": "internet"
-                }
-            ]
-        },
-        {
-            "id": "4",
-            "label": "is aanganwadi regular?",
-            "kind": "radio",
-            "misc": [
-                {
-                    "subLabel": "yes",
-                    "subID": "yes"
-                },
-                {
-                    "subLabel": "no",
-                    "subID": "no"
-                }
-            ]
-        },
-        {
             "id": "5",
             "label": "Pick a Date",
             "kind": "datepicker"
@@ -502,6 +463,10 @@ var formJson = {
     ]
 };
 
+function updateForm() {
+    create_formView(formJson);
+}
+
 function idGen() {
   var text = "";
   var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -519,20 +484,91 @@ function setFormName() {
   updateForm();
 }
 
-tempArr = [];
 
+fieldsArr = [];
 function addTextField() {
-  temp = {}
+  temp = {};
   temp.id = idGen();
   temp.label = $('#txtQuestion').val();
   temp.kind = "text";
-  tempArr.push(temp);
-  formJson.fields = tempArr;
+  fieldsArr.push(temp);
+  formJson.fields = fieldsArr;
   updateForm()
 }
 
 
+var numRopts;
+function updateRadioQ() {
+  $('#RadioSub').html('');
 
-function updateForm() {
-    create_formView(formJson);
+  if ($('#NumRadioOpt').val()<2) {
+    numRopts = 2;
+  }
+  else if ($('#NumRadioOpt').val()>=2) {
+    numRopts = $('#NumRadioOpt').val();
+  }
+  for (var cou = 0; cou < numRopts; cou++) {
+    s = "<div class=\"input-field col s10 offset-s1\"><input id=\""+cou+"\" type=\"text\" class=\"validate\"><label for=\"radioQues\">Enter Options</label></div>"
+    $('#RadioSub').append(s);
+  }
+}
+
+function addRadio() {
+  temp = {};
+  temp['id'] = idGen();
+  temp['label'] = $('#radioQues').val();
+  temp['kind'] = "radio";
+  misc = [];
+  for (var i = 0; i < numRopts; i++) {
+    subOptions = {};
+    subOptions.subLabel = $('#'+i).val();
+    subOptions.subID = $('#'+i).val();
+    misc.push(subOptions);
+  }
+  temp.misc = misc;
+  fieldsArr.push(temp);
+  formJson.fields = fieldsArr;
+  updateForm();
+}
+
+var numCBopts;
+var cbIDs = [];
+function updateCBQ() {
+  $('#CBSub').html('');
+
+  if ($('#NumCBOpt').val()<2) {
+    numCBopts = 2;
+  }
+  else if ($('#NumCBOpt').val()>=2) {
+    numCBopts = $('#NumCBOpt').val();
+  }
+  cbIDs = [];
+  for (var couCB = 0; couCB < numCBopts; couCB++) {
+    idTemp = idGen();
+    cbIDs.push(idTemp);
+    s = "<div class=\"input-field col s10 offset-s1\"><input id=\""+idTemp+"\" type=\"text\" class=\"validate\"><label for=\"CBQues\">Enter Options</label></div>"
+    $('#CBSub').append(s);
+  }
+}
+
+
+function addCB() {
+  temp = {};
+  temp.id = idGen();
+  temp.label = $('#CBQues').val();
+  temp.kind = "checkbox";
+  misc = [];
+  for (var i = 0; i < cbIDs.length; i++) {
+    subOptions = {};
+    subOptions.subLabel = $('#'+cbIDs[i]).val();
+    subOptions.subID = cbIDs[i];
+    misc.push(subOptions);
+  }
+  // for (var i = 0; i < numCBopts; i++) {
+
+  // }
+  temp.misc = misc;
+  fieldsArr.push(temp);
+  formJson.fields = fieldsArr;
+  updateForm();
 }
