@@ -674,7 +674,8 @@ def category_create():
                                                     "type": "string",
                                                   },
                                          "uniqueItems": True
-                                         }
+                                         },
+                            "parent": {"type": "string"}
                           },
         "required"      : ["title", "contains", "id", "token"]
     }
@@ -687,7 +688,17 @@ def category_create():
     if cat is not None:
         raisehttp(422, 'Category id exists')
     else:
-        db.category_insert(bottle.request.json)
+        cat = bottle.request.json
+        if 'parent' in cat:
+            parent, cat = cat['parent'], dict(cat)
+            cat.pop('parent')
+            p = db.category_data(parent)
+            if p is not None:
+                p['contains'].append(cat['id'])
+                # update
+                db.category_delete(parent)
+                db.category_insert(p)
+        db.category_insert(cat)
         return 'OK'
 
 

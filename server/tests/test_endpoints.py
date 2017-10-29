@@ -4,6 +4,8 @@ import filecmp
 import requests
 
 
+# CONFIG ------------------
+
 if os.environ.get('TEST_HEROKU'):
     root = 'https://rajasthan-aanganwadi.herokuapp.com'
 else:
@@ -24,6 +26,9 @@ active_urls = ['/user/login',
                '/content/list',
                '/content',
                '/content/delete',
+               '/category',
+               '/category/create',
+               '/category/delete',
                '/form',
                '/form/list',
                '/form/create',
@@ -31,6 +36,8 @@ active_urls = ['/user/login',
                '/form/delete',
                ]
 
+
+# FIXTURES ------------------
 
 @pytest.fixture
 def user(admin):
@@ -120,6 +127,23 @@ def category(admin):
 
 
 # TESTS---------------------------------------------------------------
+def test_category_creation_with_parent_is_ok(admin):
+    ident = '_MY New Category attached to root'
+    cat = {'title': 'mytitle',
+           'id': ident,
+           'contains': [],
+           'token': admin['token'],
+           'parent': '_ROOT_'}
+    r = requests.post(point('/category/create'), json=cat)
+    assert r.status_code == 200, r.text
+    cat = {'catid': ident}
+    r = requests.post(point('/category'), json=cat)
+    assert r.status_code == 200, r.text
+    cat = {'catid': '_ROOT_'}
+    r = requests.post(point('/category'), json=cat)
+    assert ident in [i['id'] for i in r.json()['contains']], r.json()
+
+
 def test_category_deletion_fails_for_non_existant_category(category):
     cat = {'catid': category['id'], 'token': category['token']}
     r = requests.post(point('/category/delete'), json=cat)
