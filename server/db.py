@@ -94,31 +94,30 @@ class DB:
                           'LinguisticDevelopment',
                           'Social Emotional Development',
                           'Creative Development']
+
             for catid, category in enumerate(categories):
                 catid = '_' + str(catid)
                 root_contains.append(catid)
-                d = {'id': catid, 'title': category}
+                category = {'id': catid, 'title': category}
                 category_contains = []
                 for subcatid, sc in enumerate(subcategories):
                     subcatid = catid + '_' + str(subcatid)
                     category_contains.append(subcatid)
-                    sc = {'id': subcatid, 'title': sc, 'contains': []}
-                    if sc['title'] == 'Activity Bank':
-                        C = []
-                        for actid, act in enumerate(activities):
-                            actid = subcatid + '_' + str(actid)
-                            C.append(actid)
-                            activity = {'id': actid, 'title': act,
-                                        'contains': ['laadki.mp3',
-                                                     'Proposal.pdf',
-                                                     'rajasthan.mp4']}
-                            self.category_insert(activity)
-                        sc['contains'] = C
+                    subcat_contains = []
+                    for actid, act in enumerate(activities):
+                        actid = subcatid + '_' + str(actid)
+                        subcat_contains.append(actid)
+                        activity = {'id': actid, 'title': act,
+                                    'contains': ['laadki.mp3',
+                                                 'Proposal.pdf',
+                                                 'rajasthan.mp4']}
+                        self.category_insert(activity)
+                    sc = {'id': subcatid, 'title': sc, 'contains': subcat_contains}
                     self.category_insert(sc)
-                d['contains'] = category_contains
-                self.category_insert(sc)
+                category['contains'] = category_contains
+                self.category_insert(category)
             root = {'title': 'ROOT',
-                    'id': '_1',
+                    'id': '_ROOT_',
                     'contains': root_contains}
             self.category_insert(root)
 

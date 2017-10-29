@@ -164,6 +164,7 @@ def user_login():
         else:
             raise raisehttp(422, body='regenerate token')
     else:
+        print(json)
         raise raisehttp(401, body='wrong credentials')
 
 
@@ -645,7 +646,7 @@ def category_list():
 
     Returns category item
     """
-    cat = db.category_data({'id': bottle.request.json['catid']})
+    cat = db.category_data(bottle.request.json['catid'])
     if cat is not None:
         cat['contains'] = [{'title': db.category_data(i)['title'],
                             'id': i} for i in cat['contains']]

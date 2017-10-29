@@ -107,7 +107,7 @@ def resource(tmpdir, admin):
 
 # TESTS---------------------------------------------------------------
 def test_categoy_list_works(loggeduser):
-    cat = {'token': loggeduser['token'], 'catid': '_1'}
+    cat = {'token': loggeduser['token'], 'catid': '_ROOT_'}
     r = requests.post(point('/category'), json=cat)
     assert r.status_code == 200, r.text
 
