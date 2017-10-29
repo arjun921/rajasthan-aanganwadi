@@ -21,6 +21,18 @@ function check_password(input) {
 
 // Hash Function
 //used in login/signup
+/**
+ * JS Implementation of MurmurHash3 (r136) (as of May 20, 2011)
+ *
+ * @author <a href="mailto:gary.court@gmail.com">Gary Court</a>
+ * @see http://github.com/garycourt/murmurhash-js
+ * @author <a href="mailto:aappleby@gmail.com">Austin Appleby</a>
+ * @see http://sites.google.com/site/murmurhash/
+ *
+ * @param {string} key ASCII only
+ * @param {number} seed Positive integer only
+ * @return {number} 32-bit positive integer hash
+ */
 //source https://github.com/garycourt/murmurhash-js/blob/master/murmurhash3_gc.js
 function murmurhash3_32_gc(key, seed) {
     var remainder, bytes, h1, h1b, c1, c1b, c2, c2b, k1, i;
@@ -100,7 +112,7 @@ function dologin(){
         url: (link+'/user/login'),
         type: 'post',
         contentType: 'application/json',
-        data: JSON.stringify( { "email": email, "pwd": pwd, "token": tok} ),
+        data: JSON.stringify( { "email": email, "pwd": murmurhash3_32_gc(pwd,24), "token": tok} ),
         success: function(data, st, xhr){
             Cookies.set('currenttoken', tok);
             Cookies.set('email', email);
