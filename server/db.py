@@ -329,7 +329,9 @@ class DB:
         if not self.dev:  # NOTE: remove this
             self.client.aang.categories.find_one_and_delete(catid)
         else:
-            self.categories.append(catid)
+            cat = [i for i in self.categories
+                   if i['id'] != catid]
+            self.categories = cat
 
     def category_data(self, catid):
         "Returns details about the category"

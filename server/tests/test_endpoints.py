@@ -106,7 +106,54 @@ def resource(tmpdir, admin):
     r = requests.post(point('/content/delete'), json=data)
 
 
+@pytest.fixture
+def category(admin):
+    cat = {'title': 'mytitle',
+           'id': '_MY New Category',
+           'contains': [],
+           'token': admin['token']}
+    r = requests.post(point('/category/create'), json=cat)
+    assert r.status_code == 200, r.text
+    yield cat
+    cat = {'catid': cat['id'], 'token': admin['token']}
+    requests.post(point('/category/delete'), json=cat)
+
+
 # TESTS---------------------------------------------------------------
+def test_category_deletion_fails_for_non_existant_category(category):
+    cat = {'catid': category['id'], 'token': category['token']}
+    r = requests.post(point('/category/delete'), json=cat)
+    assert r.status_code == 200, r.status_code
+    r = requests.post(point('/category/delete'), json=cat)
+    assert r.status_code == 404, r.status_code
+
+
+def test_category_deletion_works(category):
+    cat = {'catid': category['id'], 'token': category['token']}
+    r = requests.post(point('/category/delete'), json=cat)
+    assert r.status_code == 200, r.status_code
+
+
+def test_category_creation_fails_for_duplicate_id(category):
+    r = requests.post(point('/category/create'), json=category)
+    assert r.status_code == 422, r.status_code
+
+
+def test_category_creation_works(admin):
+    cat = {'title': 'mytitle',
+           'id': '_MY New Category',
+           'contains': [],
+           'token': admin['token']}
+    r = requests.post(point('/category/create'), json=cat)
+    assert r.status_code == 200, r.text
+
+
+def test_category_list_fails_on_non_existant_category():
+    cat = {'catid': '____ROUTE_____'}
+    r = requests.post(point('/category'), json=cat)
+    assert r.status_code == 404, r.text
+
+
 def test_category_list_has_entire_tree_walkable():
     def check_tree(ident):
         cat = {'catid': ident}

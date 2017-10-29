@@ -621,6 +621,37 @@ def staticfiles(link):
         return raisehttp(404, 'Perhaps this link has been used already')
 
 
+@app.post('/category/delete')
+@json_validate
+@login_required
+@admin_only
+def category_delete():
+    """
+    POST /category/delete
+
+    ----------
+    {
+        "type": "object",
+        "properties": {
+                        "token" :   {"type" : "string",
+                                     "minLength": 100,
+                                     "maxLength": 100},
+                        "catid": {"type": "string"},
+                      },
+        "required": ["token", "catid"]
+    }
+    ----------
+
+    Returns OK
+    """
+    catid = bottle.request.json['catid']
+    if db.category_data(catid) is None:
+        raisehttp(404, 'category not present')
+    else:
+        db.category_delete(catid)
+        return 'OK'
+
+
 @app.post('/category/create')
 @json_validate
 @login_required
@@ -633,15 +664,31 @@ def category_create():
     {
         "type"          : "object",
         "properties"    : {
-                            "title":   {"type" : "string"}
+                            "token" :   {"type" : "string",
+                                         "minLength": 100,
+                                         "maxLength": 100},
+                            "title":   {"type" : "string"},
+                            "id": {"type": "string"},
+                            "contains": {"type": "array",
+                                         "items": {
+                                                    "type": "string",
+                                                  },
+                                         "uniqueItems": True
+                                         }
                           },
-        "required"      : ["title"]
+        "required"      : ["title", "contains", "id", "token"]
     }
 
     ----------
 
     Returns OK
     """
+    cat = db.category_data(bottle.request.json['id'])
+    if cat is not None:
+        raisehttp(422, 'Category id exists')
+    else:
+        db.category_insert(bottle.request.json)
+        return 'OK'
 
 
 @app.post('/category')
