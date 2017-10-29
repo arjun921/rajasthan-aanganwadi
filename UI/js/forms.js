@@ -1,8 +1,9 @@
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
-// var link = 'http://192.168.225.163:8000';
+// var link = 'http://192.168.43.126:8000';
 var lastElem = "form";
 var formslist = [];
 var data;
+var finaldat;
 
 function create_list() {
   $.ajax({
@@ -75,7 +76,7 @@ function hide_allForms() {
 }
 
 function create_newElem(field) {
-  console.log(field);
+
   if (field.kind == 'text') {
     s = "<div class=\"input-field col s6\"><input id=" + field.id + " type=\"text\" " + "><label for=" + field.id + ">" + field.label + "</label></div>"
     // s = "<div class=\"input-field col s6\"><input id=" + field.id + " type=" + field.misc[0].spec + "><label for=" + field.id + ">" + field.label + "</label></div>"
@@ -145,7 +146,8 @@ function load_form(formID) {
 
 //called on click of form name from list.
 function create_form(s) {
-  fields_returned = s
+  fields_returned = s;
+  console.log(fields_returned);
   Cookies.set('fields_returned', fields_returned);
   //checks if variable is defined
   if (typeof fields_returned !== 'undefined') {
@@ -156,6 +158,8 @@ function create_form(s) {
     $('#' + lastElem).append(h);
     di = "<div class=\"divider\"></div>"
     // $('#' + lastElem).append(di);
+    console.log(fields_returned.fields);
+    finaldat = fields_returned.fields;
     for (var i = 0; i < fields_returned.fields.length; i++) {
       create_newElem(fields_returned.fields[i]);
     }

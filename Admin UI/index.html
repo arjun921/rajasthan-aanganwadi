@@ -50,7 +50,7 @@
     </div>
     <div class="nav-content" id="tabs">
       <ul class="tabs tabs-transparent">
-        <li class="tab"><a href="#form_tab">Forms</a></li>
+        <li class="tab"><a href="#form_tab" onclick="formsShow()">Forms</a></li>
         <li class="tab"><a href="#content_tab" onclick="contentShow()">Content</a></li>
         <!-- <li class="tab"><a href="#test4">Test 4</a></li> -->
       </ul>
@@ -78,7 +78,7 @@
   <div id="form_tab" class="col s12">
     <div class="container">
       <div class="section">
-        <h5>Forms</h5>
+        <h5 id="formTitle">Forms</h5>
       </div>
       <!-- <div class="divider"></div> -->
 
@@ -86,8 +86,155 @@
 
       </ul>
     </div>
+
+    <div class="" id="formCreateDiv">
+      <div class="container">
+        <div class="row">
+          <div class="input-field">
+            <input id="formName" type="text" class="validate" onkeyup="setFormName()">
+            <label for="formName">Enter Form Name</label>
+          </div>
+          <div class="col s6 m6 l6">
+
+            <h5 id="formTitle">Select Fields</h5>
+            <ul id="tabs-swipe-demo" class="tabs">
+              <li class="tab"><a class="active" href="#text">Text</a></li>
+              <li class="tab"><a href="#rdio">Radio Button</a></li>
+              <li class="tab"><a href="#cbox">Checkbox</a></li>
+              <li class="tab"><a href="#select">Selection</a></li>
+              <li class="tab"><a href="#range">Range</a></li>
+              <li class="tab"><a href="#dateP">Date Picker</a></li>
+              <li class="tab"><a href="#timeP">Time Picker</a></li>
+            </ul>
+            <div id="text" class="col s12 m12 l12 card red lighten-5">
+              <h5 class="">Add Text Input Fields</h5>
+              <div class="row">
+                <form class="col s12">
+                  <div class="row">
+                    <div class="input-field col s10">
+                      <input id="txtQuestion" type="text" class="validate">
+                      <label for="txtQuestion">Enter Question</label>
+                    </div>
+                  </div>
+                  <button class="btn waves-effect waves-light" onclick="addTextField()">Update
+                    <i class="material-icons right">update</i>
+                  </button>
+                </form>
+              </div>
+            </div>
+            <div id="rdio" class="col s12 m12 l12 card pink lighten-5">
+              <h5 class="">Add Radio Button Fields</h5>
+              <div class="row">
+                <form class="col s12">
+                  <div class="row">
+                    <div class="input-field col s10">
+                      <input id="first_name" type="text" class="validate">
+                      <label for="first_name">Enter Question</label>
+                    </div>
+                  </div>
+                  <button class="btn waves-effect waves-light" onclick="updateForm()">Update
+                    <i class="material-icons right">update</i>
+                  </button>
+                </form>
+              </div>
+            </div>
+            <div id="cbox" class="col s12 m12 l12 card purple lighten-5">
+              <h5 class="">Add Checkbox Fields</h5>
+              <div class="row">
+                <form class="col s12">
+                  <div class="row">
+                    <div class="input-field col s10">
+                      <input id="first_name" type="text" class="validate">
+                      <label for="first_name">Enter Question</label>
+                    </div>
+                  </div>
+                  <button class="btn waves-effect waves-light" onclick="updateForm()">Update
+                    <i class="material-icons right">update</i>
+                  </button>
+                </form>
+              </div>
+            </div>
+            <div id="select" class="col s12 m12 l12 card deep-purple lighten-5">
+              <h5 class="">Selection</h5>
+              <div class="row">
+                <form class="col s12">
+                  <div class="row">
+                    <div class="input-field col s10">
+                      <input id="first_name" type="text" class="validate">
+                      <label for="first_name">Enter Question</label>
+                    </div>
+                  </div>
+                  <button class="btn waves-effect waves-light" onclick="updateForm()">Update
+                    <i class="material-icons right">update</i>
+                  </button>
+                </form>
+              </div>
+            </div>
+            <div id="range" class="col s12 m12 l12 card indigo lighten-5">
+              <h5 class="">Range</h5>
+              <div class="row">
+                <form class="col s12">
+                  <div class="row">
+                    <div class="input-field col s10">
+                      <input id="first_name" type="text" class="validate">
+                      <label for="first_name">Enter Question</label>
+                    </div>
+                  </div>
+                  <button class="btn waves-effect waves-light" onclick="updateForm()">Update
+                    <i class="material-icons right">update</i>
+                  </button>
+                </form>
+              </div>
+            </div>
+            <div id="dateP" class="col s12 m12 l12 card blue lighten-5">
+              <h5 class="">Date Picker</h5>
+              <div class="row">
+                <form class="col s12">
+                  <div class="row">
+                    <div class="input-field col s10">
+                      <input id="first_name" type="text" class="validate">
+                      <label for="first_name">Enter Question</label>
+                    </div>
+                  </div>
+                  <button class="btn waves-effect waves-light" onclick="updateForm()">Update
+                    <i class="material-icons right">update</i>
+                  </button>
+                </form>
+              </div>
+            </div>
+            <div id="timeP" class="col s12 m12 l12 card light-blue lighten-5">
+              <h5 class="">Time Picker</h5>
+              <div class="row">
+                <form class="col s12">
+                  <div class="row">
+                    <div class="input-field col s10">
+                      <input id="first_name" type="text" class="validate">
+                      <label for="first_name">Enter Question</label>
+                    </div>
+                  </div>
+                  <button class="btn waves-effect waves-light" onclick="updateForm()">Update
+                    <i class="material-icons right">update</i>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col s6 m6 l6 card blue-grey lighten-4" id="formView">
+          </div>
+
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+    </div>
     <div class="fixed-action-btn">
-      <a class="btn-floating btn-large red">
+      <a class="btn-floating btn-large red" onclick="createForms()">
         <i class="large material-icons">add</i>
       </a>
       <!-- <ul>
@@ -117,7 +264,7 @@
             <option value="3">Option 3</option>
           </select>
         </div>
-        <form name="fileUploadForm" id="fileUploadForm" action="javascript:;"  method="post" enctype="multipart/form-data">
+        <form name="fileUploadForm" id="fileUploadForm" action="javascript:;" method="post" enctype="multipart/form-data">
           <div class="file-field input-field">
             <div class="btn">
               <span>File</span>
@@ -127,18 +274,11 @@
               <input class="file-path validate" type="text">
             </div>
           </div>
-          <input type="hidden" name="token" id="tokenSend"/>
-          <button class="btn waves-effect waves-light" onclick="$('#tokenSend').val(Cookies.get('currenttoken'))"  type="submit" name="action">Submit
-            <i class="material-icons right">send</i>
+          <input type="hidden" name="token" id="tokenSend" />
+          <button class="btn waves-effect waves-light" onclick="$('#tokenSend').val(Cookies.get('currenttoken'))" type="submit" name="action">Submit
+            <i class="material-icons right">update</i>
           </button>
-          <!-- <input onclick="$('#tokenSend').val(Cookies.get('currenttoken'))" type="submit" value="Start upload" /> -->
         </form>
-
-<!-- <form action="https://rajasthan-aanganwadi.herokuapp.com/content/create" method="post" enctype="multipart/form-data">
-    Category:      <input type="hidden" name="token" id="tokenSend"/>
-    Select a file: <input type="file" name="upload" />
-    <input onclick="$('#tokenSend').val(Cookies.get('currenttoken'))" type="submit" value="Start upload" />
-</form> -->
       </div>
     </div>
     <div class="fixed-action-btn">

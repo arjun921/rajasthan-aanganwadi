@@ -1,4 +1,7 @@
+var lastElem = "formView";
+
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
+// var link = 'http://192.168.43.126:8000';
 var currenttoken = '';
 
 var genToken = function() {
@@ -81,9 +84,11 @@ function murmurhash3_32_gc(key, seed) {
 }
 
 function REinit() {
+  $('ul.tabs').tabs('select_tab', 'text');
   $(".button-collapse").sideNav();
   $("#loggedIn").show();
   $("#noLogin").hide();
+  $("#formCreateDiv").hide();
   //sets navigation menu profile content
   // var currenttoken = Cookies.get('currenttoken');
   if (Cookies.get('currenttoken')) {
@@ -93,7 +98,7 @@ function REinit() {
     $("#form_tab").show();
     $("#tabs").show();
     $("#loginDiv").hide();
-    load_forms();
+    loadFormList();
     load_content();
   }
   else {
@@ -119,6 +124,8 @@ function REinit() {
     } );
     e.preventDefault();
   } );
+  //remove
+  createForms();
 }
 
 $(document).ready(function() {
@@ -187,7 +194,7 @@ function load_content() {
   });
 }
 
-function load_forms(){
+function loadFormList(){
   $.ajax({
     url: (link + '/form/list'),
     type: 'post',
@@ -265,7 +272,6 @@ $("#contUploadDiv").hide();
 
 function contentPushPage() {
   $("#contentList").hide();
-  $("#tokenIn").hide();
   $("#contentTitle").text("Content > Upload");
   $("#contUploadDiv").show();
 }
@@ -287,3 +293,246 @@ function logout() {
       }
     }
   });}
+
+
+function createForms() {
+  $("#formList").hide();
+  $("#formTitle").text("Forms > Create");
+  $("#formCreateDiv").show();
+
+}
+
+function formsShow() {
+  $("#formTitle").text("Forms");
+  $("#formList").show();
+  $("#formCreateDiv").hide();
+}
+
+function load_form(formID) {
+  $.ajax({
+    url: (link + '/form'),
+    type: 'post',
+    contentType: 'application/json',
+    data: JSON.stringify({
+      "token": Cookies.get('currenttoken'),
+      'formid': formID
+    }),
+    success: function(data, st, xhr) {
+      data = data;
+      create_formView(data);
+    }
+  });
+  //load form based on id requested
+  // return create
+}
+
+function create_formView(s) {
+  $('#formView').html('');
+  fields_returned = s;
+  Cookies.set('fields_returned', fields_returned);
+  //checks if variable is defined
+  if (typeof fields_returned !== 'undefined') {
+    //hides all forms list
+    //dynamically generates forms in same view
+    h = "<h5>" + fields_returned.title + "</h5>"
+    $('#' + lastElem).append(h);
+    di = "<div class=\"divider\"></div>"
+    // $('#' + lastElem).append(di);
+    finaldat = fields_returned.fields;
+    for (var i = 0; i < fields_returned.fields.length; i++) {
+      create_newElem(fields_returned.fields[i]);
+    }
+    // but = "<button style=\"padding-bottom:20px;\" class=\"btn waves-effect waves-light\"onclick=\"doSubmit()\">Submit<i class=\"material-icons right\">send</i></button>"
+    // $('#' + lastElem).append(but);
+    //enables time picker
+    $('.timepicker').pickatime({
+      default: 'now', // Set default time: 'now', '1:30AM', '16:30'
+      fromnow: 0, // set default time to * milliseconds from now (using with default = 'now')
+      twelvehour: false, // Use AM/PM or 24-hour format
+      donetext: 'OK', // text for done-button
+      cleartext: 'Clear', // text for clear-button
+      canceltext: 'Cancel', // Text for cancel-button
+      autoclose: false, // automatic close timepicker
+      ampmclickable: true, // make AM PM clickable
+      aftershow: function() {} //Function for after opening timepicker
+    });
+    //enables datepicker
+    $('.datepicker').pickadate({
+      selectMonths: true, // Creates a dropdown to control month
+      selectYears: 15, // Creates a dropdown of 15 years to control year,
+      today: 'Today',
+      clear: 'Clear',
+      close: 'Ok',
+      closeOnSelect: false // Close upon selecting a date,
+    });
+    //enables select
+    $('select').material_select();
+  }
+}
+
+function create_newElem(field) {
+  if (field.kind == 'text') {
+    s = "<div class=\"input-field col s12\"><input id=" + field.id + " type=\"text\" " + "><label for=" + field.id + ">" + field.label + "</label></div>"
+    // s = "<div class=\"input-field col s6\"><input id=" + field.id + " type=" + field.misc[0].spec + "><label for=" + field.id + ">" + field.label + "</label></div>"
+    $('#' + lastElem).append(s);
+  } else if (field.kind == 'radio') {
+    p = "<p>" + field.label + "</p>"
+    $('#' + lastElem).append(p);
+    for (var i = 0; i < field.misc.length; i++) {
+      va = field.misc[i];
+      prb = "<p>  <input name=" + field.id + " type=\"radio\" id=" + va.subID + " value=" + va.subID + " />  <label for=" + va.subID + ">" + va.subLabel + "</label></p>"
+      $('#' + lastElem).append(prb);
+    }
+  } else if (field.kind == 'checkbox') {
+    p = "<p>" + field.label + "</p>"
+    $('#' + lastElem).append(p);
+    for (var i = 0; i < field.misc.length; i++) {
+      cbv = field.misc[i];
+      s = "<p><input type=\"checkbox\" id=" + cbv.subID + " /><label for=" + cbv.subID + ">" + cbv.subLabel + "</label></p>"
+      $('#' + lastElem).append(s);
+    }
+  } else if (field.kind == 'select') {
+    p = "<p>" + field.label + "</p>"
+    $('#' + lastElem).append(p);
+    s = "<select id=" + field.id + "><option value=\"\" disabled selected>Choose your option</option></select>"
+    $('#' + lastElem).append(s);
+    for (var i = 0; i < field.misc.length; i++) {
+      vs = field.misc[i];
+      op = "<option value=" + vs.subVal + ">" + vs.subLabel + "</option>"
+      $('#' + field.id).append(op);
+    }
+  } else if (field.kind == 'range') {
+    s = "<p>" + field.label + "</p>"
+    $('#' + lastElem).append(s);
+    sp = "<p class=\"range-field\"><input type=\"range\" id=" + field.id + " min=" + field.misc[0].min + " max=" + field.misc[0].max + " /></p>"
+    $('#' + lastElem).append(sp);
+  } else if (field.kind == 'datepicker') {
+    s = "<p>" + field.label + "</p>"
+    $('#' + lastElem).append(s);
+    pic = "<input type=\"text\" class=\"datepicker\" id=" + field.id + " placeholder=\"Choose Date\">"
+    $('#' + lastElem).append(pic);
+  } else if (field.kind == 'timepicker') {
+    s = "<p>" + field.label + "</p>"
+    $('#' + lastElem).append(s);
+    pic = "<input type=\"text\" class=\"timepicker\" id=" + field.id + " placeholder=\"Select Time\">"
+    $('#' + lastElem).append(pic);
+  }
+}
+
+var formJson = {
+    "formid": "Dummy Form",
+    "title": "Dummy Form 1",
+    "fields": [
+        {
+            "id": "1",
+            "label": "name",
+            "kind": "text"
+        },
+        {
+            "id": "2",
+            "label": "email",
+            "kind": "text"
+        },
+        {
+            "id": "3",
+            "label": "What do you need at school?",
+            "kind": "checkbox",
+            "misc": [
+                {
+                    "subLabel": "more books",
+                    "subID": "books"
+                },
+                {
+                    "subLabel": "access to internet",
+                    "subID": "internet"
+                }
+            ]
+        },
+        {
+            "id": "4",
+            "label": "is aanganwadi regular?",
+            "kind": "radio",
+            "misc": [
+                {
+                    "subLabel": "yes",
+                    "subID": "yes"
+                },
+                {
+                    "subLabel": "no",
+                    "subID": "no"
+                }
+            ]
+        },
+        {
+            "id": "5",
+            "label": "Pick a Date",
+            "kind": "datepicker"
+        },
+        {
+            "id": "6",
+            "label": "Pick a Time",
+            "kind": "timepicker"
+        },
+        {
+            "id": "7",
+            "label": "Select something",
+            "kind": "select",
+            "misc": [
+                {
+                    "subVal": "something1",
+                    "subLabel": "something1"
+                },
+                {
+                    "subVal": "something2",
+                    "subLabel": "something2"
+                }
+            ]
+        },
+        {
+            "id": "8",
+            "label": "Pick a number between 1 and 10",
+            "kind": "range",
+            "misc": [
+                {
+                    "min": 1,
+                    "max": 10
+                }
+            ]
+        }
+    ]
+};
+
+function idGen() {
+  var text = "";
+  var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+  for(var i = 0; i < 21; i++) {
+  text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
+}
+
+
+function setFormName() {
+  e = $('#formName').val();
+  formJson.title = e;
+  formJson.formid = e;
+  updateForm();
+}
+
+tempArr = [];
+
+function addTextField() {
+  temp = {}
+  temp.id = idGen();
+  temp.label = $('#txtQuestion').val();
+  temp.kind = "text";
+  tempArr.push(temp);
+  formJson.fields = tempArr;
+  updateForm()
+}
+
+
+
+function updateForm() {
+    create_formView(formJson);
+}
