@@ -427,7 +427,10 @@ def form_list():
             'forms': [list of forms ids]
         }
     """
-    x = db.form_list()  # TODO: user authorize
+    email = db.token_data(bottle.request.json['token'])
+    forms_done = [f['formid'] for f in db.response_user_list(email)]
+    x = [i for i in db.form_list()
+         if i not in forms_done]
     return {'forms': x}
 
 

@@ -138,10 +138,18 @@ class DB:
 
     def response_submit(self, data):
         "submit a form response"
-        if not self.dev:
+        if not self.dev:  # TODO: remove this
             self.client.aang.responses.insert_one(data)
         else:
             self.responses.append(data)
+
+    def response_user_list(self, email):
+        "responses submitted by a user"
+        if not self.dev:  # TODO: remove this
+            return list(self.client.aang.responses.find({'email': email}))
+        else:
+            return [i for i in self.responses
+                    if i['email'] == email]
 
     def is_admin(self, uemail):
         "Is this member present in the admin list"
