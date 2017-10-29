@@ -624,7 +624,6 @@ def staticfiles(link):
 
 @app.post('/category')
 @json_validate
-@login_required
 def category_list():
     """
     POST /category
@@ -634,22 +633,32 @@ def category_list():
         {
             "type"          : "object",
             "properties"    : {
-                                    "token" :   {"type" : "string",
-                                                 "minLength": 100,
-                                                 "maxLength": 100},
                                     "catid":   {"type" : "string"}
                               },
-            "required"      : ["token", "catid"]
+            "required"      : ["catid"]
         }
 
     ----------
 
-    Returns category item
+    Returns category item.
+
+    Category IDs are system generated and are always
+    prefixed with an `_`.
+    If a catid does not have an `_` it is an actual content file
     """
     cat = db.category_data(bottle.request.json['catid'])
     if cat is not None:
-        cat['contains'] = [{'title': db.category_data(i)['title'],
-                            'id': i} for i in cat['contains']]
+        contains = []
+        for i in cat['contains']:
+            if not isinstance(i, str):
+                print(cat)
+            if i[0] == '_':
+                title = db.category_data(i)['title']
+            else:
+                title = i  # TODO: File metadata title
+            contains.append({'title': title,
+                             'id': i})
+        cat['contains'] = contains
     else:
         raisehttp(404, 'Category not found')
     return cat

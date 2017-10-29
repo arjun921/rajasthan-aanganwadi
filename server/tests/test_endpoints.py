@@ -106,10 +106,19 @@ def resource(tmpdir, admin):
 
 
 # TESTS---------------------------------------------------------------
-def test_categoy_list_works(loggeduser):
-    cat = {'token': loggeduser['token'], 'catid': '_ROOT_'}
-    r = requests.post(point('/category'), json=cat)
-    assert r.status_code == 200, r.text
+def test_category_list_has_entire_tree_walkable():
+    def check_tree(ident):
+        cat = {'catid': ident}
+        r = requests.post(point('/category'), json=cat)
+        assert r.status_code == 200, r.text
+        data = r.json()
+        assert 'contains' in data, data
+        assert 'id' in data, data
+        assert 'title' in data, data
+        for sub in data['contains']:
+            if sub['id'][0] == '_':
+                check_tree(sub['id'])
+    check_tree('_ROOT_')
 
 
 def test_resource_retreival_fails_for_unlogged_user(resource):
