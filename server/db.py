@@ -3,6 +3,14 @@ import random
 from pymongo import MongoClient
 
 
+def randstring(n):
+    """
+    Random string of length n
+    """
+    alpha = 'abcdefghijklmnopqrstuvwxyz1234567890'
+    return ''.join(random.choice(alpha) for _ in range(n))
+
+
 class DB:
     """
     The database class to quietly abstract away all differences
@@ -23,7 +31,7 @@ class DB:
                 self.user_insert(data)
                 self.add_admin(data['email'])
             for k in ['tokens', 'users', 'forms', 'responses',
-                      'admins', 'content_links']:
+                      'admins', 'content_links', 'categories']:
                 d = {'column': 'initiator'}
                 self.client.aang[k].insert_one(d)
                 self.client.aang[k].find_one_and_delete(d)
@@ -37,6 +45,7 @@ class DB:
             self.responses = []
             self.admins = []
             self.content_links = []
+            self.categories = []
 
             # add initial admin
             if len(self.admins) == 0:
@@ -66,7 +75,7 @@ class DB:
                                            'subID': 'yes'},
                                           {'subLabel': 'no',
                                            'subID': 'no'},
-                                           ]},
+                                          ]},
                                 ],
                     }
             self.form_insert(data)
@@ -217,8 +226,7 @@ class DB:
 
     def generate_content_url(self, fname):
         "Generate a one time download link for the file"
-        newlink = ''.join(random.choice('abcdefghijklmnopqrstuvwxyz')
-                          for _ in range(50)) +'.'+ fname.split('.')[-1]
+        newlink = randstring(50) + '.' + fname.split('.')[-1]
         data = {'fname': fname, 'newlink': newlink}
         if not self.dev:  # NOTE: remove this
             self.client.aang['content_links'].insert_one(data)
@@ -252,3 +260,28 @@ class DB:
         else:
             return len(list(1 for i in self.users
                        if i['email'] == email and i['pwd'] == pwd)) > 0
+
+    def category_insert(self, category):
+        "Insert a new category"
+        if not self.dev:  # NOTE: remove this
+            self.client.aang.categories.insert_one(category)
+        else:
+            self.categories.append(category)
+
+    def category_delete(self, catid):
+        "Deletes this category and it's subtree"
+        if not self.dev:  # NOTE: remove this
+            self.client.aang.categories.find_one_and_delete(catid)
+        else:
+            self.categories.append(catid)
+
+    def category_data(self, catid):
+        "Returns details about the category"
+        if not self.dev:  # NOTE: remove this
+            x = list(self.client.aang.categories.find(catid))
+            if len(x) > 0:
+                return x[0]
+        else:
+            x = [i for i in self.categories if i['id'] == catid['id']]
+            if len(x) > 0:
+                return x[0]
