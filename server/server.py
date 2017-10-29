@@ -525,6 +525,7 @@ def form_create():
             'formid': <formid if created>
         }
     """
+    # TODO: raise error if not unique form id
     db.form_insert(bottle.request.json)
 
 
