@@ -621,5 +621,38 @@ def staticfiles(link):
         return raisehttp(404, 'Perhaps this link has been used already')
 
 
+@app.post('/category')
+@json_validate
+@login_required
+def category_list():
+    """
+    POST /category
+
+    ----------
+
+        {
+            "type"          : "object",
+            "properties"    : {
+                                    "token" :   {"type" : "string",
+                                                 "minLength": 100,
+                                                 "maxLength": 100},
+                                    "catid":   {"type" : "string"}
+                              },
+            "required"      : ["token", "catid"]
+        }
+
+    ----------
+
+    Returns category item
+    """
+    cat = db.category_data({'id': bottle.request.json['catid']})
+    if cat is not None:
+        cat['contains'] = [{'title': db.category_data(i)['title'],
+                            'id': i} for i in cat['contains']]
+    else:
+        raisehttp(404, 'Category not found')
+    return cat
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=8000, host='0.0.0.0')

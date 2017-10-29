@@ -106,6 +106,12 @@ def resource(tmpdir, admin):
 
 
 # TESTS---------------------------------------------------------------
+def test_categoy_list_works(loggeduser):
+    cat = {'token': loggeduser['token'], 'catid': '_1'}
+    r = requests.post(point('/category'), json=cat)
+    assert r.status_code == 200, r.text
+
+
 def test_resource_retreival_fails_for_unlogged_user(resource):
     fname, f, tok = resource
     tok = tok[1:] + 'a'

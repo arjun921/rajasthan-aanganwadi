@@ -79,6 +79,48 @@ class DB:
                                 ],
                     }
             self.form_insert(data)
+            # categories
+            # add root
+            root_contains = []
+            categories = ['Supplementary Nutrition',
+                          'Early Childhood Education',
+                          'Growth Monitoring', 'Healthcare',
+                          'Nutrition Education', 'Health Check Up']
+            subcategories = ['Syllabus', 'Curriculum',
+                             'Activity Bank', 'Activity Books',
+                             'Child assessment card', 'ECE Certificate',
+                             'Time table']
+            activities = ['Physical Development', 'CognitiveDevelopment',
+                          'LinguisticDevelopment',
+                          'Social Emotional Development',
+                          'Creative Development']
+            for catid, category in enumerate(categories):
+                catid = '_' + str(catid)
+                root_contains.append(catid)
+                d = {'id': catid, 'title': category}
+                category_contains = []
+                for subcatid, sc in enumerate(subcategories):
+                    subcatid = catid + '_' + str(subcatid)
+                    category_contains.append(subcatid)
+                    sc = {'id': subcatid, 'title': sc, 'contains': []}
+                    if sc['title'] == 'Activity Bank':
+                        C = []
+                        for actid, act in enumerate(activities):
+                            actid = subcatid + '_' + str(actid)
+                            C.append(actid)
+                            activity = {'id': actid, 'title': act,
+                                        'contains': ['laadki.mp3',
+                                                     'Proposal.pdf',
+                                                     'rajasthan.mp4']}
+                            self.category_insert(activity)
+                        sc['contains'] = C
+                    self.category_insert(sc)
+                d['contains'] = category_contains
+                self.category_insert(sc)
+            root = {'title': 'ROOT',
+                    'id': '_1',
+                    'contains': root_contains}
+            self.category_insert(root)
 
     def response_submit(self, data):
         "submit a form response"
@@ -282,6 +324,6 @@ class DB:
             if len(x) > 0:
                 return x[0]
         else:
-            x = [i for i in self.categories if i['id'] == catid['id']]
+            x = [i for i in self.categories if i['id'] == catid]
             if len(x) > 0:
                 return x[0]
