@@ -62,7 +62,8 @@ def loggeduser(user):
 
 @pytest.fixture
 def admin():
-    d = {'email': 'arjoonn.94@gmail.com', 'pwd': '2328904461', 'token': '1'*100}
+    d = {'email': 'arjoonn.94@gmail.com',
+         'pwd': '2328904461', 'token': '1'*100}
     resp = requests.post(point('/user/login'), json=d)
     assert resp.status_code == 200, resp.text
     yield d

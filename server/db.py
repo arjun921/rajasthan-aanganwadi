@@ -83,7 +83,7 @@ class DB:
                                  'label': 'Pick a Time',
                                  'kind': 'timepicker'},
                                 {'id': '7',
-                                 'label': 'Pick a Time',
+                                 'label': 'Select something',
                                  'kind': 'select',
                                  'misc': [{'subVal': 'something1',
                                            'subLabel': 'something1'},
@@ -103,16 +103,11 @@ class DB:
             root_contains = []
             categories = ['Supplementary Nutrition',
                           'Early Childhood Education',
-                          'Growth Monitoring', 'Healthcare',
-                          'Nutrition Education', 'Health Check Up']
-            subcategories = ['Syllabus', 'Curriculum',
-                             'Activity Bank', 'Activity Books',
-                             'Child assessment card', 'ECE Certificate',
-                             'Time table']
+                          'Health Check Up']
+            subcategories = ['Syllabus', 'Activity Bank',
+                             'Activity Books', 'Time table']
             activities = ['Physical Development', 'CognitiveDevelopment',
-                          'LinguisticDevelopment',
-                          'Social Emotional Development',
-                          'Creative Development']
+                          ]
 
             for catid, category in enumerate(categories):
                 catid = '_' + str(catid)
@@ -131,7 +126,8 @@ class DB:
                                                  'Proposal.pdf',
                                                  'rajasthan.mp4']}
                         self.category_insert(activity)
-                    sc = {'id': subcatid, 'title': sc, 'contains': subcat_contains}
+                    sc = {'id': subcatid, 'title': sc,
+                          'contains': subcat_contains}
                     self.category_insert(sc)
                 category['contains'] = category_contains
                 self.category_insert(category)
@@ -344,4 +340,4 @@ class DB:
         else:
             x = [i for i in self.categories if i['id'] == catid]
             if len(x) > 0:
-                return x[0]
+                return dict(x[0])

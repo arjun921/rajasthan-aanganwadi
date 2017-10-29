@@ -164,7 +164,6 @@ def user_login():
         else:
             raise raisehttp(422, body='regenerate token')
     else:
-        print(json)
         raise raisehttp(401, body='wrong credentials')
 
 
@@ -634,7 +633,9 @@ def category_create():
     {
         "type"          : "object",
         "properties"    : {
-                          }
+                            "title":   {"type" : "string"}
+                          },
+        "required"      : ["title"]
     }
 
     ----------
@@ -669,10 +670,9 @@ def category_list():
     """
     cat = db.category_data(bottle.request.json['catid'])
     if cat is not None:
+        # add titles to contains
         contains = []
         for i in cat['contains']:
-            if not isinstance(i, str):
-                print(cat)
             if i[0] == '_':
                 title = db.category_data(i)['title']
             else:
@@ -680,9 +680,9 @@ def category_list():
             contains.append({'title': title,
                              'id': i})
         cat['contains'] = contains
+        return cat
     else:
         raisehttp(404, 'Category not found')
-    return cat
 
 
 if __name__ == '__main__':
