@@ -1,5 +1,5 @@
-var link = 'https://rajasthan-aanganwadi.herokuapp.com';
-// var link = 'http://192.168.225.163:8000';
+// var link = 'https://rajasthan-aanganwadi.herokuapp.com';
+var link = 'http://192.168.43.126:8000';
 var currenttoken = '';
 //runs functions to be executed at page load
 $(document).ready(function() {
@@ -107,12 +107,15 @@ function dologin(){
     $("#preloader").show();
     var email = $('#emailinput').val();
     var pwd = $("#pwdinput").val();
+    pwd = murmurhash3_32_gc(pwd,24);
+    pws =  pwd.toString();
     var tok = genToken();
     $.ajax({
+
         url: (link+'/user/login'),
         type: 'post',
         contentType: 'application/json',
-        data: JSON.stringify( { "email": email, "pwd": murmurhash3_32_gc(pwd,24), "token": tok} ),
+        data: JSON.stringify( { "email": email, "pwd": pws, "token": tok} ),
         success: function(data, st, xhr){
             Cookies.set('currenttoken', tok);
             Cookies.set('email', email);
