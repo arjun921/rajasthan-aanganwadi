@@ -18,7 +18,7 @@ class DB:
     """
     def __init__(self):
         data = dict(email='arjoonn.94@gmail.com',
-                    pwd='hash',
+                    pwd='2328904461',
                     name='arjoonn',
                     address='india',
                     mobile='123')

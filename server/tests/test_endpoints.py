@@ -39,7 +39,7 @@ def user(admin):
             'address': 'a',
             'name': 'a',
             'mobile': '1234567890',
-            'pwd': 'hash',
+            'pwd': '2328904461',
             "token": admin['token']
             }
     resp = requests.post(point('/user/create'), json=data)
@@ -62,7 +62,7 @@ def loggeduser(user):
 
 @pytest.fixture
 def admin():
-    d = {'email': 'arjoonn.94@gmail.com', 'pwd': 'hash', 'token': '1'*100}
+    d = {'email': 'arjoonn.94@gmail.com', 'pwd': '2328904461', 'token': '1'*100}
     resp = requests.post(point('/user/login'), json=d)
     assert resp.status_code == 200, resp.text
     yield d
@@ -305,7 +305,7 @@ def test_user_create_works(admin):
             'address': 'a',
             'name': 'a',
             'mobile': '1234567890',
-            'pwd': 'hash',
+            'pwd': '2328904461',
             'token': admin['token']}
     resp = requests.post(point('/user/create'), json=data)
     assert resp.status_code == 200, resp.text
@@ -320,7 +320,7 @@ def test_user_create_fails_for_non_admin(admin, loggeduser):
             'address': 'a',
             'name': 'a',
             'mobile': '1234567890',
-            'pwd': 'hash',
+            'pwd': '2328904461',
             'token': loggeduser['token']}
     resp = requests.post(point('/user/create'), json=data)
     assert resp.status_code == 403, resp.text
