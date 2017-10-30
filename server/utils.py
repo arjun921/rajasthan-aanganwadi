@@ -1,5 +1,5 @@
 import os
-from db import DB
+from db import DB, randstring
 
 
 db = DB()

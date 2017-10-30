@@ -525,7 +525,10 @@ def form_create():
             'formid': <formid if created>
         }
     """
+    frm = bottle.request.json
+    frm['formid'] = utils.randstring(50)
     db.form_insert(bottle.request.json)
+    return frm['formid']
 
 
 @app.post('/form/submit')
