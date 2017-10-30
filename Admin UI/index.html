@@ -180,11 +180,21 @@
                 <form class="col s12">
                   <div class="row">
                     <div class="input-field col s10">
-                      <input id="first_name" type="text" class="validate">
-                      <label for="first_name">Enter Question</label>
+                      <input id="SelectQues" type="text" class="validate">
+                      <label for="SelectQues">Enter Question</label>
+                    </div>
+                    <div class="input-field col s10">
+                        <input id="numSelect" type="text" class="validate" onkeyup="updateSelectQ()">
+                      <label for="numSelect">Number of Selections(2 or more)</label>
+                    </div>
+                    <div id="selectSub">
+                      <!-- <div class="input-field col s10 offset-s1">
+                        <input id="radioQues" type="text" class="validate">
+                        <label for="radioQues">Enter Options</label>
+                      </div> -->
                     </div>
                   </div>
-                  <button class="btn waves-effect waves-light" onclick="updateForm()">Update
+                  <button class="btn waves-effect waves-light" onclick="addSelect()">Update
                     <i class="material-icons right">update</i>
                   </button>
                 </form>
@@ -196,8 +206,8 @@
                 <form class="col s12">
                   <div class="row">
                     <div class="input-field col s10">
-                      <input id="first_name" type="text" class="validate">
-                      <label for="first_name">Enter Question</label>
+                      <input id="rangeQ" type="text" class="validate">
+                      <label for="rangeQ">Enter Question</label>
                     </div>
                   </div>
                   <button class="btn waves-effect waves-light" onclick="updateForm()">Update
@@ -212,11 +222,11 @@
                 <form class="col s12">
                   <div class="row">
                     <div class="input-field col s10">
-                      <input id="first_name" type="text" class="validate">
-                      <label for="first_name">Enter Question</label>
+                      <input id="dateQ" type="text" class="validate">
+                      <label for="dateQ">Enter Question</label>
                     </div>
                   </div>
-                  <button class="btn waves-effect waves-light" onclick="updateForm()">Update
+                  <button class="btn waves-effect waves-light" onclick="addDate()">Update
                     <i class="material-icons right">update</i>
                   </button>
                 </form>
@@ -228,11 +238,11 @@
                 <form class="col s12">
                   <div class="row">
                     <div class="input-field col s10">
-                      <input id="first_name" type="text" class="validate">
-                      <label for="first_name">Enter Question</label>
+                      <input id="timeQ" type="text" class="validate">
+                      <label for="timeQ">Enter Question</label>
                     </div>
                   </div>
-                  <button class="btn waves-effect waves-light" onclick="updateForm()">Update
+                  <button class="btn waves-effect waves-light" onclick="addTime()">Update
                     <i class="material-icons right">update</i>
                   </button>
                 </form>

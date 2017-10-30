@@ -5,12 +5,12 @@ var link = 'https://rajasthan-aanganwadi.herokuapp.com';
 var currenttoken = '';
 
 var genToken = function() {
-                var text = "";
-                var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
-                for(var i = 0; i < 100; i++) {
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-                }
-                return text;
+  var text = "";
+  var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+  for (var i = 0; i < 100; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
 }
 
 // Hash Function
@@ -29,58 +29,58 @@ var genToken = function() {
  */
 //source https://github.com/garycourt/murmurhash-js/blob/master/murmurhash3_gc.js
 function murmurhash3_32_gc(key, seed) {
-    var remainder, bytes, h1, h1b, c1, c1b, c2, c2b, k1, i;
+  var remainder, bytes, h1, h1b, c1, c1b, c2, c2b, k1, i;
 
-    remainder = key.length & 3; // key.length % 4
-    bytes = key.length - remainder;
-    h1 = seed;
-    c1 = 0xcc9e2d51;
-    c2 = 0x1b873593;
-    i = 0;
+  remainder = key.length & 3; // key.length % 4
+  bytes = key.length - remainder;
+  h1 = seed;
+  c1 = 0xcc9e2d51;
+  c2 = 0x1b873593;
+  i = 0;
 
-    while (i < bytes) {
-        k1 =
-            ((key.charCodeAt(i) & 0xff)) |
-            ((key.charCodeAt(++i) & 0xff) << 8) |
-            ((key.charCodeAt(++i) & 0xff) << 16) |
-            ((key.charCodeAt(++i) & 0xff) << 24);
-        ++i;
+  while (i < bytes) {
+    k1 =
+      ((key.charCodeAt(i) & 0xff)) |
+      ((key.charCodeAt(++i) & 0xff) << 8) |
+      ((key.charCodeAt(++i) & 0xff) << 16) |
+      ((key.charCodeAt(++i) & 0xff) << 24);
+    ++i;
 
-        k1 = ((((k1 & 0xffff) * c1) + ((((k1 >>> 16) * c1) & 0xffff) << 16))) & 0xffffffff;
-        k1 = (k1 << 15) | (k1 >>> 17);
-        k1 = ((((k1 & 0xffff) * c2) + ((((k1 >>> 16) * c2) & 0xffff) << 16))) & 0xffffffff;
+    k1 = ((((k1 & 0xffff) * c1) + ((((k1 >>> 16) * c1) & 0xffff) << 16))) & 0xffffffff;
+    k1 = (k1 << 15) | (k1 >>> 17);
+    k1 = ((((k1 & 0xffff) * c2) + ((((k1 >>> 16) * c2) & 0xffff) << 16))) & 0xffffffff;
 
-        h1 ^= k1;
-        h1 = (h1 << 13) | (h1 >>> 19);
-        h1b = ((((h1 & 0xffff) * 5) + ((((h1 >>> 16) * 5) & 0xffff) << 16))) & 0xffffffff;
-        h1 = (((h1b & 0xffff) + 0x6b64) + ((((h1b >>> 16) + 0xe654) & 0xffff) << 16));
-    }
+    h1 ^= k1;
+    h1 = (h1 << 13) | (h1 >>> 19);
+    h1b = ((((h1 & 0xffff) * 5) + ((((h1 >>> 16) * 5) & 0xffff) << 16))) & 0xffffffff;
+    h1 = (((h1b & 0xffff) + 0x6b64) + ((((h1b >>> 16) + 0xe654) & 0xffff) << 16));
+  }
 
-    k1 = 0;
+  k1 = 0;
 
-    switch (remainder) {
-        case 3:
-            k1 ^= (key.charCodeAt(i + 2) & 0xff) << 16;
-        case 2:
-            k1 ^= (key.charCodeAt(i + 1) & 0xff) << 8;
-        case 1:
-            k1 ^= (key.charCodeAt(i) & 0xff);
+  switch (remainder) {
+    case 3:
+      k1 ^= (key.charCodeAt(i + 2) & 0xff) << 16;
+    case 2:
+      k1 ^= (key.charCodeAt(i + 1) & 0xff) << 8;
+    case 1:
+      k1 ^= (key.charCodeAt(i) & 0xff);
 
-            k1 = (((k1 & 0xffff) * c1) + ((((k1 >>> 16) * c1) & 0xffff) << 16)) & 0xffffffff;
-            k1 = (k1 << 15) | (k1 >>> 17);
-            k1 = (((k1 & 0xffff) * c2) + ((((k1 >>> 16) * c2) & 0xffff) << 16)) & 0xffffffff;
-            h1 ^= k1;
-    }
+      k1 = (((k1 & 0xffff) * c1) + ((((k1 >>> 16) * c1) & 0xffff) << 16)) & 0xffffffff;
+      k1 = (k1 << 15) | (k1 >>> 17);
+      k1 = (((k1 & 0xffff) * c2) + ((((k1 >>> 16) * c2) & 0xffff) << 16)) & 0xffffffff;
+      h1 ^= k1;
+  }
 
-    h1 ^= key.length;
+  h1 ^= key.length;
 
-    h1 ^= h1 >>> 16;
-    h1 = (((h1 & 0xffff) * 0x85ebca6b) + ((((h1 >>> 16) * 0x85ebca6b) & 0xffff) << 16)) & 0xffffffff;
-    h1 ^= h1 >>> 13;
-    h1 = ((((h1 & 0xffff) * 0xc2b2ae35) + ((((h1 >>> 16) * 0xc2b2ae35) & 0xffff) << 16))) & 0xffffffff;
-    h1 ^= h1 >>> 16;
+  h1 ^= h1 >>> 16;
+  h1 = (((h1 & 0xffff) * 0x85ebca6b) + ((((h1 >>> 16) * 0x85ebca6b) & 0xffff) << 16)) & 0xffffffff;
+  h1 ^= h1 >>> 13;
+  h1 = ((((h1 & 0xffff) * 0xc2b2ae35) + ((((h1 >>> 16) * 0xc2b2ae35) & 0xffff) << 16))) & 0xffffffff;
+  h1 ^= h1 >>> 16;
 
-    return h1 >>> 0;
+  return h1 >>> 0;
 }
 
 function REinit() {
@@ -94,36 +94,35 @@ function REinit() {
   if (Cookies.get('currenttoken')) {
     $("#email_menu").text(Cookies.get('email'));
     $("#name_menu").text("Arjoonn Sharma");
-    $("#profile_pic").attr('src',"https://avatars3.githubusercontent.com/u/7693265?v=4&s=400");
+    $("#profile_pic").attr('src', "https://avatars3.githubusercontent.com/u/7693265?v=4&s=400");
     $("#form_tab").show();
     $("#tabs").show();
     $("#loginDiv").hide();
     loadFormList();
     load_content();
-  }
-  else {
+  } else {
     out_changes();
   }
-  $( '#fileUploadForm' ).submit( function( e ) {
-    $.ajax( {
-      url: link+'/content/create',
+  $('#fileUploadForm').submit(function(e) {
+    $.ajax({
+      url: link + '/content/create',
       type: 'POST',
-      data: new FormData( this ),
+      data: new FormData(this),
       processData: false,
       contentType: false,
-      success: function () {
-        Materialize.toast('Upload Successful', 4000,'',function(){
+      success: function() {
+        Materialize.toast('Upload Successful', 4000, '', function() {
           window.location.reload(true);
         })
       },
-      error: function(){
-        Materialize.toast('Upload Failed', 4000,'',function(){
+      error: function() {
+        Materialize.toast('Upload Failed', 4000, '', function() {
           window.location.reload(true);
         })
       }
-    } );
+    });
     e.preventDefault();
-  } );
+  });
   //remove
   createForms();
 }
@@ -135,17 +134,20 @@ $(document).ready(function() {
 function deleteCont(fname) {
   tok = Cookies.get('currenttoken');
   $.ajax({
-      url: (link+'/content/delete'),
-      type: 'post',
-      contentType: 'application/json',
-      data: JSON.stringify( { "fname": fname, "token": tok} ),
-      success: function(data, st, xhr){
-        Materialize.toast('Delete Successful', 4000,'',function(){
-          window.location.reload(true);
-          // window.open("../UI/login.html","_self")
-        })
+    url: (link + '/content/delete'),
+    type: 'post',
+    contentType: 'application/json',
+    data: JSON.stringify({
+      "fname": fname,
+      "token": tok
+    }),
+    success: function(data, st, xhr) {
+      Materialize.toast('Delete Successful', 4000, '', function() {
+        window.location.reload(true);
+        // window.open("../UI/login.html","_self")
+      })
 
-      }
+    }
   });
 }
 
@@ -165,25 +167,23 @@ function load_content() {
         fname = content.fname;
         ftype = (content.fname.split('.').pop());
         icon = ""
-        if (ftype=="mp4") {
-          ftype="Video";
-          icon="movie";
+        if (ftype == "mp4") {
+          ftype = "Video";
+          icon = "movie";
+        } else if (ftype == "mp3") {
+          ftype = "Audio";
+          icon = "music_note";
+        } else if (ftype == "pdf") {
+          ftype = "PDF";
+          icon = "picture_as_pdf";
         }
-        else if (ftype=="mp3") {
-          ftype="Audio";
-          icon="music_note";
-        }
-        else if (ftype=="pdf") {
-          ftype="PDF";
-          icon="picture_as_pdf";
-        }
-        s = "<li><div class=\"collapsible-header\"><i class=\"material-icons\">"+icon+"</i>"+title+"</div><div class=\"collapsible-body\"><div class=\"collection\"><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">October 25, 2017</span>Date Published</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">"+ftype+"</span>Content Type</a><a onclick=\"deleteCont(this.id)\" id=\""+fname+"\" class=\"collection-item\"><span class=\"badge\"><i class=\"material-icons\">delete</i></span>Delete</a></div></div></li>"
+        s = "<li><div class=\"collapsible-header\"><i class=\"material-icons\">" + icon + "</i>" + title + "</div><div class=\"collapsible-body\"><div class=\"collection\"><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">October 25, 2017</span>Date Published</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">" + ftype + "</span>Content Type</a><a onclick=\"deleteCont(this.id)\" id=\"" + fname + "\" class=\"collection-item\"><span class=\"badge\"><i class=\"material-icons\">delete</i></span>Delete</a></div></div></li>"
         $('#contentList').append(s);
       }
     },
     error: function(returnval) {
-      if (returnval.status!=200) {
-        Materialize.toast('You need to be logged in to view this', 4000,'',function(){
+      if (returnval.status != 200) {
+        Materialize.toast('You need to be logged in to view this', 4000, '', function() {
           Cookies.remove('currenttoken');
           Cookies.remove('email');
           window.location.reload(true);
@@ -194,7 +194,7 @@ function load_content() {
   });
 }
 
-function loadFormList(){
+function loadFormList() {
   $.ajax({
     url: (link + '/form/list'),
     type: 'post',
@@ -205,13 +205,13 @@ function loadFormList(){
     success: function(data, st, xhr) {
       for (var i = 0; i < data.forms.length; i++) {
         name = data.forms[i];
-        s = "<li><div class=\"collapsible-header\"><i class=\"material-icons\">assessment</i>"+name+"</div><div class=\"collapsible-body\"><div class=\"collection\"><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">October 25, 2017</span>Date Published</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">October 31, 2017</span>Expiry</a><a href=\"#!\" class=\"collection-item\"><span class=\"new badge\">21</span>Number of responses</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\"><i class=\"material-icons\">edit</i></span>Edit</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\"><i class=\"material-icons\">delete</i></span>Delete</a></div></div></li>"
+        s = "<li><div class=\"collapsible-header\"><i class=\"material-icons\">assessment</i>" + name + "</div><div class=\"collapsible-body\"><div class=\"collection\"><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">October 25, 2017</span>Date Published</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\">October 31, 2017</span>Expiry</a><a href=\"#!\" class=\"collection-item\"><span class=\"new badge\">21</span>Number of responses</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\"><i class=\"material-icons\">edit</i></span>Edit</a><a href=\"#!\" class=\"collection-item\"><span class=\"badge\"><i class=\"material-icons\">delete</i></span>Delete</a></div></div></li>"
         $('#formList').append(s);
       }
     },
     error: function(returnval) {
-      if (returnval.status!=200) {
-        Materialize.toast('You need to be logged in to view this', 4000,'',function(){
+      if (returnval.status != 200) {
+        Materialize.toast('You need to be logged in to view this', 4000, '', function() {
           Cookies.remove('currenttoken');
           Cookies.remove('email');
           window.location.reload(true);
@@ -238,36 +238,40 @@ function out_changes() {
   // $("#login_menu_butD").show();
 }
 
-function dologin(){
-    var email = $('#emailinput').val();
-    var pwd = $("#pwdinput").val();
-    pwd = murmurhash3_32_gc(pwd,24);
-    pws =  pwd.toString();
-    var tok = genToken();
-    $.ajax({
-        url: (link+'/user/login'),
-        type: 'post',
-        contentType: 'application/json',
-        data: JSON.stringify( { "email": email, "pwd": pws, "token": tok} ),
-        success: function(data, st, xhr){
-            Cookies.set('currenttoken', tok);
-            Cookies.set('email', email);
-            Materialize.toast('Login Successful', 4000);
-            $("#form_tab").show();
-            $("#tabs").show();
-            $("#loginDiv").hide();
-            $("#nav-mobile").show();
-            $("#sideLogin").show();
-            window.location.reload(true);
-        }
-    });
+function dologin() {
+  var email = $('#emailinput').val();
+  var pwd = $("#pwdinput").val();
+  pwd = murmurhash3_32_gc(pwd, 24);
+  pws = pwd.toString();
+  var tok = genToken();
+  $.ajax({
+    url: (link + '/user/login'),
+    type: 'post',
+    contentType: 'application/json',
+    data: JSON.stringify({
+      "email": email,
+      "pwd": pws,
+      "token": tok
+    }),
+    success: function(data, st, xhr) {
+      Cookies.set('currenttoken', tok);
+      Cookies.set('email', email);
+      Materialize.toast('Login Successful', 4000);
+      $("#form_tab").show();
+      $("#tabs").show();
+      $("#loginDiv").hide();
+      $("#nav-mobile").show();
+      $("#sideLogin").show();
+      window.location.reload(true);
+    }
+  });
 
 };
 
 function contentShow() {
   $("#contentTitle").text("Content");
-$("#contentList").show();
-$("#contUploadDiv").hide();
+  $("#contentList").show();
+  $("#contUploadDiv").hide();
 }
 
 function contentPushPage() {
@@ -289,10 +293,13 @@ function logout() {
       if (xhr.status == 200) {
         Cookies.remove('currenttoken');
         Cookies.remove('email');
-        Materialize.toast('User Logout Successful', 4000,'',function(){window.open("#!","_self")})
+        Materialize.toast('User Logout Successful', 4000, '', function() {
+          window.open("#!", "_self")
+        })
       }
     }
-  });}
+  });
+}
 
 
 function createForms() {
@@ -421,57 +428,30 @@ function create_newElem(field) {
 }
 
 var formJson = {
-    "formid": "Dummy Form",
-    "title": "Dummy Form 1",
-    "fields": [
-        {
-            "id": "5",
-            "label": "Pick a Date",
-            "kind": "datepicker"
-        },
-        {
-            "id": "6",
-            "label": "Pick a Time",
-            "kind": "timepicker"
-        },
-        {
-            "id": "7",
-            "label": "Select something",
-            "kind": "select",
-            "misc": [
-                {
-                    "subVal": "something1",
-                    "subLabel": "something1"
-                },
-                {
-                    "subVal": "something2",
-                    "subLabel": "something2"
-                }
-            ]
-        },
-        {
-            "id": "8",
-            "label": "Pick a number between 1 and 10",
-            "kind": "range",
-            "misc": [
-                {
-                    "min": 1,
-                    "max": 10
-                }
-            ]
-        }
-    ]
+  "formid": "Dummy Form",
+  "title": "Dummy Form 1",
+  "fields": [
+      {
+      "id": "8",
+      "label": "Pick a number between 1 and 10",
+      "kind": "range",
+      "misc": [{
+        "min": 1,
+        "max": 10
+      }]
+    }
+  ]
 };
 
 function updateForm() {
-    create_formView(formJson);
+  create_formView(formJson);
 }
 
 function idGen() {
   var text = "";
   var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
-  for(var i = 0; i < 21; i++) {
-  text += possible.charAt(Math.floor(Math.random() * possible.length));
+  for (var i = 0; i < 21; i++) {
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
 }
@@ -486,6 +466,7 @@ function setFormName() {
 
 
 fieldsArr = [];
+
 function addTextField() {
   temp = {};
   temp.id = idGen();
@@ -498,17 +479,17 @@ function addTextField() {
 
 
 var numRopts;
+
 function updateRadioQ() {
   $('#RadioSub').html('');
 
-  if ($('#NumRadioOpt').val()<2) {
+  if ($('#NumRadioOpt').val() < 2) {
     numRopts = 2;
-  }
-  else if ($('#NumRadioOpt').val()>=2) {
+  } else if ($('#NumRadioOpt').val() >= 2) {
     numRopts = $('#NumRadioOpt').val();
   }
   for (var cou = 0; cou < numRopts; cou++) {
-    s = "<div class=\"input-field col s10 offset-s1\"><input id=\""+cou+"\" type=\"text\" class=\"validate\"><label for=\"radioQues\">Enter Options</label></div>"
+    s = "<div class=\"input-field col s10 offset-s1\"><input id=\"" + cou + "\" type=\"text\" class=\"validate\"><label for=\"radioQues\">Enter Options</label></div>"
     $('#RadioSub').append(s);
   }
 }
@@ -521,8 +502,8 @@ function addRadio() {
   misc = [];
   for (var i = 0; i < numRopts; i++) {
     subOptions = {};
-    subOptions.subLabel = $('#'+i).val();
-    subOptions.subID = $('#'+i).val();
+    subOptions.subLabel = $('#' + i).val();
+    subOptions.subID = $('#' + i).val();
     misc.push(subOptions);
   }
   temp.misc = misc;
@@ -533,20 +514,20 @@ function addRadio() {
 
 var numCBopts;
 var cbIDs = [];
+
 function updateCBQ() {
   $('#CBSub').html('');
 
-  if ($('#NumCBOpt').val()<2) {
+  if ($('#NumCBOpt').val() < 2) {
     numCBopts = 2;
-  }
-  else if ($('#NumCBOpt').val()>=2) {
+  } else if ($('#NumCBOpt').val() >= 2) {
     numCBopts = $('#NumCBOpt').val();
   }
   cbIDs = [];
   for (var couCB = 0; couCB < numCBopts; couCB++) {
     idTemp = idGen();
     cbIDs.push(idTemp);
-    s = "<div class=\"input-field col s10 offset-s1\"><input id=\""+idTemp+"\" type=\"text\" class=\"validate\"><label for=\"CBQues\">Enter Options</label></div>"
+    s = "<div class=\"input-field col s10 offset-s1\"><input id=\"" + idTemp + "\" type=\"text\" class=\"validate\"><label for=\"CBQues\">Enter Options</label></div>"
     $('#CBSub').append(s);
   }
 }
@@ -560,7 +541,7 @@ function addCB() {
   misc = [];
   for (var i = 0; i < cbIDs.length; i++) {
     subOptions = {};
-    subOptions.subLabel = $('#'+cbIDs[i]).val();
+    subOptions.subLabel = $('#' + cbIDs[i]).val();
     subOptions.subID = cbIDs[i];
     misc.push(subOptions);
   }
@@ -571,4 +552,70 @@ function addCB() {
   fieldsArr.push(temp);
   formJson.fields = fieldsArr;
   updateForm();
+}
+
+var selectIDs = [];
+
+function updateSelectQ() {
+  $('#selectSub').html('');
+
+  if ($('#numSelect').val() < 2) {
+    numCBopts = 2;
+  } else if ($('#numSelect').val() >= 2) {
+    numCBopts = $('#numSelect').val();
+  }
+  selectIDs = [];
+  for (var couCB = 0; couCB < numCBopts; couCB++) {
+    idTemp = idGen();
+    selectIDs.push(idTemp);
+    s = "<div class=\"input-field col s10 offset-s1\"><input id=\"" + idTemp + "\" type=\"text\" class=\"validate\"><label for=\"CBQues\">Enter Options</label></div>"
+    $('#selectSub').append(s);
+  }
+}
+
+function addSelect() {
+  temp = {};
+  temp.id = idGen();
+  temp.label = $('#SelectQues').val();
+  temp.kind = "select";
+  misc = [];
+  for (var i = 0; i < selectIDs.length; i++) {
+    subOptions = {};
+    subOptions.subVal = $('#' + selectIDs[i]).val();
+    subOptions.subLabel = $('#' + selectIDs[i]).val();
+    misc.push(subOptions);
+  }
+  temp.misc = misc;
+  fieldsArr.push(temp);
+  formJson.fields = fieldsArr;
+  updateForm();
+}
+
+function addDate() {
+  temp = {};
+  temp.id = idGen();
+  temp.label = $('#dateQ').val();
+  temp.kind = "datepicker";
+  fieldsArr.push(temp);
+  formJson.fields = fieldsArr;
+  updateForm()
+}
+
+function addTime() {
+  temp = {};
+  temp.id = idGen();
+  temp.label = $('#timeQ').val();
+  temp.kind = "timepicker";
+  fieldsArr.push(temp);
+  formJson.fields = fieldsArr;
+  updateForm()
+}
+function addRange() {
+  temp = {};
+  temp.id = idGen();
+  temp.label = $('#rangeQ').val();
+  temp.kind = "timepicker";
+  fieldsArr.push(temp);
+  formJson.fields = fieldsArr;
+  updateForm()
 }

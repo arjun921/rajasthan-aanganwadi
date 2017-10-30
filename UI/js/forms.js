@@ -14,8 +14,10 @@ function create_list() {
       "token": Cookies.get('currenttoken')
     }),
     success: function(data, st, xhr) {
+      console.log(data);
       for (var i = 0; i < data.forms.length; i++) {
-        name = data.forms[i]
+        name = data.forms[i];
+
         var mydiv = document.getElementById("form_list");
         var aTag = document.createElement('a');
         // aTag.setAttribute('href', href);
