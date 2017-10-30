@@ -191,9 +191,11 @@ class DB:
         "List forms available for this user"
         if not self.dev:
             frms = self.client.aang.forms.find()
-            return [f['formid'] for f in frms]
+            return [{'formid': f['formid'],
+                     'title': f['title']} for f in frms]
         else:
-            return [f['formid'] for f in self.forms]
+            return [{'formid': f['formid'],
+                     'title': f['title']} for f in self.forms]
 
     def form_present(self, formid):
         "Is this form present?"
