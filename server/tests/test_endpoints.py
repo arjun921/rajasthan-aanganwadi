@@ -93,6 +93,7 @@ def form(admin):
             "token": admin['token']
             }
     resp = requests.post(point('/form/create'), json=data)
+    data['formid'] = resp.text
     assert resp.status_code == 200, resp.text
     yield data
     d = {'token': data['token'], 'formid': data['formid']}
