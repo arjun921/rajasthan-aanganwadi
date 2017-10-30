@@ -614,8 +614,15 @@ function addRange() {
   temp = {};
   temp.id = idGen();
   temp.label = $('#rangeQ').val();
-  temp.kind = "timepicker";
+  temp.kind = "range";
+  misc = [];
+  subOptions = {};
+  subOptions.max = $('#maxRange').val();
+  subOptions.min = $('#minRange').val();
+  misc.push(subOptions);
+  temp.misc = misc;
   fieldsArr.push(temp);
   formJson.fields = fieldsArr;
-  updateForm()
+  console.log(fieldsArr);
+  updateForm();
 }
