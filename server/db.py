@@ -45,6 +45,7 @@ class DB:
             self.responses = []
             self.admins = []
             self.content_links = []
+            self.content_meta = []
             self.categories = []
 
             # add initial admin
@@ -289,6 +290,25 @@ class DB:
         else:
             return len(list(1 for i in self.users
                        if i['email'] == user_email)) > 0
+
+    def content_meta_create(self, fname, title, desc):
+        "Add meta about the content"
+        data = {'fname': fname,
+                'title': title,
+                'desc': desc}
+        if not self.dev:  # NOTE: remove this
+            self.client.aang['content_meta'].insert_one(data)
+        else:
+            self.content_meta.append(data)
+
+    def content_meta_data(self, fname):
+        "Returns meta about a file"
+        if not self.dev:  # NOTE: remove this
+            f = list(self.client.aang['content_meta'].find({'fname': fname}))
+        else:
+            f = [i for i in self.content_meta if i['fname'] == fname]
+        if len(f) > 0:
+            return f[0]
 
     def generate_content_url(self, fname):
         "Generate a one time download link for the file"

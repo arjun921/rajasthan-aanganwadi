@@ -18,7 +18,7 @@ import utils
 import hashlib
 from functools import wraps
 from jsonschema import validate
-__version__ = (0, 0, 13)
+__version__ = (0, 0, 14)
 
 
 app = bottle.Bottle()
@@ -299,6 +299,11 @@ def content_create():
     hasher.update(file.file.read())
     name = hasher.hexdigest()
     fname = name + '.' + file.filename.split('.')[-1]
+    # add meta
+    title = bottle.request.forms.get('title')
+    desc = bottle.request.forms.get('description')
+    db.content_meta_create(fname, title, desc)
+    # save
     savepath = utils.get_savepath(fname)
     file.file.seek(0)
     file.save(savepath, overwrite=True)
@@ -740,7 +745,9 @@ def category_list():
             if i[0] == '_':
                 title = db.category_data(i)['title']
             else:
-                title = i  # TODO: File metadata title
+                title = db.content_meta_data(i)
+                if title is not None:
+                    title = title['title']
             contains.append({'title': title,
                              'id': i})
         cat['contains'] = contains
