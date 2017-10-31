@@ -1,4 +1,5 @@
 import os
+import random
 import pytest
 import filecmp
 import requests
@@ -74,13 +75,13 @@ def admin():
     resp = requests.post(point('/user/login'), json=d)
     assert resp.status_code == 200, resp.text
     yield d
-    d = {'token': '1'*100}
+    d = {'token': d['token']}
     resp = requests.post(point('/user/logout'), json=d)
 
 
 @pytest.fixture
 def form(admin):
-    data = {'formid': 'f1',
+    data = {'formid': 'TestForm'+str(random.random()),
             'title': 'form1',
             'fields': [
                         {'id': '1',
@@ -128,6 +129,39 @@ def category(admin):
 
 
 # TESTS---------------------------------------------------------------
+def test_submission_download_as_csv_works_for_form(form, loggeduser, admin):
+    data = {'token': loggeduser['token']}
+    # verify it's listed
+    r = requests.post(point('/form/list'), json=data)
+    assert r.status_code == 200, r.status_code
+    assert form['formid'] in [i['formid'] for i in r.json()['forms']]
+    # submit
+    data = {'token': loggeduser['token'],
+            'formid': form['formid'],
+            'data': [
+                {'id': '1', 'value': 'a'},
+                {'id': '2', 'value': 'a'}
+                ]
+            }
+    r = requests.post(point('/form/submit'), json=data)
+    assert r.status_code == 200, r.status_code
+    # verify it's no longer listed
+    listdata = {'token': admin['token'], 'formid': form['formid']}
+    r = requests.post(point('/form/responses'), json=listdata)
+    assert r.status_code == 200, r.text
+    link = r.json()['url']
+    # download the submission
+    r = requests.get(point(link))
+    with open('data.csv', 'wb') as handle:
+        for block in r.iter_content(1024):
+            handle.write(block)
+    # verify it's ok
+    with open('data.csv', 'r') as fl:
+        text = fl.read()
+    assert loggeduser['token'] in text
+    assert form['formid'] in text
+
+
 def test_category_creation_with_parent_is_ok(admin):
     ident = '_MY New Category attached to root'
     # ASSERT not already in ROOT children
@@ -492,8 +526,9 @@ def test_dummy_file_retreival(loggeduser):
         with open(fname, 'wb') as handle:
             for block in r.iter_content(1024):
                 handle.write(block)
-        assert filecmp.cmp(fname, 'TEMP/'+fname)
-        os.remove(fname)
+        if os.path.exists('TEMP/'+fname):
+            assert filecmp.cmp(fname, 'TEMP/'+fname)
+            os.remove(fname)
 
 
 def test_dummy_file_retreival_fails_for_dual_use_of_link(loggeduser):
@@ -509,10 +544,11 @@ def test_dummy_file_retreival_fails_for_dual_use_of_link(loggeduser):
         with open(fname, 'wb') as handle:
             for block in r.iter_content(1024):
                 handle.write(block)
-        assert filecmp.cmp(fname, 'TEMP/'+fname)
-        os.remove(fname)
-        r = requests.get(point(r1.json()['url']))
-        assert r.status_code == 404
+        if os.path.exists('TEMP/'+fname):
+            assert filecmp.cmp(fname, 'TEMP/'+fname)
+            os.remove(fname)
+            r = requests.get(point(r1.json()['url']))
+            assert r.status_code == 404
 
 
 def test_cors_on_active_urls():

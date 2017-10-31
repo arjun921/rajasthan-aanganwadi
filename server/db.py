@@ -155,9 +155,11 @@ class DB:
     def response_for_form(self, formid):
         "Responses for a given formid"
         if not self.dev:  # TODO: remove this
-            return list(self.client.aang.responses.find({'formid': formid}))
+            resp = list(self.client.aang.responses.find({'formid': formid}))
         else:
-            return [i for i in self.responses if i['formid'] == formid]
+            resp = [i for i in self.responses if i['formid'] == formid]
+        # process
+        return resp
 
     def is_admin(self, uemail):
         "Is this member present in the admin list"
@@ -364,7 +366,7 @@ class DB:
     def category_delete(self, catid):
         "Deletes this category and it's subtree"
         if not self.dev:  # NOTE: remove this
-            self.client.aang.categories.find_one_and_delete(catid)
+            self.client.aang.categories.find_one_and_delete({'id': catid})
         else:
             cat = [i for i in self.categories
                    if i['id'] != catid]
@@ -372,11 +374,14 @@ class DB:
 
     def category_data(self, catid):
         "Returns details about the category"
+        d = None
         if not self.dev:  # NOTE: remove this
-            x = list(self.client.aang.categories.find(catid))
+            x = list(self.client.aang.categories.find({'id': catid}))
             if len(x) > 0:
-                return x[0]
+                d = x[0]
+                d.pop('_id')
         else:
             x = [i for i in self.categories if i['id'] == catid]
             if len(x) > 0:
-                return dict(x[0])
+                d = dict(x[0])
+        return d

@@ -18,7 +18,7 @@ import utils
 import hashlib
 import pandas as pd
 from functools import wraps
-from datetim import datetime
+from datetime import datetime
 from jsonschema import validate
 __version__ = (0, 0, 14)
 
@@ -398,12 +398,12 @@ def form_responses_as_csv():
     ----------
     returns JSON
 
-    { 'contents': []}
+    { 'url': '/static/<fileid>.csv'}
     """
     formid = bottle.request.json['formid']
     responses = db.response_for_form(formid)
     df = pd.DataFrame(responses)
-    fname = str(hash(str(df)))+'.csv'
+    fname = str(hash(str(df))).strip('-')+'.csv'
     path = utils.get_savepath(fname)
     df.to_csv(path, index=False)
     # now this works like normal content
