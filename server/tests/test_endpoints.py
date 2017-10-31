@@ -285,6 +285,28 @@ def test_form_retreival_works(form, loggeduser):
     assert resp.status_code == 200, resp.text
 
 
+def test_form_listing_does_not_show_form_after_submission(form, loggeduser):
+    data = {'token': loggeduser['token']}
+    # verify it's listed
+    r = requests.post(point('/form/list'), json=data)
+    assert r.status_code == 200, r.status_code
+    assert form['formid'] in [i['formid'] for i in r.json()['forms']]
+    # submit
+    data = {'token': loggeduser['token'],
+            'formid': form['formid'],
+            'data': [
+                {'id': '1', 'value': 'a'},
+                {'id': '2', 'value': 'a'}
+                ]
+            }
+    r = requests.post(point('/form/submit'), json=data)
+    assert r.status_code == 200, r.status_code
+    # verify it's no longer listed
+    r = requests.post(point('/form/list'), json=data)
+    assert r.status_code == 200, r.status_code
+    assert form['formid'] not in [i['formid'] for i in r.json()['forms']]
+
+
 def test_form_submit_fails_for_duplicate_items(form, loggeduser):
     data = {'token': loggeduser['token'],
             'formid': form['formid'],
