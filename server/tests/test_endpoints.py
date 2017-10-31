@@ -336,6 +336,8 @@ def test_form_create_works(admin):
             }
     resp = requests.post(point('/form/create'), json=data)
     assert resp.status_code == 200, resp.text
+    d = {'token': admin['token'], 'formid': data['formid']}
+    resp = requests.post(point('/form/delete'), json=d)
 
 
 def test_form_create_fails_for_non_admin(loggeduser):
