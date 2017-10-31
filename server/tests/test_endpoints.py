@@ -528,7 +528,7 @@ def test_dummy_file_retreival(loggeduser):
                 handle.write(block)
         if os.path.exists('TEMP/'+fname):
             assert filecmp.cmp(fname, 'TEMP/'+fname)
-            os.remove(fname)
+        os.remove(fname)
 
 
 def test_dummy_file_retreival_fails_for_dual_use_of_link(loggeduser):
@@ -546,9 +546,9 @@ def test_dummy_file_retreival_fails_for_dual_use_of_link(loggeduser):
                 handle.write(block)
         if os.path.exists('TEMP/'+fname):
             assert filecmp.cmp(fname, 'TEMP/'+fname)
-            os.remove(fname)
-            r = requests.get(point(r1.json()['url']))
-            assert r.status_code == 404
+        r = requests.get(point(r1.json()['url']))
+        assert r.status_code == 404
+        os.remove(fname)
 
 
 def test_cors_on_active_urls():

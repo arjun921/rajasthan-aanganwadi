@@ -159,7 +159,17 @@ class DB:
         else:
             resp = [i for i in self.responses if i['formid'] == formid]
         # process
-        return resp
+        submitted = []
+        for r in resp:
+            sub = {}
+            for part in r['data']:
+                sub[part['id']+'_value'] = part['value']
+                if 'misc' in part:
+                    sub[part['id']+'_misc'] = part['misc']
+            r.pop('data')
+            sub.update(r)
+            submitted.append(sub)
+        return submitted
 
     def is_admin(self, uemail):
         "Is this member present in the admin list"

@@ -471,7 +471,7 @@ def form_list():
             'forms': [list of forms ids]
         }
     """
-    email = db.token_data(bottle.request.json['token'])
+    email = db.token_data(bottle.request.json['token'])['email']
     forms_done = [f['formid'] for f in db.response_user_list(email)]
     x = [i for i in db.form_list()
          if i['formid'] not in forms_done]
@@ -627,7 +627,7 @@ def form_submit():
 
     returns OK
     """
-    email = db.token_data(bottle.request.json['token'])
+    email = db.token_data(bottle.request.json['token'])['email']
     data = dict(bottle.request.json)
     data['email'] = email
     data['timestamp'] = str(datetime.now())
