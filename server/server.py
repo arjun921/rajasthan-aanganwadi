@@ -18,6 +18,7 @@ import utils
 import hashlib
 import pandas as pd
 from functools import wraps
+from datetim import datetime
 from jsonschema import validate
 __version__ = (0, 0, 14)
 
@@ -629,6 +630,7 @@ def form_submit():
     email = db.token_data(bottle.request.json['token'])
     data = dict(bottle.request.json)
     data['email'] = email
+    data['timestamp'] = str(datetime.now())
     db.response_submit(data)
     return 'OK'
 
