@@ -16,6 +16,7 @@ import os
 import bottle
 import utils
 import hashlib
+import pandas as pd
 from functools import wraps
 from jsonschema import validate
 __version__ = (0, 0, 14)
@@ -370,6 +371,43 @@ def list_content():
                           'title': fid + ' content '+str(i),
                           'meta': []}
                          for i, fid in enumerate(os.listdir(utils.upath))]}
+
+
+@app.post('/form/responses')
+@json_validate
+@login_required
+@admin_only
+def form_responses_as_csv():
+    """
+    POST /form/responses
+
+    ----------
+
+    {
+        "type": "object",
+        "properties":   {
+                            "token" :   {"type": "string",
+                                         "maxLength": 100,
+                                         "minLength": 100},
+                            "formid":   {"type": "string"}
+                        },
+        "required": ["token", "formid"]
+    }
+
+    ----------
+    returns JSON
+
+    { 'contents': []}
+    """
+    formid = bottle.request.json['formid']
+    responses = db.response_for_form(formid)
+    df = pd.DataFrame(responses)
+    fname = str(hash(str(df)))+'.csv'
+    path = utils.get_savepath(fname)
+    df.to_csv(path, index=False)
+    # now this works like normal content
+    link = db.generate_content_url(fname)
+    return {'url': '/static/'+link}
 
 
 @app.post('/content')

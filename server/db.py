@@ -152,6 +152,13 @@ class DB:
             return [i for i in self.responses
                     if i['email'] == email]
 
+    def response_for_form(self, formid):
+        "Responses for a given formid"
+        if not self.dev:  # TODO: remove this
+            return list(self.client.aang.responses.find({'formid': formid}))
+        else:
+            return [i for i in self.responses if i['formid'] == formid]
+
     def is_admin(self, uemail):
         "Is this member present in the admin list"
         if self.user_present(uemail):
