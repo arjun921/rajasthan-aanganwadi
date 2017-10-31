@@ -1,9 +1,9 @@
 var lastElem = "formView";
-
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
-// var link = 'http://192.168.43.126:8000';
 var currenttoken = '';
+fieldsArr = [];
 
+//---------------------------------creates token for login ---> BEGINS`
 var genToken = function() {
   var text = "";
   var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -12,6 +12,7 @@ var genToken = function() {
   }
   return text;
 }
+//---------------------------------------------------------token ENDS------>
 
 // Hash Function
 //used in login/signup
@@ -83,6 +84,10 @@ function murmurhash3_32_gc(key, seed) {
   return h1 >>> 0;
 }
 
+// hash function end --------------------->
+
+// document.ready function contents for reload.
+//<-------------------- REinit begins
 function REinit() {
   $('ul.tabs').tabs('select_tab', 'text');
   $(".button-collapse").sideNav();
@@ -126,11 +131,13 @@ function REinit() {
   //remove
   createForms();
 }
+//---------------------------REinit ends------------------>
 
 $(document).ready(function() {
   REinit();
 });
 
+//-----------------------content delete begins---------------------->
 function deleteCont(fname) {
   tok = Cookies.get('currenttoken');
   $.ajax({
@@ -150,7 +157,9 @@ function deleteCont(fname) {
     }
   });
 }
+//-----------------------content delete ends---------------------->
 
+//--------------------------show content listing begins----------->
 function load_content() {
   $.ajax({
     url: (link + '/content/list'),
@@ -193,7 +202,8 @@ function load_content() {
     }
   });
 }
-
+//--------------------------show content listing ends----------->
+// -------------------------- form listing begins -------------->
 function loadFormList() {
   $.ajax({
     url: (link + '/form/list'),
@@ -221,7 +231,9 @@ function loadFormList() {
     }
   });
 }
+// -------------------------- form listing ends -------------->
 
+// <----------------------- functions to be called on logout ----------
 function out_changes() {
   $("#tabs").hide();
   $("#form_tab").hide();
@@ -230,14 +242,10 @@ function out_changes() {
   $("#sideLogin").hide();
   $("#contentList").hide();
   $("#content_tab").hide();
-
-
-  // $("#logout_menu_but").hide();
-  // $("#logout_menu_butD").hide();
-  // $("#login_menu_but").show();
-  // $("#login_menu_butD").show();
 }
+// -----------------------  logout functions ends ---------->
 
+//<------------------------------------login begins-------------
 function dologin() {
   var email = $('#emailinput').val();
   var pwd = $("#pwdinput").val();
@@ -265,21 +273,26 @@ function dologin() {
       window.location.reload(true);
     }
   });
-
 };
+//--------------------------------login ends--------------->
 
+//<---------show content on tab click begins-----------------
 function contentShow() {
   $("#contentTitle").text("Content");
   $("#contentList").show();
   $("#contUploadDiv").hide();
 }
+// ----------------- content tab click ENDS ---------------->
 
+//<------------------show content upload page--------------
 function contentPushPage() {
   $("#contentList").hide();
   $("#contentTitle").text("Content > Upload");
   $("#contUploadDiv").show();
 }
+//-------------------show content upload page ENDS-------------->
 
+//<-------------------logout begins------------------------------
 function logout() {
   $.ajax({
     url: (link + '/user/logout'),
@@ -300,21 +313,25 @@ function logout() {
     }
   });
 }
+//------------------logout ENDS----------------------------------->
 
-
+//<--------------------------forms create begins------------------
 function createForms() {
   $("#formList").hide();
   $("#formTitle").text("Forms > Create");
   $("#formCreateDiv").show();
-
 }
+//-----------------------------forms create ends----------------->
 
+//<----------show forms content on tab click----------------------
 function formsShow() {
   $("#formTitle").text("Forms");
   $("#formList").show();
   $("#formCreateDiv").hide();
 }
+//--------------forms tab click ENDS------------------------------->
 
+//<-----------------load form for preview------------------------
 function load_form(formID) {
   $.ajax({
     url: (link + '/form'),
@@ -329,14 +346,13 @@ function load_form(formID) {
       create_formView(data);
     }
   });
-  //load form based on id requested
-  // return create
 }
+//---------------- load form ENDS --------------------------------->
 
+//<------------supply fields through loop to show form preview---------------------
 function create_formView(s) {
   $('#formView').html('');
   fields_returned = s;
-
   Cookies.set('fields_returned', fields_returned);
   //checks if variable is defined
   if (typeof fields_returned !== 'undefined') {
@@ -350,8 +366,6 @@ function create_formView(s) {
     for (var i = 0; i < fields_returned.fields.length; i++) {
       create_newElem(fields_returned.fields[i]);
     }
-    // but = "<button style=\"padding-bottom:20px;\" class=\"btn waves-effect waves-light\"onclick=\"doSubmit()\">Submit<i class=\"material-icons right\">send</i></button>"
-    // $('#' + lastElem).append(but);
     //enables time picker
     $('.timepicker').pickatime({
       default: 'now', // Set default time: 'now', '1:30AM', '16:30'
@@ -377,7 +391,9 @@ function create_formView(s) {
     $('select').material_select();
   }
 }
+//--------------------------fields through loop ENDS--------------------------->
 
+//<--------------create new form field based on type-----------------
 function create_newElem(field) {
   if (field.kind == 'text') {
     s = "<div class=\"input-field col s12\"><input id=" + field.id + " type=\"text\" " + "><label for=" + field.id + ">" + field.label + "</label></div>"
@@ -426,7 +442,9 @@ function create_newElem(field) {
     $('#' + lastElem).append(pic);
   }
 }
+//---------------------------- formFieldCreate ENDS---------------------------->
 
+//<------------------form create stores value inside this json------------------
 var formJson = {
   "formid": "Dummy Form",
   "title": "Dummy Form 1",
@@ -442,11 +460,14 @@ var formJson = {
     }
   ]
 };
-
+//-------------------------------------form create JSOn ends------------------->
+//<_-----------------------------------Update  form on form_element add---------
 function updateForm() {
   create_formView(formJson);
 }
+//element add form refresh Ends----------------------------------------------->
 
+//<----------generates ID for form element BEGINS----------------------------
 function idGen() {
   var text = "";
   var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -455,18 +476,19 @@ function idGen() {
   }
   return text;
 }
+//-----------------------element ID generate ENDS---------------------------->
 
-
+//<-------------------------Update form name on keyUp---------------------------
 function setFormName() {
   e = $('#formName').val();
   formJson.title = e;
   formJson.formid = e;
   updateForm();
 }
+//------------------------------Update form name ends ------------------------>
 
 
-fieldsArr = [];
-
+//<-------------------------- Add Text field BEGINS----------------------------
 function addTextField() {
   temp = {};
   temp.id = idGen();
@@ -476,10 +498,10 @@ function addTextField() {
   formJson.fields = fieldsArr;
   updateForm()
 }
+//-------------------------------Add text field ENDS -------------------------->
 
-
+//<--------------------------------Add radio BEGINS-----------------------------
 var numRopts;
-
 function updateRadioQ() {
   $('#RadioSub').html('');
 
@@ -511,10 +533,11 @@ function addRadio() {
   formJson.fields = fieldsArr;
   updateForm();
 }
+//--------------------------------Add radio ENDS------------------------------->
 
+//<-------------------------------Add checkbox BEGINS---------------------------
 var numCBopts;
 var cbIDs = [];
-
 function updateCBQ() {
   $('#CBSub').html('');
 
@@ -554,11 +577,12 @@ function addCB() {
   updateForm();
 }
 
-var selectIDs = [];
+//------------------------Add checkbox ENDS------------------------------------>
 
+//<-------------------------Add select field begins-----------------------------
+var selectIDs = [];
 function updateSelectQ() {
   $('#selectSub').html('');
-
   if ($('#numSelect').val() < 2) {
     numCBopts = 2;
   } else if ($('#numSelect').val() >= 2) {
@@ -590,7 +614,9 @@ function addSelect() {
   formJson.fields = fieldsArr;
   updateForm();
 }
+//-------------------------------add selection ENDS---------------------------->
 
+//<-------------------------------add date BEGINS-------------------------------
 function addDate() {
   temp = {};
   temp.id = idGen();
@@ -600,7 +626,10 @@ function addDate() {
   formJson.fields = fieldsArr;
   updateForm()
 }
+//----------------------------------add date ENDS------------------------------>
 
+
+//<------------------------------add time BEGINS---------------------------------
 function addTime() {
   temp = {};
   temp.id = idGen();
@@ -610,6 +639,9 @@ function addTime() {
   formJson.fields = fieldsArr;
   updateForm()
 }
+//------------------------------add time ENDS---------------------------------->
+
+//<-------------------------------add range BEGINS-------------------------------
 function addRange() {
   temp = {};
   temp.id = idGen();
@@ -626,3 +658,4 @@ function addRange() {
   console.log(fieldsArr);
   updateForm();
 }
+//-----------------------------------add range ENDS---------------------------->
