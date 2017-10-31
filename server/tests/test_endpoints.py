@@ -130,6 +130,15 @@ def category(admin):
 # TESTS---------------------------------------------------------------
 def test_category_creation_with_parent_is_ok(admin):
     ident = '_MY New Category attached to root'
+    # ASSERT not already in ROOT children
+    cat = {'catid': '_ROOT_'}
+    r = requests.post(point('/category'), json=cat)
+    assert r.status_code == 200, r.text
+    assert ident not in [i['id'] for i in r.json()['contains']], r.json()
+    root = r.json()
+    root['token'] = admin['token']
+    root['contains'] = [i['id'] for i in root['contains']]
+    # ASSERT insertion is successful
     cat = {'title': 'mytitle',
            'id': ident,
            'contains': [],
@@ -138,11 +147,21 @@ def test_category_creation_with_parent_is_ok(admin):
     r = requests.post(point('/category/create'), json=cat)
     assert r.status_code == 200, r.text
     cat = {'catid': ident}
+    # ASSERT present in root children
     r = requests.post(point('/category'), json=cat)
     assert r.status_code == 200, r.text
     cat = {'catid': '_ROOT_'}
     r = requests.post(point('/category'), json=cat)
     assert ident in [i['id'] for i in r.json()['contains']], r.json()
+    # REMOVE CHANGES TO TREE
+    cat = {'catid': ident, 'token': admin['token']}
+    r = requests.post(point('/category/delete'), json=cat)
+    assert r.status_code == 200, r.text
+    cat = {'catid': '_ROOT_', 'token': admin['token']}
+    r = requests.post(point('/category/delete'), json=cat)
+    assert r.status_code == 200, r.text
+    r = requests.post(point('/category/create'), json=root)
+    assert r.status_code == 200, root
 
 
 def test_category_deletion_fails_for_non_existant_category(category):
@@ -171,6 +190,8 @@ def test_category_creation_works(admin):
            'token': admin['token']}
     r = requests.post(point('/category/create'), json=cat)
     assert r.status_code == 200, r.text
+    cat = {'catid': cat['id'], 'token': admin['token']}
+    requests.post(point('/category/delete'), json=cat)
 
 
 def test_category_list_fails_on_non_existant_category():
