@@ -332,7 +332,7 @@ class DB:
     def generate_content_url(self, fname):
         "Generate a one time download link for the file"
         newlink = randstring(50) + '.' + fname.split('.')[-1]
-        data = {'fname': fname, 'newlink': newlink}
+        data = {'fname': fname, 'newlink': newlink, 'count': 100}
         if not self.dev:  # NOTE: remove this
             self.client.aang['content_links'].insert_one(data)
         else:
@@ -347,13 +347,21 @@ class DB:
             fnames = list(self.client.aang.content_links.find(q))
             if len(fnames) >= 1:
                 self.client.aang.content_links.find_one_and_delete(q)
-                fname = fnames[0]['fname']
+                data = fnames[0]
+                if data['count'] >= 1:  # put it back if not yet done
+                    data['count'] -= 1
+                    self.client.aand.content_links.insert_one(data)
+                fname = data['fname']
         else:
             fnames = [i for i in self.content_links if i['newlink'] == link]
             if len(fnames) == 1:
                 self.content_links = [i for i in self.content_links
                                       if i['newlink'] != link]
-                fname = fnames[0]['fname']
+                data = fnames[0]
+                if data['count'] >= 1:  # put it back if not yet done
+                    data['count'] -= 1
+                    self.content_links.append(data)
+                fname = data['fname']
         return fname
 
     def user_pwd_present(self, email, pwd):
