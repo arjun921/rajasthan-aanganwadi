@@ -45,10 +45,12 @@ function createNav(id) {
             Cookies.remove('mediaCont');
             window.open('content.html', '_self', 'location=yes');
           }
-          for (var i = 0; i < data.contains.length; i++) {
-            item = data.contains[i];
-            p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
-            $('#navi').append(p);
+          else {
+            for (var i = 0; i < data.contains.length; i++) {
+              item = data.contains[i];
+              p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
+              $('#navi').append(p);
+            }
           }
         }
       });
@@ -68,6 +70,7 @@ function navClick(id) {
     }
   }
   else {
+    $('#navi').html('');
     load_content(id)
   }
   $("#_ROOT_").hide();

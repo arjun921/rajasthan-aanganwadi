@@ -48,6 +48,7 @@ function out_changes() {
 function loadContent(type) {
   $('#contentT').show();
   $('#contentT').html('');
+  $('#contentCat').hide();
   console.log(type);
   // console.log(medias);
   for (var i = 0; i < medias.files.length; i++) {
