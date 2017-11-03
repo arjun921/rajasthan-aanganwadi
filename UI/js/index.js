@@ -12,11 +12,13 @@ function createNav(id) {
   }
   else {
     $.ajax({
+
         url: (link + '/category'),
         type: 'post',
         contentType: 'application/json',
         data: JSON.stringify({'catid': id}),
         success: function(data, st, xhr) {
+                console.log(data);
           if ($.inArray(data.id, old_id)==-1) {
             old_id.push(data.id);
           }
@@ -48,6 +50,41 @@ function navClick(id) {
   $("#_ROOT_").hide();
 }
 
+function loadSideMenu() {
+  $.ajax({
+      url: (link + '/category'),
+      type: 'post',
+      contentType: 'application/json',
+      data: JSON.stringify({'catid': '_ROOT_'}),
+      success: function(data, st, xhr) {
+        if ($.inArray(data.id, old_id)==-1) {
+          old_id.push(data.id);
+        }
+        for (var i = 0; i < data.contains.length; i++) {
+          item = data.contains[i];
+          s = "<li><a class=\"dropdown-button\" onclick=\"$('.button-collapse').sideNav('hide');navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a></li>"
+          $('#mobile-demo').append(s);
+
+        }
+        s = "<li><div class=\"divider\"></div></li><li><a class=\"waves-effect \" href=\"activity_bank.html\"><i class=\"material-icons\">home</i>Activity Bank</a></li><li><a class=\"waves-effect \" href=\"#!\"><i class=\"material-icons\">settings</i>Settings</a></li><li><a class=\"waves-effect\" href=\"all_forms.html\"><i class=\"material-icons\">format_align_left</i>Forms to Fill</a></li><li><a class=\"waves-effect\" href=\"#!\" onclick=\"logout()\" id=\"logout_menu_but\"><i class=\"material-icons\">exit_to_app</i>Logout</a></li><li><a class=\"waves-effect\" href=\"login.html\" id=\"login_menu_but\"><i class=\"material-icons\">exit_to_app</i>Login</a></li>"
+        $('#mobile-demo').append(s);
+        $("#loggedIn").show();
+        $("#noLogin").hide();
+        //sets navigation menu profile content
+        if (Cookies.get('currenttoken')) {
+          $("#email_menu").text(Cookies.get('email'));
+          $("#name_menu").text("Arjoonn Sharma");
+          $("#profile_pic").attr('src',"https://avatars3.githubusercontent.com/u/7693265?v=4&s=400");
+          $("#login_menu_but").hide();
+          $("#login_menu_butD").hide();
+        }
+        else {
+          out_changes();
+        }
+      }
+    });
+}
+
 
 $(document).ready(function() {
   $('select').material_select();
@@ -55,20 +92,11 @@ $(document).ready(function() {
   $(".button-collapse").sideNav();
   //generates forms list
   //hides login/login based on cookie present/absent
-  $("#loggedIn").show();
-  $("#noLogin").hide();
+
   createNav('_ROOT_');
-  //sets navigation menu profile content
-  if (Cookies.get('currenttoken')) {
-    $("#email_menu").text(Cookies.get('email'));
-    $("#name_menu").text("Arjoonn Sharma");
-    $("#profile_pic").attr('src',"https://avatars3.githubusercontent.com/u/7693265?v=4&s=400");
-    $("#login_menu_but").hide();
-    $("#login_menu_butD").hide();
-  }
-  else {
-    out_changes();
-  }
+  loadSideMenu();
+
+
 
 });
 
@@ -112,6 +140,13 @@ function load_content(contentID) {
         window.open('https://docs.google.com/viewer?url='+link+data.url, '_self', 'location=yes');
       }
 
+    },
+    error: function(returnval) {
+      if (returnval.status!=403) {
+        var $toastContent = $('<span>Please Login to view.</span>').add($('<a href="../UI/login.html"><button class="btn-flat toast-action">OK</button></a>'));
+        Materialize.toast($toastContent, 4000,'',function(){window.open("../UI/login.html","_self")})
+      }
+
     }
   });
   //load form based on id requested
@@ -136,36 +171,3 @@ function logout() {
       }
     }
   });}
-// ---------------------------------logout----------
-function load_content(contentID) {
-  $.ajax({
-    url: (link + '/content'),
-    type: 'post',
-    contentType: 'application/json',
-    data: JSON.stringify({
-      "token": Cookies.get('currenttoken'),
-      'fname': contentID
-    }),
-    success: function(data, st, xhr) {
-      data = data;
-      ftype = (data.url.split('.').pop());
-
-      if (ftype == "mp4") {
-        $("#navi").hide();
-        p = "<video class=\"responsive-video\" style=\"width:100%; padding-top: 25px;\" controls><source src="+link+data.url+" type=\"video/mp4\"></video>"
-        $('#content').append(p);
-      }
-      else if (ftype=="mp3") {
-        $("#navi").hide();
-        p = "<audio controls=\"controls\" style=\"width:100%; padding-top: 25px;\" id = \"player\"><source src = "+link+data.url+" /></audio>"
-        $('#content').append(p);
-      }
-      else if (ftype=="pdf") {
-        window.open('https://docs.google.com/viewer?url='+link+data.url, '_self', 'location=yes');
-      }
-
-    }
-  });
-  //load form based on id requested
-  // return create
-}
