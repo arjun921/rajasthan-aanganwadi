@@ -96,7 +96,7 @@ function loadSideMenu() {
           $('#mobile-demo').append(s);
 
         }
-        s = "<li><div class=\"divider\"></div></li><li><a class=\"waves-effect \" href=\"activity_bank.html\"><i class=\"material-icons\">home</i>Activity Bank</a></li><li><a class=\"waves-effect \" href=\"#!\"><i class=\"material-icons\">settings</i>Settings</a></li><li><a class=\"waves-effect\" href=\"all_forms.html\"><i class=\"material-icons\">format_align_left</i>Forms to Fill</a></li><li><a class=\"waves-effect\" href=\"#!\" onclick=\"logout()\" id=\"logout_menu_but\"><i class=\"material-icons\">exit_to_app</i>Logout</a></li><li><a class=\"waves-effect\" href=\"login.html\" id=\"login_menu_but\"><i class=\"material-icons\">exit_to_app</i>Login</a></li>"
+        s = "<li><div class=\"divider\"></div></li><li><a class=\"waves-effect \" href=\"index.html\"><i class=\"material-icons\">home</i>Home</a></li><li><a class=\"waves-effect \" href=\"#!\"><i class=\"material-icons\">settings</i>Settings</a></li><li><a class=\"waves-effect\" href=\"all_forms.html\"><i class=\"material-icons\">format_align_left</i>Forms to Fill</a></li><li><a class=\"waves-effect\" href=\"#!\" onclick=\"logout()\" id=\"logout_menu_but\"><i class=\"material-icons\">exit_to_app</i>Logout</a></li><li><a class=\"waves-effect\" href=\"login.html\" id=\"login_menu_but\"><i class=\"material-icons\">exit_to_app</i>Login</a></li>"
         $('#mobile-demo').append(s);
         $("#loggedIn").show();
         $("#noLogin").hide();
@@ -204,7 +204,7 @@ function logout() {
       if (xhr.status == 200) {
         Cookies.remove('currenttoken');
         Cookies.remove('email');
-        Materialize.toast('User Logout Successful', 4000,'',function(){window.open("../UI/activity_bank.html","_self")})
+        Materialize.toast('User Logout Successful', 4000,'',function(){window.open("../UI/index.html","_self")})
       }
     }
   });}
