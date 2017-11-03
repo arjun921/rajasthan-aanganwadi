@@ -14,18 +14,20 @@ function create_list() {
       "token": Cookies.get('currenttoken')
     }),
     success: function(data, st, xhr) {
-      console.log(data);
-      for (var i = 0; i < data.forms.length; i++) {
-        name = data.forms[i];
-
-        var mydiv = document.getElementById("form_list");
-        var aTag = document.createElement('a');
-        // aTag.setAttribute('href', href);
-        aTag.setAttribute('class', "collection-item");
-        aTag.setAttribute('onclick', 'load_form(this.innerHTML)')
-        aTag.innerHTML = name;
-        mydiv.appendChild(aTag);
+      console.log();
+      if (data.forms.length<0) {
+        for (var i = 0; i < data.forms.length; i++) {
+          item = data.forms[i];
+          console.log(data.forms[i]);
+          p = "<a class=\"collection-item\" onclick=\"load_form(this.id)\" id=\""+item.formid+"\">"+item.title+"</a>";
+          $('#form_list').append(p);
+        }
       }
+      else{
+        p = "<a class=\"collection-item\" href=\"index.html\">No Forms to fill at the moment</a>";
+        $('#form_list').append(p);
+      }
+
     },
     error: function(returnval) {
       if (returnval.status!=200) {
@@ -263,12 +265,12 @@ function doSubmit() {
       data: JSON.stringify(dataRet),
       success: function(data, st, xhr) {
         if (xhr.status==200) {
-          // Materialize.toast('Form Submitted Succesfully', 4000,'',function(){window.open("../UI/activity_bank.html","_self")})
+          Materialize.toast('Form Submitted Succesfully', 4000,'',function(){window.open("../UI/activity_bank.html","_self")})
         }
       },
       error: function(returnval) {
         if (returnval.status!=200) {
-          Materialize.toast('Form Submit Failed', 4000,'',function(){window.open("../UI/activity_bank.html","_self")})
+          Materialize.toast('Form Submit Failed', 4000,'',function(){window.open("../UI/index.html","_self")})
         }
       }
     });
