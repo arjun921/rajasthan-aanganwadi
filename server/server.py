@@ -785,13 +785,14 @@ def category_list():
         # add titles to contains
         contains = []
         for i in cat['contains']:
-            title = i
             if i[0] == '_':
                 title = db.category_data(i)['title']
             else:
-                title = db.content_meta_data(i)
-                if title is not None and title['title'] is not None:
-                    title = title['title']
+                meta = db.content_meta_data(i)
+                if meta is not None and meta['title'] is not None:
+                    title = meta['title']
+                else:
+                    title = i
             contains.append({'title': title,
                              'id': i})
         cat['contains'] = contains
