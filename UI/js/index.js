@@ -4,11 +4,13 @@ var lastElem = "form";
 var formslist = [];
 var data;
 var old_id = [];
+// var media = false;
 function createNav(id) {
   $('#navi').html('');
   if (id=="_up") {
     old_id.pop();
     createNav(old_id[old_id.length-1]);
+    $('#content').html('');
   }
   else {
     $.ajax({
@@ -18,9 +20,30 @@ function createNav(id) {
         contentType: 'application/json',
         data: JSON.stringify({'catid': id}),
         success: function(data, st, xhr) {
-                console.log(data);
           if ($.inArray(data.id, old_id)==-1) {
             old_id.push(data.id);
+          }
+          // console.log(data.contains);
+          var files = [];
+          for (var i = 0; i < data.contains.length; i++) {
+            cont = data.contains[i];
+            if (cont.id[0]!='_') {
+              ftype = cont.id.split('.').pop();
+              file = {}
+              file[ftype] = [data.contains[i]];
+              file['type'] = ftype;
+              files.push(file)
+                Cookies.set('mediaCont', true);
+                Cookies.set('media', { files});
+              }
+            }
+
+          if (Cookies.get('mediaCont')) {
+            s = Cookies.get('media');
+            s = JSON.parse(s);
+            console.log(s);
+            Cookies.remove('mediaCont');
+            window.open('content.html', '_self', 'location=yes');
           }
           for (var i = 0; i < data.contains.length; i++) {
             item = data.contains[i];
@@ -60,6 +83,7 @@ function loadSideMenu() {
         if ($.inArray(data.id, old_id)==-1) {
           old_id.push(data.id);
         }
+
         for (var i = 0; i < data.contains.length; i++) {
           item = data.contains[i];
           s = "<li><a class=\"dropdown-button\" onclick=\"$('.button-collapse').sideNav('hide');navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a></li>"
@@ -85,8 +109,7 @@ function loadSideMenu() {
     });
 }
 
-
-$(document).ready(function() {
+function reINT() {
   $('select').material_select();
   //enables nav
   $(".button-collapse").sideNav();
@@ -95,9 +118,10 @@ $(document).ready(function() {
 
   createNav('_ROOT_');
   loadSideMenu();
+}
 
-
-
+$(document).ready(function() {
+  reINT();
 });
 
 function out_changes() {
@@ -127,12 +151,12 @@ function load_content(contentID) {
       ftype = (data.url.split('.').pop());
 
       if (ftype == "mp4") {
-        $("#content_list").hide();
+        $("#contentT").hide();
         p = "<video class=\"responsive-video\" style=\"width:100%; padding-top: 25px;\" controls><source src="+link+data.url+" type=\"video/mp4\"></video>"
         $('#content').append(p);
       }
       else if (ftype=="mp3") {
-        $("#content_list").hide();
+        $("#contentT").hide();
         p = "<audio controls=\"controls\" style=\"width:100%; padding-top: 25px;\" id = \"player\"><source src = "+link+data.url+" /></audio>"
         $('#content').append(p);
       }
@@ -142,7 +166,7 @@ function load_content(contentID) {
 
     },
     error: function(returnval) {
-      if (returnval.status!=403) {
+      if (returnval.status!=200) {
         var $toastContent = $('<span>Please Login to view.</span>').add($('<a href="../UI/login.html"><button class="btn-flat toast-action">OK</button></a>'));
         Materialize.toast($toastContent, 4000,'',function(){window.open("../UI/login.html","_self")})
       }
@@ -171,3 +195,18 @@ function logout() {
       }
     }
   });}
+
+  $(function() {
+
+      // show account info if #showAccountInfo is present
+      showAccountInfo();
+
+      // detect url hash changes and fire off showAccountInfo
+      $(window).bind("hashchange", showAccountInfo());
+
+  });
+
+  function showAccountInfo() {
+      if (window.location.hash == "load-account-info")
+          loadAccountInformation();
+  }
