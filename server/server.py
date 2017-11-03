@@ -409,7 +409,7 @@ def form_responses_as_csv():
     path = utils.get_savepath(fname)
     df.to_csv(path, index=False)
     # now this works like normal content
-    link = db.generate_content_url(fname)
+    link = db.generate_content_url(fname, count=1)
     return {'url': '/static/'+link}
 
 
@@ -667,7 +667,10 @@ def form_delete():
 
 @app.get('/static/<link>')
 def staticfiles(link):
+    fname = None
+    print('before', link, fname, os.listdir(utils.upath), db.content_links)
     fname = db.content_get_fname_for_link(link)
+    print('after', link, fname, os.listdir(utils.upath), db.content_links)
     if fname is not None:
         return bottle.static_file(fname, root=utils.upath)
     else:
@@ -806,4 +809,6 @@ def category_list():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8000, host='0.0.0.0')
+    port = os.environ.get("PORT")
+    port = port if port else 8000
+    app.run(debug=True, port=port, host='0.0.0.0')

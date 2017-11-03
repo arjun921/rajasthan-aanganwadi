@@ -6,8 +6,6 @@ $( document ).ready(function() {
 
     // function definitions for everything
     function cleanSlate(){ $("#mainContainer").html(''); 
-        $("#login_div").show();
-        $("#logout_button").hide();
     };
 
 
@@ -81,22 +79,86 @@ $( document ).ready(function() {
 
 
     function makePart(config, formid){
+        console.log(config);
         var ident = formid + config["id"];
         var label = $("<label for='" + ident + "'>" + config["label"] + "</label>");
-        
-        var string = "<input id='"+ident+"' ";
-        string += "type='" + config["kind"] + "' ";
-        string += "class='form-control' >"
-        string += "</input>"
-        var part = $(string);
-
         var group = $("<div class='form-group'></div>");
         group.append(label);
-        group.append(part);
+
+        if(config['kind'] == "checkbox")
+        {
+            var n_checks = config["misc"].length;
+            for(var i=0; i < n_checks; i++){
+                var ck = config["misc"][i];
+                var subid=ck["subID"];
+                var sub_label = $("<br><label for='"+subid+"'>" + ck["subLabel"] + "</label>");
+                var check = $("<input type='checkbox' id='"+subid+"'/>");
+                group.append(sub_label);
+                group.append(check);
+            }//loop
+        } // checkbox
+        else if(config["kind"] == "radio") {
+            var n_checks = config["misc"].length;
+            for(var i=0; i < n_checks; i++){
+                var ck = config["misc"][i];
+                var subid=ck["subID"];
+                var sub_label = $("<br><label for='"+subid+"'>" + ck["subLabel"] + "</label>");
+                var check = $("<input name='"+ident+"' type='radio' id='"+subid+"'/>");
+                group.append(sub_label);
+                group.append(check);
+            }//loop
+        } 
+        else if(config["kind"] == "select"){
+            var n_checks = config["misc"].length;
+            var selection = $("<br><select id='"+ident+"'></select>");
+            for(var i=0; i < n_checks; i++){
+                var ck = config["misc"][i];
+                var subid=ck["subVal"];
+                var check = $("<option value='"+subid+"'>"+ck["subLabel"]+"</option>");
+                selection.append(sub_label);
+                selection.append(check);
+            }//loop
+            group.append(selection);
+        }else if(config["kind"] == "range"){
+            var M = config["misc"][0]["max"];
+            var m = config["misc"][0]["min"];
+            var string = "<input id='"+ident+"' ";
+            string += "type='" + config["kind"] + "' ";
+            string += "class='form-control' max='"+M+"' min='"+m+"'>"
+            string += "</input>"
+            var part = $(string);
+            group.append(part);
+
+        }else {
+            var string = "<input id='"+ident+"' ";
+            string += "type='" + config["kind"] + "' ";
+            string += "class='form-control' >"
+            string += "</input>"
+            var part = $(string);
+            group.append(part);
+        }
+
         group.append($("<hr>"));
         return group
     } // make a part of a form
 
+    function deleteForm(){
+        var formid = this.getAttribute("formid");
+        hitApi("/form/delete", {"formid": formid}, function (d, s, x){
+            $("#formtab").click();
+            console.log(d);
+        });
+    }// delete form
+
+    function newForm(){
+        $("#form_control").html("");
+        $("#form_display").html("");
+
+    }  // new form
+
+    function editForm(){
+        var formid = this.getAttribute("formid");
+    }
 
     function showForm(){
         $("#form_display").html("");
@@ -105,6 +167,14 @@ $( document ).ready(function() {
             console.log(data);
             $("#form_display").append($("<h2>" + data["title"] + "</h2>"));
             $("#form_display").append($("<hr>"));
+            // CONTROLS FOR THE FORM
+            var delete_form = $("<button class='btn btn-danger' id='delete_"+formid+"' formid='"+formid+"'>Delete Form</button>");
+            delete_form.click(deleteForm);
+            var edit_form = $("<button class='btn btn-default' id='edit_"+formid+"'>Edit Form</button>");
+            edit_form.click(editForm);
+            $("#form_control").append(delete_form);
+            $("#form_control").append(edit_form);
+
             var n_parts = data["fields"].length;
             for(var i=0; i<n_parts; i++){
                 var part = makePart(data["fields"][i], formid);
@@ -115,8 +185,16 @@ $( document ).ready(function() {
 
 
     function getFormList(){
-        var form_listing = $("<div class='md-col-4' id='form_listing'></div>");
-        var form_display = $("<div class='md-col-8' id='form_display'></div>");
+        var form_listing = $("<div class='col-md-3' id='form_listing'></div>");
+        var form_display = $("<div class='col-md-6' id='form_display'></div>");
+        var form_control = $("<div class='col-md-3' id='form_control'></div>");
+        $("#mainContainer").append(form_listing);
+        $("#mainContainer").append(form_display);
+        $("#mainContainer").append(form_control);
+        var new_form = $("<button class='btn btn-default' id='new_form'>New Form</button>");
+        new_form.click(newForm);
+        $("#form_control").append(new_form);
+
         hitApi("/form/list", {}, function (data, st, x){
             var n_forms = data["forms"].length;
             var listing = $("<ul id='form_list' class='list-group'></ul>");
@@ -129,8 +207,6 @@ $( document ).ready(function() {
                 link.click(showForm);
             }//for loop
             form_listing.append(listing);
-            $("#mainContainer").append(form_listing);
-            $("#mainContainer").append(form_display);
         });
     }; // form listing
 
