@@ -810,5 +810,5 @@ def category_list():
 
 if __name__ == '__main__':
     port = os.environ.get("PORT")
-    port = 8000 if port == '' else port
+    port = port if port else 8000
     app.run(debug=True, port=port, host='0.0.0.0')
