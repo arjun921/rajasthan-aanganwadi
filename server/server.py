@@ -371,7 +371,7 @@ def list_content():
     contents = []
     for i, fid in enumerate(os.listdir(utils.upath)):
         met = db.content_meta_data(fid)
-        title = fid if met is None else met['title']
+        title = fid if (met is None or met['title'] is None) else met['title']
         contents.append({'fname': fid, 'title': title,
                          'meta': []})
     return {'contents': contents}

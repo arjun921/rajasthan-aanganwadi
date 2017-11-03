@@ -8,3 +8,4 @@ _static/
 _templates/
 htmlcov/
 TEMP/
+*.csv
