@@ -25,7 +25,6 @@ __version__ = (0, 0, 15)
 
 app = bottle.Bottle()
 db = utils.db
-UPLOAD_DIR = 'uploads'  # NOTE: Needs to be replaced with amazon s3
 string = 'Origin, Accept , Content-Type, X-Requested-With, X-CSRF-Token'
 CORS_HEADERS = {
                 'Access-Control-Allow-Origin': '*',
@@ -673,6 +672,11 @@ def staticfiles(link):
         return bottle.static_file(fname, root=utils.upath)
     else:
         return raisehttp(404, 'Perhaps this link has been used already')
+
+
+@app.get('/adminstatic/<link>')
+def adminstaticfiles(link):
+    return bottle.static_file(link, root=utils.adminstatic)
 
 
 @app.post('/category/delete')
