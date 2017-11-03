@@ -6,6 +6,7 @@ $(document).ready(function() {
     $("#loggedIn").show();
     $("#noLogin").hide();
     $('#contentT').hide();
+    $('#content').hide();
     $('#navi').hide();
     //sets navigation menu profile content
     // var currenttoken = Cookies.get('currenttoken');
