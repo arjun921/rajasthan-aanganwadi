@@ -50,8 +50,6 @@ function loadContent(type) {
   $('#contentT').show();
   $('#contentT').html('');
   $('#contentCat').hide();
-  console.log(type);
-  // console.log(medias);
   for (var i = 0; i < medias.files.length; i++) {
     if (type==medias.files[i].type) {
       filest = medias.files[i][type]
@@ -60,7 +58,6 @@ function loadContent(type) {
         item = filest[j];
         p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
         $('#contentT').append(p);
-        // console.log(filest[j]);
       }
     }
   }

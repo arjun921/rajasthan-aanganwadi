@@ -41,7 +41,6 @@ function createNav(id) {
           if (Cookies.get('mediaCont')) {
             s = Cookies.get('media');
             s = JSON.parse(s);
-            console.log(s);
             Cookies.remove('mediaCont');
             window.open('content.html', '_self', 'location=yes');
           }
@@ -57,7 +56,10 @@ function createNav(id) {
   }
 }
 
+
+
 function navClick(id) {
+  $('#navi').html('');
   if (id[0]=="_") {
     if (id!="_ROOT_") {
       createNav(id);
@@ -65,7 +67,6 @@ function navClick(id) {
       $('#navi').append(p);
     }
     else {
-      $('#navi').html('');
       createNav(id);
     }
   }
@@ -90,7 +91,8 @@ function loadSideMenu() {
 
         for (var i = 0; i < data.contains.length; i++) {
           item = data.contains[i];
-          s = "<li><a class=\"dropdown-button\" onclick=\"$('.button-collapse').sideNav('hide');navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a></li>"
+          // s = "<li><a class=\"dropdown-button\" onclick=\"$('.button-collapse').sideNav('hide');navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a></li>"
+          s = "<li><a class=\"dropdown-button\" href=\"index.html#"+item.id+"\" onclick=\"$('.button-collapse').sideNav('hide');\" id=\"" + item.id + "\">" + item.title + "</a></li>"
           $('#mobile-demo').append(s);
 
         }
@@ -119,9 +121,11 @@ function reINT() {
   $(".button-collapse").sideNav();
   //generates forms list
   //hides login/login based on cookie present/absent
-
-  createNav('_ROOT_');
+  if (window.location.href.split('#').length==1) {
+    createNav('_ROOT_');
+  }
   loadSideMenu();
+  doYourStuff();
 }
 
 $(document).ready(function() {
@@ -205,17 +209,37 @@ function logout() {
     }
   });}
 
-  $(function() {
 
-      // show account info if #showAccountInfo is present
-      showAccountInfo();
+function doYourStuff() {
+  // console.log("Hash Changed!");
+  if (true) {
 
-      // detect url hash changes and fire off showAccountInfo
-      $(window).bind("hashchange", showAccountInfo());
-
-  });
-
-  function showAccountInfo() {
-      if (window.location.hash == "load-account-info")
-          loadAccountInformation();
   }
+  console.log(window.location.href.split('#')[1]);
+  navClick(window.location.href.split('#')[1])
+
+}
+window.onhashchange = function() { doYourStuff(); }
+
+// var hash = [];
+// function loadRoot() {
+//
+//     $.ajax({
+//         url: (link + '/category'),
+//         type: 'post',
+//         contentType: 'application/json',
+//         data: JSON.stringify({'catid': '_ROOT_'}),
+//         success: function(data, st, xhr) {
+//           hash = [];
+//           for (var i = 0; i < data.contains.length; i++) {
+//             hash.push(data.contains[i].id);
+//             // if (window.location.href.split('#')[1]==data.contains[i].id) {
+//             //     console.log(data.contains[i].id);
+//             // }
+//           }
+//
+//         }
+//       });
+//       // if (window.location.href.split('#')[1] == "_1")
+//       //     console.log("It works!");
+//   }
