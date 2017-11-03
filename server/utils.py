@@ -4,6 +4,7 @@ from db import DB, randstring
 
 db = DB()
 upath = os.path.join(os.getcwd(), 'UPLOAD')
+adminstatic = os.path.join(os.getcwd(), 'ADMINSTATIC')
 whitelist = 'abcdefghijklmnopqrstuvwxyz1234567890'
 
 

@@ -1,133 +1,45 @@
 <!DOCTYPE html>
 <html lang='en'>
     <head>
-        <meta charset = "utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<script src="/adminstatic/tether.min.js"></script>
+		<link rel="stylesheet" href="/adminstatic/bootstrap.min.css">
+		<script src="/adminstatic/jquery-3.2.1.min.js"></script>
+		<script src="/adminstatic/bootstrap.min.js"></script>
         <title>Rajasthan Aanganwadi</title>
+        <style> body { padding-top: 4.5rem; } </style>
         <!-- Bootstrap -->
-        <style>
-        .col-centered{
-            float: none;
-            margin: 0 auto;
-        }
-        </style>
     </head>
     <body>
-		<!-- Static navbar -->
-		  <nav class="navbar navbar-default">
-			<div class="container-fluid">
-			  <div class="navbar-header">
-				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-				  <span class="sr-only">Toggle navigation</span>
-				  <span class="icon-bar"></span>
-				  <span class="icon-bar"></span>
-				  <span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#">Aanganwadi</a>
-			  </div>
-			  <div id="navbar" class="navbar-collapse collapse">
-				<ul class="nav navbar-nav">
-				  <li class="active"><a href="#">Home</a></li>
-				  <li><a href="#forms" id='forms_button'>Forms</a></li>
-				  <li><a href="#content" id='content_button'>Content</a></li>
-				</ul>
-				<ul class="nav navbar-nav navbar-right">
-                  <li><label id='username'></label></li>
-                  <li><input type='text' placeholder='user@email.com'id='emailinput'/></li>
-                  <li><input type='password' placeholder='somepassword'id='pwdinput'/></li>
-                  <li id='loginbutton'><button>Login</button></li>
-                  <li id='logoutbutton'><button>LogOut</button></li>
-				</ul>
-			  </div><!--/.nav-collapse -->
-			</div><!--/.container-fluid -->
-		  </nav>
-          <div class='container' id='main_content'>
-          </div>
-        <script>
-            var root = '';
-            var currenttoken = '';
-            // --------------------------------------------
-            var genToken = function() {
-                var text = "";
-                var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
-                for(var i = 0; i < 100; i++) {
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-                }
-                return text;
-            }  // token generation --------------------------------
-
-            function dologin(){
-                var email = $('#emailinput').val();
-                var pwd = $("#pwdinput").val();
-                var tok = genToken();
-                $.ajax({
-                    url: (root+'/user/login'),
-                    type: 'post',
-                    contentType: 'application/json',
-                    data: JSON.stringify( { "email": email, "pwd": pwd, "token": tok} ),
-                    success: function(data, st, xhr){
-                        $('#emailinput').hide();
-                        $("#pwdinput").hide();
-                        $("#loginbutton").hide();
-                        $("#logoutbutton").show();
-                        $("#username").text(email);
-                        currenttoken = tok;
-                    }
-                });
-
-            }; // ----------------do login ------------------------
-            function doLogout(){
-                $.ajax({
-                    url: (root+'/user/logout'),
-                    type: 'post',
-                    contentType: 'application/json',
-                    data: JSON.stringify( {"token": currenttoken} ),
-                    success: function(data, st, xhr){
-                        $('#emailinput').show();
-                        $("#pwdinput").show();
-                        $("#loginbutton").show();
-                        $("#logoutbutton").hide();
-                        $("#username").text('');
-                        currenttoken = '';
-                    }
-                });
-
-            }; // ---------------------------------logout----------
-            $( document ).ready(function() {
-                $("#logoutbutton").hide();
-                $("#logoutbutton").click(function(){
-                    doLogout();
-                });  //logout click
-                $("#loginbutton").click(function(){
-                    dologin();
-                });  // login onclick
-                $("#forms_button").click(function(){
-                    console.log('forms');
-                    $.ajax({
-                            url: (root+'/form/list'),
-                            type: 'post',
-                            contentType: 'application/json',
-                            data: JSON.stringify( {"token": currenttoken} ),
-                            success: function(data, st, xhr){
-                                $("#main_content").empty();
-                                var arrlen = data['forms'].length;
-                                for(var i=0; i<arrlen; i++){
-                                    var ident = data['forms'][i];
-                                    var item = $("<button id='"+ident+"' class='col-md-4 btn btn-default' style='margin: 5px;'>"+ident+"</button>");
-                                    $("#main_content").append(item);
-                                }// loop
-                            }
-                        })  // end of ajax
-                });  // forms button
-                // ----------------------- TODO: REMOVE AFTER THIS
-                $("#emailinput").text('arjoonn.94@gmail.com');
-                // ----------------------- TODO: REMOVE BEFORE THIS
-            });  // document ready
-        </script>
+		<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+		  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		  </button>
+		  <a class="navbar-brand" href="#">Aanganwadi</a>
+		  <div class="collapse navbar-collapse" id="navbarCollapse">
+			<ul class="navbar-nav mr-auto">
+			  <li class="nav-item active">
+				<a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="#" id='formtab'>Forms</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link disabled" href="#" id='contenttab'>Content</a>
+			  </li>
+			</ul>
+			<div class="form-inline mt-2 mt-md-0" id="login_div">
+			  <input class="form-control mr-sm-2" type="text" placeholder="email" id="login_email">
+			  <input class="form-control mr-sm-2" type="password" placeholder="password" id="login_pwd">
+			  <button class="btn btn-outline-success my-2 my-sm-0" id='login_button'>Login</button>
+			</div>
+			  <button class="btn btn-outline-success my-2 my-sm-0" id='logout_button'>Logout</button>
+		  </div>
+		</nav>
+        <div class='container row' id='mainContainer'>
+            hi
+        </div>
+		<script src="/adminstatic/main.js"></script>
     </body>
 </html>
