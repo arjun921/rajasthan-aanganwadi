@@ -803,4 +803,6 @@ def category_list():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8000, host='0.0.0.0')
+    port = os.environ.get("PORT")
+    port = 8000 if port == '' else port
+    app.run(debug=True, port=port, host='0.0.0.0')
