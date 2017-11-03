@@ -26,13 +26,14 @@ function create_list() {
       else{
         p = "<a class=\"collection-item\" href=\"index.html\">No Forms to fill at the moment</a>";
         $('#form_list').append(p);
+        Materialize.toast('No forms to fill at the moment', 4000,'',function(){window.open("../UI/index.html","_self")})
       }
 
     },
     error: function(returnval) {
       if (returnval.status!=200) {
         var $toastContent = $('<span>Please Login to view.</span>').add($('<a href="../UI/login.html"><button class="btn-flat toast-action">OK</button></a>'));
-Materialize.toast($toastContent, 4000,'',function(){window.open("../UI/login.html","_self")})
+        Materialize.toast($toastContent, 4000,'',function(){window.open("../UI/login.html","_self")})
       }
     }
   });
@@ -213,7 +214,7 @@ function logout() {
       if (xhr.status == 200) {
         Cookies.remove('currenttoken');
         Cookies.remove('email');
-        Materialize.toast('User Logout Successful', 4000,'',function(){window.open("../UI/activity_bank.html","_self")})
+        Materialize.toast('User Logout Successful', 4000,'',function(){window.open("../UI/index.html","_self")})
       }
     }
   });}
@@ -265,7 +266,7 @@ function doSubmit() {
       data: JSON.stringify(dataRet),
       success: function(data, st, xhr) {
         if (xhr.status==200) {
-          Materialize.toast('Form Submitted Succesfully', 4000,'',function(){window.open("../UI/activity_bank.html","_self")})
+          Materialize.toast('Form Submitted Succesfully', 4000,'',function(){window.open("../UI/index.html","_self")})
         }
       },
       error: function(returnval) {
