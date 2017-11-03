@@ -104,7 +104,7 @@ function loadSideMenu() {
         if (Cookies.get('currenttoken')) {
           $("#email_menu").text(Cookies.get('email'));
           $("#name_menu").text("Arjoonn Sharma");
-          $("#profile_pic").attr('src',"https://avatars3.githubusercontent.com/u/7693265?v=4&s=400");
+          $("#profile_pic").attr('src',"images/turban22.png");
           $("#login_menu_but").hide();
           $("#login_menu_butD").hide();
         }
