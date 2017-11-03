@@ -410,7 +410,7 @@ def form_responses_as_csv():
     path = utils.get_savepath(fname)
     df.to_csv(path, index=False)
     # now this works like normal content
-    link = db.generate_content_url(fname)
+    link = db.generate_content_url(fname, count=1)
     return {'url': '/static/'+link}
 
 
