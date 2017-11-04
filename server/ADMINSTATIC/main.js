@@ -465,8 +465,11 @@ $( document ).ready(function() {
         });
     }); // logout click
 
+    $("#home_link").click(cleanSlate);
+
     // ========================================= CALLS
     cleanSlate();
+    $("#logout_button").hide();
     // TODO: remove this
     // $("#login_pwd").val("hash");
     // $("#login_email").val("arjoonn.94@gmail.com");
