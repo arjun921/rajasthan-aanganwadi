@@ -29,6 +29,16 @@ $( document ).ready(function() {
                 success: success_fn});
     } // hit API
 
+    function makeTag(name, contains="", config={}){
+        var tag = $("<" + name + ">"+contains+"</" + name+">");
+        for (var property in config) {
+            if (config.hasOwnProperty(property)) {
+                tag.attr(property, config[property]);
+            } // if property is own
+        } // loop
+        return tag;
+    } // make Tag
+
     // ------------------------------------------------
     // ------------------------------------------------
 
@@ -81,8 +91,8 @@ $( document ).ready(function() {
     function makePart(config, formid){
         console.log(config);
         var ident = formid + config["id"];
-        var label = $("<label for='" + ident + "'>" + config["label"] + "</label>");
-        var group = $("<div class='form-group'></div>");
+        var label = makeTag("label", config["label"], {"for": ident});
+        var group = makeTag("div", "", {"class": "form-group"});
         group.append(label);
 
         if(config['kind'] == "checkbox")
@@ -91,8 +101,9 @@ $( document ).ready(function() {
             for(var i=0; i < n_checks; i++){
                 var ck = config["misc"][i];
                 var subid=ck["subID"];
-                var sub_label = $("<br><label for='"+subid+"'>" + ck["subLabel"] + "</label>");
-                var check = $("<input type='checkbox' id='"+subid+"'/>");
+                var sub_label = makeTag("label", ck["subLabel"], {"for": subid});
+                var check = makeTag("input", "", {"type": "checkbox", "id": subid});
+                group.append(makeTag("br"));
                 group.append(sub_label);
                 group.append(check);
             }//loop
@@ -102,19 +113,23 @@ $( document ).ready(function() {
             for(var i=0; i < n_checks; i++){
                 var ck = config["misc"][i];
                 var subid=ck["subID"];
-                var sub_label = $("<br><label for='"+subid+"'>" + ck["subLabel"] + "</label>");
-                var check = $("<input name='"+ident+"' type='radio' id='"+subid+"'/>");
+                var sub_label = makeTag("label", ck["subLabel"], {"for": subid});
+                var check = makeTag("input", "", {"type": "radio",
+                                                  "id": subid,
+                                                  "name": ident});
+                group.append(makeTag("br"));
                 group.append(sub_label);
                 group.append(check);
             }//loop
         } 
         else if(config["kind"] == "select"){
             var n_checks = config["misc"].length;
-            var selection = $("<br><select id='"+ident+"'></select>");
+            var selection = makeTag("select", "", {"id": ident});
             for(var i=0; i < n_checks; i++){
                 var ck = config["misc"][i];
                 var subid=ck["subVal"];
-                var check = $("<option value='"+subid+"'>"+ck["subLabel"]+"</option>");
+                var check = makeTag("option", ck["subLabel"], {"value": subid});
+                group.append(makeTag("br"));
                 selection.append(sub_label);
                 selection.append(check);
             }//loop
@@ -126,7 +141,10 @@ $( document ).ready(function() {
             string += "type='" + config["kind"] + "' ";
             string += "class='form-control' max='"+M+"' min='"+m+"'>"
             string += "</input>"
-            var part = $(string);
+            var part = makeTag("input", "", {"id": ident,
+                                             "type": config["kind"],
+                                             "class": "form-control",
+                                             "max": M, "min": m});
             group.append(part);
 
         }else {
@@ -135,14 +153,18 @@ $( document ).ready(function() {
             string += "class='form-control' >"
             string += "</input>"
             var part = $(string);
+            var part = makeTag("input", "", {"id": ident,
+                                             "type": config["kind"],
+                                             "class": "form-control",
+                                            });
             group.append(part);
         }
 
-        group.append($("<hr>"));
+        group.append(makeTag("hr"));
         return group
     } // make a part of a form
 
-    function deleteForm(){
+    function deleteForm(){ // DONE
         var formid = this.getAttribute("formid");
         hitApi("/form/delete", {"formid": formid}, function (d, s, x){
             $("#formtab").click();
@@ -150,30 +172,40 @@ $( document ).ready(function() {
         });
     }// delete form
 
-    function newForm(){
+    function newForm(){  // TODO
         $("#form_control").html("");
         $("#form_display").html("");
 
     }  // new form
 
-    function editForm(){
+    function editForm(){  // TODO
         var formid = this.getAttribute("formid");
     }
 
-    function showForm(){
+    function showForm(){ // DONE
         $("#form_display").html("");
+        $("#form_control").html("");
         var formid = this.id;
         hitApi("/form", {"formid": formid}, function (data, st, x){
-            console.log(data);
-            $("#form_display").append($("<h2>" + data["title"] + "</h2>"));
-            $("#form_display").append($("<hr>"));
+            $("#form_display").append(makeTag("h2", data["title"]));
+            $("#form_display").append(makeTag("hr"));
             // CONTROLS FOR THE FORM
-            var delete_form = $("<button class='btn btn-danger' id='delete_"+formid+"' formid='"+formid+"'>Delete Form</button>");
+            var delete_form = makeTag("li", "", {"class": "list-group-item", "id": "delete_"+formid, "formid": formid});
+            delete_form.append(makeTag("a", "Delete Form", {"href": "#"}));
             delete_form.click(deleteForm);
-            var edit_form = $("<button class='btn btn-default' id='edit_"+formid+"'>Edit Form</button>");
+            // ----------------delete made
+            var edit_form = makeTag("li", "", {"class": "list-group-item", "id": "edit_"+formid, "formid": formid});
+            edit_form.append(makeTag("a", "Edit Form", {"href": "#"}));
             edit_form.click(editForm);
-            $("#form_control").append(delete_form);
+            // ---------------- edit made
+            var new_form = makeTag("li", "", {"class": "list-group-item", "id": "new_form", "formid": formid});
+            new_form.append(makeTag("a", "New Form", {"href": "#"}));
+            new_form.click(newForm);
+            // ----------------- new made
+            $("#form_control").append(new_form);
+            $("#form_control").append(makeTag("hr", "", {"class": "nav-divider"}));
             $("#form_control").append(edit_form);
+            $("#form_control").append(delete_form);
 
             var n_parts = data["fields"].length;
             for(var i=0; i<n_parts; i++){
@@ -185,25 +217,27 @@ $( document ).ready(function() {
 
 
     function getFormList(){
-        var form_listing = $("<div class='col-md-3' id='form_listing'></div>");
-        var form_display = $("<div class='col-md-6' id='form_display'></div>");
-        var form_control = $("<div class='col-md-3' id='form_control'></div>");
+        var form_listing = makeTag("div", "", {"class": "col-md-3", "id": "form_listing"});
+        var form_display = makeTag("div", "", {"class": "col-md-6", "id": "form_display"});
+        var fcd = makeTag("div", "", {"class": "col-md-3", "id": "form_control_div"});
+        var form_control = makeTag("ul", "", {"id": "form_control"});
+        fcd.append(form_control);
+        var new_form = makeTag("li", "", {"class": "list-group-item", "id": "new_form"});
+        new_form.append(makeTag("a", "New Form", {"href": "#"}));
+        new_form.click(newForm);
         $("#mainContainer").append(form_listing);
         $("#mainContainer").append(form_display);
-        $("#mainContainer").append(form_control);
-        var new_form = $("<button class='btn btn-default' id='new_form'>New Form</button>");
-        new_form.click(newForm);
+        $("#mainContainer").append(fcd);
         $("#form_control").append(new_form);
 
         hitApi("/form/list", {}, function (data, st, x){
             var n_forms = data["forms"].length;
-            var listing = $("<ul id='form_list' class='list-group'></ul>");
+            var listing = makeTag("ul", "", {"class": "list-group", "id": "form_list"});
             for(var i=0; i<n_forms; i++){
                 var form = data["forms"][i];
-                var li = $("<li class='list-group-item'></li>");
-                var link = $("<a id='"+form["formid"]+"' href='#' class='form_item'>"+form["title"]+"</a>");
-                li.append(link);
-                listing.append(li);
+                var link = makeTag("li", "", {"class": "list-group-item", "id": form["formid"]});
+                link.append(makeTag("a", form["title"], {"href": "#"}));
+                listing.append(link);
                 link.click(showForm);
             }//for loop
             form_listing.append(listing);
