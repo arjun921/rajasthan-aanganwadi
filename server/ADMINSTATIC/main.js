@@ -3,10 +3,10 @@ $( document ).ready(function() {
     var user_token="";
     var token_length = 100;
     var murmur_seed_value = 24;
+    var form_data = {};
 
     // function definitions for everything
-    function cleanSlate(){ $("#mainContainer").html(''); 
-    };
+    function cleanSlate(){ $("#mainContainer").html('');};
 
 
     function genToken() {
@@ -89,7 +89,6 @@ $( document ).ready(function() {
 
 
     function makePart(config, formid){
-        console.log(config);
         var ident = formid + config["id"];
         var label = makeTag("label", config["label"], {"for": ident});
         var group = makeTag("div", "", {"class": "form-group"});
@@ -172,47 +171,66 @@ $( document ).ready(function() {
         });
     }// delete form
 
-    function newForm(){  // TODO
+    function addNewFormButton(){
+        var new_form = makeTag("li", "", {"class": "list-group-item", "id": "new_form"});
+        new_form.append(makeTag("a", "New Form", {"href": "#"}));
+        new_form.click(newForm);
+        $("#form_control").append(new_form);
+        $("#form_control").append(makeTag("hr", "", {"class": "nav-divider"}));
+    } // new form button
+
+    function addDeleteFormButton(formid){
+        var delete_form = makeTag("li", "", {"class": "list-group-item bg-warning", "id": "delete_"+formid, "formid": formid});
+        delete_form.append(makeTag("a", "Delete Form", {"href": "#"}));
+        delete_form.click(deleteForm);
+        $("#form_control").append(delete_form);
+    } // delete form button
+
+    function addEditFormButton(formid){
+        var edit_form = makeTag("li", "", {"class": "list-group-item", "id": "edit_"+formid, "formid": formid});
+        edit_form.append(makeTag("a", "Edit Form", {"href": "#"}));
+        edit_form.click(editForm);
+        $("#form_control").append(edit_form);
+    } // edit form button
+
+
+    function addFormElementAdditionForms(){  // TODO
+    } // form element addtion forms
+
+
+    function newForm(){
         $("#form_control").html("");
         $("#form_display").html("");
-
+        // add forms
+        form_data = {"formid": "blank_form", "title": "",
+                     "fields": []};
+        showForm(form_data)
+        editForm(form_data);
     }  // new form
+
+    function editForm(data){
+    } // edit form
 
     function editForm(){  // TODO
         var formid = this.getAttribute("formid");
     }
 
-    function showForm(){ // DONE
-        $("#form_display").html("");
-        $("#form_control").html("");
-        var formid = this.id;
-        hitApi("/form", {"formid": formid}, function (data, st, x){
-            $("#form_display").append(makeTag("h2", data["title"]));
-            $("#form_display").append(makeTag("hr"));
-            // CONTROLS FOR THE FORM
-            var delete_form = makeTag("li", "", {"class": "list-group-item", "id": "delete_"+formid, "formid": formid});
-            delete_form.append(makeTag("a", "Delete Form", {"href": "#"}));
-            delete_form.click(deleteForm);
-            // ----------------delete made
-            var edit_form = makeTag("li", "", {"class": "list-group-item", "id": "edit_"+formid, "formid": formid});
-            edit_form.append(makeTag("a", "Edit Form", {"href": "#"}));
-            edit_form.click(editForm);
-            // ---------------- edit made
-            var new_form = makeTag("li", "", {"class": "list-group-item", "id": "new_form", "formid": formid});
-            new_form.append(makeTag("a", "New Form", {"href": "#"}));
-            new_form.click(newForm);
-            // ----------------- new made
-            $("#form_control").append(new_form);
-            $("#form_control").append(makeTag("hr", "", {"class": "nav-divider"}));
-            $("#form_control").append(edit_form);
-            $("#form_control").append(delete_form);
 
-            var n_parts = data["fields"].length;
-            for(var i=0; i<n_parts; i++){
-                var part = makePart(data["fields"][i], formid);
-                $("#form_display").append(part);
-            }// for each part
-        });
+    function showForm(data){ // DONE
+        var formid = data["formid"];
+        $("#form_display").html("");
+        $("#form_display").append(makeTag("h2", data["title"]));
+        $("#form_display").append(makeTag("hr"));
+        // CONTROLS FOR THE FORM
+        addNewFormButton();
+        addEditFormButton(formid);
+        addDeleteFormButton(formid);
+
+        var n_parts = data["fields"].length;
+        for(var i=0; i < n_parts; i++){
+            var part = makePart(data["fields"][i], formid);
+            $("#form_display").append(part);
+        }// for each part
     } // form display
 
 
@@ -222,13 +240,10 @@ $( document ).ready(function() {
         var fcd = makeTag("div", "", {"class": "col-md-3", "id": "form_control_div"});
         var form_control = makeTag("ul", "", {"id": "form_control"});
         fcd.append(form_control);
-        var new_form = makeTag("li", "", {"class": "list-group-item", "id": "new_form"});
-        new_form.append(makeTag("a", "New Form", {"href": "#"}));
-        new_form.click(newForm);
         $("#mainContainer").append(form_listing);
         $("#mainContainer").append(form_display);
         $("#mainContainer").append(fcd);
-        $("#form_control").append(new_form);
+        addNewFormButton();
 
         hitApi("/form/list", {}, function (data, st, x){
             var n_forms = data["forms"].length;
@@ -238,7 +253,13 @@ $( document ).ready(function() {
                 var link = makeTag("li", "", {"class": "list-group-item", "id": form["formid"]});
                 link.append(makeTag("a", form["title"], {"href": "#"}));
                 listing.append(link);
-                link.click(showForm);
+                link.click(function (){
+                    $("#form_control").html("");
+                    var formid = this.id;
+                    hitApi("/form", {"formid": formid}, function (data, st, x){
+                        showForm(data);
+                    });
+                }); // form link click
             }//for loop
             form_listing.append(listing);
         });
