@@ -554,7 +554,7 @@ def form_create():
                                                             "misc":{
                                                                     "type":"array",
                                                                     "items":{
-                                                                      "type":"string"},
+                                                                      "type":"object"},
                                                                     "uniqueItems":True}
                                                                },
                                                  },

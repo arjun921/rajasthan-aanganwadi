@@ -1,9 +1,11 @@
+var user_token="";
+var token_length = 100;
+var murmur_seed_value = 24;
+var form_data = {};
+
+
 $( document ).ready(function() {
     // CONFIG
-    var user_token="";
-    var token_length = 100;
-    var murmur_seed_value = 24;
-    var form_data = {};
 
     // function definitions for everything
     function cleanSlate(){ $("#mainContainer").html('');};
@@ -186,15 +188,176 @@ $( document ).ready(function() {
         $("#form_control").append(delete_form);
     } // delete form button
 
-    function addEditFormButton(formid){
+    function addEditFormButton(formid, data){
         var edit_form = makeTag("li", "", {"class": "list-group-item", "id": "edit_"+formid, "formid": formid});
-        edit_form.append(makeTag("a", "Edit Form", {"href": "#"}));
-        edit_form.click(editForm);
+        edit_form.append(makeTag("a", "Save/Edit Form", {"href": "#"}));
+        edit_form.click(function (){
+            form_data = data;
+            console.log(data);
+            hitApi("/form/delete", {"formid": formid}, function(d, s, x){console.log(d);});
+            hitApi("/form/create", form_data, function(d, s, x){console.log(d);});
+            $("#formtab").click();
+        });
         $("#form_control").append(edit_form);
     } // edit form button
 
 
-    function addFormElementAdditionForms(){  // TODO
+    function formRangeAddForm(){
+        var item = makeTag("li", "", {"class": "list-group-item input-group"});
+        var button = makeTag("div", "", {"class": "input-group-btn"});
+        var add = makeTag("button", "+", {"class": "btn btn-success"});
+        // ----------------
+        var m = makeTag("input", "", {"class": "form-control", "placeholder": "min"});
+        var M = makeTag("input", "", {"class": "form-control", "placeholder": "Max"});
+        var inp = makeTag("input", "", {"class": "form-control", "placeholder": "Question Here"});
+        add.click(function (){
+            form_data["fields"].push({"kind": "range", "label": inp.val(), "id": genToken(),
+                                      "misc": [{"min": m.val(), "max": M.val()}]});
+            showForm(form_data);
+        });
+        button.append(add);
+        item.append(button);
+        item.append(inp);
+        item.append(m);
+        item.append(M);
+        return item
+    }  // form part text
+
+    function formTextAddForm(){
+        var item = makeTag("li", "", {"class": "list-group-item input-group"});
+        var inp = makeTag("input", "", {"class": "form-control", "placeholder": "Text input"});
+        var button = makeTag("div", "", {"class": "input-group-btn"});
+        var add = makeTag("button", "+", {"class": "btn btn-success"});
+        add.click(function (){
+            form_data["fields"].push({"kind": "text", "label": inp.val(), "id": genToken()});
+            showForm(form_data);
+        });
+        button.append(add);
+        item.append(button);
+        item.append(inp);
+        return item
+    }  // form part text
+
+    function formDatePickerAddForm(){
+        var item = makeTag("li", "", {"class": "list-group-item input-group"});
+        var inp = makeTag("input", "", {"class": "form-control", "placeholder": "DatePicker"});
+        var button = makeTag("div", "", {"class": "input-group-btn"});
+        var add = makeTag("button", "+", {"class": "btn btn-success"});
+        add.click(function (){
+            form_data["fields"].push({"kind": "datepicker", "label": inp.val(), "id": genToken()});
+            showForm(form_data);
+        });
+        button.append(add);
+        item.append(button);
+        item.append(inp);
+        return item
+    }  //datepicker
+
+    function formTimePickerAddForm(){
+        var item = makeTag("li", "", {"class": "list-group-item input-group"});
+        var inp = makeTag("input", "", {"class": "form-control", "placeholder": "TimePicker"});
+        var button = makeTag("div", "", {"class": "input-group-btn"});
+        var add = makeTag("button", "+", {"class": "btn btn-success"});
+        add.click(function (){
+            form_data["fields"].push({"kind": "timepicker", "label": inp.val(), "id": genToken()});
+            showForm(form_data);
+        });
+        button.append(add);
+        item.append(button);
+        item.append(inp);
+        return item
+    } // timepicker
+
+    function formCheckboxAddForm(){
+        var item = makeTag("li", "", {"class": "list-group-item input-group"});
+        var inp = makeTag("input", "", {"class": "form-control", "placeholder": "checkbox"});
+        var button = makeTag("div", "", {"class": "input-group-btn"});
+        var add = makeTag("button", "+", {"class": "btn btn-success"});
+
+        var checkitems = [];
+
+        add.click(function (){
+            form_data["fields"].push({"kind": "checkbox", "label": inp.val(), "id": genToken(), "misc": checkitems});
+            showForm(form_data);
+        });
+
+        var ulforbox = makeTag("ul", "", {"class": "list-group"});
+        var boxitem = makeTag("li", "", {"class": "list-group-item input-group"});
+        var boxinp = makeTag("input", "", {"class": "form-control", "placeholder": "Label"});
+        var boxbutton = makeTag("div", "", {"class": "input-group-btn"});
+        var boxadd = makeTag("button", "+", {"class": "btn btn-success"});
+
+        boxadd.click(function (){
+            checkitems.push({"subID": genToken(), "subLabel": boxinp.val()});
+            boxinp.val("");
+        });
+
+        boxbutton.append(boxadd);
+        boxitem.append(boxbutton);
+        boxitem.append(boxinp);
+        ulforbox.append(boxitem);
+
+        button.append(add);
+        item.append(button);
+        item.append(inp);
+        item.append(ulforbox);
+        return item
+    } // checkbox
+
+    function formRadioAddForm(){
+        var item = makeTag("li", "", {"class": "list-group-item input-group"});
+        var inp = makeTag("input", "", {"class": "form-control", "placeholder": "RadioButton"});
+        var button = makeTag("div", "", {"class": "input-group-btn"});
+        var add = makeTag("button", "+", {"class": "btn btn-success"});
+
+        var checkitems = [];
+
+        add.click(function (){
+            form_data["fields"].push({"kind": "radio", "label": inp.val(), "id": genToken(), "misc": checkitems});
+            showForm(form_data);
+        });
+
+        var ulforbox = makeTag("ul", "", {"class": "list-group"});
+        var boxitem = makeTag("li", "", {"class": "list-group-item input-group"});
+        var boxinp = makeTag("input", "", {"class": "form-control", "placeholder": "Label"});
+        var boxbutton = makeTag("div", "", {"class": "input-group-btn"});
+        var boxadd = makeTag("button", "+", {"class": "btn btn-success"});
+
+        boxadd.click(function (){
+            checkitems.push({"subID": genToken(), "subLabel": boxinp.val()});
+            boxinp.val("");
+        });
+
+        boxbutton.append(boxadd);
+        boxitem.append(boxbutton);
+        boxitem.append(boxinp);
+        ulforbox.append(boxitem);
+
+        button.append(add);
+        item.append(button);
+        item.append(inp);
+        item.append(ulforbox);
+        return item
+    } // radio
+
+    function addFormElementAdditionForms(){
+        $("#form_control").append(makeTag("hr", "", {"class": "nav-divider"}));
+        var title = makeTag("li", "", {"class": "list-group-item"});
+        var titleinp = makeTag("input", "", {"placeholder": "Form Title", "type": "text"});
+        titleinp.change(function (){
+            console.log("Setting Title");
+            form_data["title"] = this.value;
+        });
+        title.append(titleinp);
+        $("#form_control").append(title);
+        $("#form_control").append(makeTag("hr", "", {"class": "nav-divider"}));
+        $("#form_control").append(formTextAddForm());
+        $("#form_control").append(formRangeAddForm());
+        $("#form_control").append(formDatePickerAddForm());
+        $("#form_control").append(formTimePickerAddForm());
+        $("#form_control").append(formCheckboxAddForm());
+        $("#form_control").append(formRadioAddForm());
+        // add various valid elements
     } // form element addtion forms
 
 
@@ -205,26 +368,36 @@ $( document ).ready(function() {
         form_data = {"formid": "blank_form", "title": "",
                      "fields": []};
         showForm(form_data)
-        editForm(form_data);
     }  // new form
 
-    function editForm(data){
-    } // edit form
 
-    function editForm(){  // TODO
-        var formid = this.getAttribute("formid");
-    }
+    function addDownloadFormResponses(formid){
+        var edit_form = makeTag("li", "", {"class": "list-group-item", "id": "download_"+formid, "formid": formid});
+        edit_form.append(makeTag("a", "Download Responses", {"href": "#"}));
+        edit_form.click(function (){
+            hitApi("/form/responses", {"formid": formid}, function (d, s, x){
+                var url = d["url"];
+                console.log(url);
+                window.location.href=url;
+            });
+        });
+        $("#form_control").append(edit_form);
+    } // download responses
 
 
     function showForm(data){ // DONE
+        $("#form_control").html("");
+        form_data = data;
         var formid = data["formid"];
         $("#form_display").html("");
         $("#form_display").append(makeTag("h2", data["title"]));
         $("#form_display").append(makeTag("hr"));
         // CONTROLS FOR THE FORM
         addNewFormButton();
-        addEditFormButton(formid);
+        addEditFormButton(formid, data);
+        addDownloadFormResponses(formid);
         addDeleteFormButton(formid);
+        addFormElementAdditionForms();
 
         var n_parts = data["fields"].length;
         for(var i=0; i < n_parts; i++){
@@ -235,9 +408,10 @@ $( document ).ready(function() {
 
 
     function getFormList(){
-        var form_listing = makeTag("div", "", {"class": "col-md-3", "id": "form_listing"});
-        var form_display = makeTag("div", "", {"class": "col-md-6", "id": "form_display"});
-        var fcd = makeTag("div", "", {"class": "col-md-3", "id": "form_control_div"});
+        cleanSlate();
+        var form_listing = makeTag("div", "", {"class": "col-md-4", "id": "form_listing"});
+        var form_display = makeTag("div", "", {"class": "col-md-4", "id": "form_display"});
+        var fcd = makeTag("div", "", {"class": "col-md-4", "id": "form_control_div"});
         var form_control = makeTag("ul", "", {"id": "form_control"});
         fcd.append(form_control);
         $("#mainContainer").append(form_listing);
@@ -254,7 +428,6 @@ $( document ).ready(function() {
                 link.append(makeTag("a", form["title"], {"href": "#"}));
                 listing.append(link);
                 link.click(function (){
-                    $("#form_control").html("");
                     var formid = this.id;
                     hitApi("/form", {"formid": formid}, function (data, st, x){
                         showForm(data);
@@ -267,10 +440,7 @@ $( document ).ready(function() {
 
 
     // ========================================= BINDINGS
-    $("#formtab").click(function (){
-        cleanSlate();
-        getFormList();
-    }); // form tab
+    $("#formtab").click(getFormList); // form tab
 
     $("#contenttab").click(function (){
     }); // content tab
