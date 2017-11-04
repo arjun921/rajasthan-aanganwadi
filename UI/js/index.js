@@ -14,7 +14,6 @@ function createNav(id) {
   }
   else {
     $.ajax({
-
         url: (link + '/category'),
         type: 'post',
         contentType: 'application/json',
