@@ -212,34 +212,11 @@ function logout() {
 
 function doYourStuff() {
   // console.log("Hash Changed!");
-  if (true) {
-
+  if (window.location.href.split('#')[1][0]=='_') {
+    console.log(window.location.href.split('#')[1]);
+    navClick(window.location.href.split('#')[1]);
   }
-  console.log(window.location.href.split('#')[1]);
-  navClick(window.location.href.split('#')[1])
+
 
 }
 window.onhashchange = function() { doYourStuff(); }
-
-// var hash = [];
-// function loadRoot() {
-//
-//     $.ajax({
-//         url: (link + '/category'),
-//         type: 'post',
-//         contentType: 'application/json',
-//         data: JSON.stringify({'catid': '_ROOT_'}),
-//         success: function(data, st, xhr) {
-//           hash = [];
-//           for (var i = 0; i < data.contains.length; i++) {
-//             hash.push(data.contains[i].id);
-//             // if (window.location.href.split('#')[1]==data.contains[i].id) {
-//             //     console.log(data.contains[i].id);
-//             // }
-//           }
-//
-//         }
-//       });
-//       // if (window.location.href.split('#')[1] == "_1")
-//       //     console.log("It works!");
-//   }
