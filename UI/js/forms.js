@@ -14,8 +14,8 @@ function create_list() {
       "token": Cookies.get('currenttoken')
     }),
     success: function(data, st, xhr) {
-      console.log();
-      if (data.forms.length<0) {
+      console.log(data.forms);
+      if (data.forms.length>0) {
         for (var i = 0; i < data.forms.length; i++) {
           item = data.forms[i];
           console.log(data.forms[i]);
