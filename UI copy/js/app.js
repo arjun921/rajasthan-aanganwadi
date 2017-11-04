@@ -1,14 +1,9 @@
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
-// var link = 'http://192.168.43.126:8000';
 var currenttoken = '';
 //runs functions to be executed at page load
 $(document).ready(function() {
     $(".button-collapse").sideNav();
-          $("#preloader").hide();
-          if (Cookies.get('currenttoken')) {
-            window.open("../UI/index.html","_self")
-          }
-
+    document.getElementById('submit').classList.add("disabled");
 });
 
 //Checks password both same or not
@@ -24,18 +19,6 @@ function check_password(input) {
 
 // Hash Function
 //used in login/signup
-/**
- * JS Implementation of MurmurHash3 (r136) (as of May 20, 2011)
- *
- * @author <a href="mailto:gary.court@gmail.com">Gary Court</a>
- * @see http://github.com/garycourt/murmurhash-js
- * @author <a href="mailto:aappleby@gmail.com">Austin Appleby</a>
- * @see http://sites.google.com/site/murmurhash/
- *
- * @param {string} key ASCII only
- * @param {number} seed Positive integer only
- * @return {number} 32-bit positive integer hash
- */
 //source https://github.com/garycourt/murmurhash-js/blob/master/murmurhash3_gc.js
 function murmurhash3_32_gc(key, seed) {
     var remainder, bytes, h1, h1b, c1, c1b, c2, c2b, k1, i;
@@ -105,37 +88,86 @@ var genToken = function() {
 //<------------- Login begin
 
 function dologin(){
-
-    $("#Main_Body").hide();
-    $("#preloader").show();
     var email = $('#emailinput').val();
     var pwd = $("#pwdinput").val();
-    pwd = murmurhash3_32_gc(pwd,24);
-    pws =  pwd.toString();
     var tok = genToken();
     $.ajax({
-
         url: (link+'/user/login'),
         type: 'post',
         contentType: 'application/json',
-        data: JSON.stringify( { "email": email, "pwd": pws, "token": tok} ),
+        data: JSON.stringify( { "email": email, "pwd": pwd, "token": tok} ),
         success: function(data, st, xhr){
-            Cookies.set('currenttoken', tok);
-            Cookies.set('email', email);
-            Materialize.toast('Login Successful', 4000);
-            window.open("../UI/index.html","_self")
-        },
-        error: function(returnval) {
-          if (returnval.status==401) {
-              Materialize.toast("Username or password incorrect", 4000);
-          }
-          console.log(returnval.status);
-          // Materialize.toast(returnval, 4000);
-          $("#Main_Body").show();
-          $("#preloader").hide();
+            // $('#emailinput').hide();
+            // $("#pwdinput").hide();
+            // $("#loginbutton").hide();
+            // $("#logoutbutton").show();
+            // $("#username").text(email);
+            currenttoken = tok;
+            Materialize.toast('Login Successful', 4000)
         }
     });
 
 };
 
 //Login end ------------->
+
+
+//<------------- register.html script begin
+
+//disables signup button until all form fields valid.
+function validations() {
+    if (document.getElementById("name").value != "" && document.getElementById("email").value != "" && document.getElementById("password_confirm").value != "" && document.getElementById("ph").value != "") {
+        if (document.getElementById("name").validationMessage == "" && document.getElementById("email").validationMessage == "" && document.getElementById("password_confirm").validationMessage == "" && document.getElementById("ph").validationMessage == "") {
+            // Materialize.toast("All Fields Valid", 4000);
+            console.log("All Fields Valid");
+            document.getElementById('submit').classList.remove("disabled");
+            // return ("All Fields Valid");
+        }
+    } else {
+        // Materialize.toast("Fields Invalid", 4000);
+        console.log("Fields  inValid");
+        document.getElementById('submit').classList.add("disabled");
+        // return ("Fields Invalid");
+    }
+}
+
+//signup function, called when clicking sign-up button
+function sign_up() {
+    var name = document.getElementById("name").value;
+    var email = document.getElementById("email").value;
+    var pwd = document.getElementById("password_confirm").value;
+    var addr = document.getElementById("addr").value;
+    var ph = document.getElementById("ph").value;
+    pwd_hash = murmurhash3_32_gc(pwd, 124);
+    var data = {
+        name: name,
+        email: email,
+        pwd: pwd_hash.toString(),
+        address: addr,
+        mobile: ph
+    };
+    console.log(data);
+    $.ajax({
+        url: link+'/user/create',
+        type: "POST",
+        dataType: 'json',
+        crossDomain: true,
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function(result, textStatus, xhr) {
+            alert(xhr.status);
+            alert(result);
+            alert(textStatus);
+            // if (xhr.status == 200) {
+            //     Materialize.toast("Sign-Up Success", 4000);
+            // } else {
+            //     // Materialize.toast(xhr.status, 4000);
+            //     // Materialize.toast(ajaxOptions, 4000);
+            //     Materialize.toast(thrownError, 4000);
+            // }
+            // // Materialize.toast(result, 4000);
+            // // Materialize.toast(result.status, 4000);
+        },
+    });
+}
+//register.html end ------------->
