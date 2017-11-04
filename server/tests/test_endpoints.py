@@ -6,6 +6,7 @@ import requests
 
 
 # CONFIG ------------------
+N_USES_FOR_CONTENT_LINK = 6
 
 if os.environ.get('TEST_HEROKU'):
     root = 'https://rajasthan-aanganwadi.herokuapp.com'
@@ -531,7 +532,7 @@ def test_dummy_file_retreival(loggeduser):
         os.remove(fname)
 
 
-def test_dummy_file_retreival_fails_for_dual_use_of_link(loggeduser):
+def test_dummy_file_retreival_fails_for_multiple_use_of_link(loggeduser):
     token = loggeduser['token']
     r = requests.post(point('/content/list'),
                       json={'token': token})
@@ -540,12 +541,13 @@ def test_dummy_file_retreival_fails_for_dual_use_of_link(loggeduser):
         fname = data['fname']
         json = {'token': token, 'fname': fname}
         r1 = requests.post(point('/content'), json=json)
-        r = requests.get(point(r1.json()['url']))
-        with open(fname, 'wb') as handle:
-            for block in r.iter_content(1024):
-                handle.write(block)
-        if os.path.exists('TEMP/'+fname):
-            assert filecmp.cmp(fname, 'TEMP/'+fname)
+        for part in range(N_USES_FOR_CONTENT_LINK):
+            r = requests.get(point(r1.json()['url']))
+            with open(fname, 'wb') as handle:
+                for block in r.iter_content(1024):
+                    handle.write(block)
+            if os.path.exists('TEMP/'+fname):
+                assert filecmp.cmp(fname, 'TEMP/'+fname)
         r = requests.get(point(r1.json()['url']))
         assert r.status_code == 404
         os.remove(fname)
