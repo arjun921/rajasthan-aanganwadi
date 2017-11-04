@@ -468,9 +468,9 @@ $( document ).ready(function() {
     // ========================================= CALLS
     cleanSlate();
     // TODO: remove this
-    $("#login_pwd").val("hash");
-    $("#login_email").val("arjoonn.94@gmail.com");
-    $("#login_button").click();
-    $("#formtab").click();
+    // $("#login_pwd").val("hash");
+    // $("#login_email").val("arjoonn.94@gmail.com");
+    // $("#login_button").click();
+    // $("#formtab").click();
 
 }); // DOCUMENT READY
