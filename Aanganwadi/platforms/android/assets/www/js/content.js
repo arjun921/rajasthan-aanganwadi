@@ -1,8 +1,13 @@
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
+medias = Cookies.get('media');
+medias = JSON.parse(medias);
 $(document).ready(function() {
     $(".button-collapse").sideNav();
     $("#loggedIn").show();
     $("#noLogin").hide();
+    $('#contentT').hide();
+    $('#content').hide();
+    $('#navi').hide();
     //sets navigation menu profile content
     // var currenttoken = Cookies.get('currenttoken');
     if (Cookies.get('currenttoken')) {
@@ -15,16 +20,21 @@ $(document).ready(function() {
     else {
       out_changes();
     }
-    $.ajax({
-        url: (link+'/content/list'),
-        type: 'post',
-        contentType: 'application/json',
-        data: JSON.stringify( {"token": Cookies.get('currenttoken')} ),
-        success: function(data, st, xhr){
 
-        }
-    });
+
+load_contentTabs();
 });
+
+function load_contentTabs() {
+  for (var i = 0; i < medias.files.length; i++) {
+    // file = s.files[i];
+    file = medias.files[i];
+    p = "<div class=\"col s6 m6 l6\" onclick=\"loadContent(this.id)\" id=\""+file.type+"\"><div class=\"card red accent-2\"><div class=\"card-content\"><span class=\"card-title white-text text-darken-4\">"+file.type.toUpperCase()+"</span></div></div></div>"
+    // p = "<div class=\"col s6 m6 l6\"><div class=\"card red accent-2\"><div class=\"card-content\"><span class=\"card-title white-text text-darken-4\">"+file.type.toUpperCase()+"</span></div></div></div>"
+    $('#contentCat').append(p);
+  }
+  // Cookies.remove('media');
+}
 
 function out_changes() {
   $("#profile_pic").attr('src',"images/empty-profile.gif");
@@ -35,6 +45,23 @@ function out_changes() {
   $("#login_menu_butD").show();
   $("#name_menu").text(" ");
   $("#noLogin").show();
+}
+function loadContent(type) {
+  $('#contentT').show();
+  $('#contentT').html('');
+  $('#contentCat').hide();
+  for (var i = 0; i < medias.files.length; i++) {
+    if (type==medias.files[i].type) {
+      filest = medias.files[i][type]
+
+      for (var j = 0; j < filest.length; j++) {
+        item = filest[j];
+        p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
+        $('#contentT').append(p);
+      }
+    }
+  }
+
 }
 
 

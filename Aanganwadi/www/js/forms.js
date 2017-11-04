@@ -1,8 +1,9 @@
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
-// var link = 'http://192.168.225.163:8000';
+// var link = 'http://192.168.43.126:8000';
 var lastElem = "form";
 var formslist = [];
 var data;
+var finaldat;
 
 function create_list() {
   $.ajax({
@@ -13,21 +14,26 @@ function create_list() {
       "token": Cookies.get('currenttoken')
     }),
     success: function(data, st, xhr) {
-      for (var i = 0; i < data.forms.length; i++) {
-        name = data.forms[i]
-        var mydiv = document.getElementById("form_list");
-        var aTag = document.createElement('a');
-        // aTag.setAttribute('href', href);
-        aTag.setAttribute('class', "collection-item");
-        aTag.setAttribute('onclick', 'load_form(this.innerHTML)')
-        aTag.innerHTML = name;
-        mydiv.appendChild(aTag);
+      console.log();
+      if (data.forms.length<0) {
+        for (var i = 0; i < data.forms.length; i++) {
+          item = data.forms[i];
+          console.log(data.forms[i]);
+          p = "<a class=\"collection-item\" onclick=\"load_form(this.id)\" id=\""+item.formid+"\">"+item.title+"</a>";
+          $('#form_list').append(p);
+        }
       }
+      else{
+        p = "<a class=\"collection-item\" href=\"index.html\">No Forms to fill at the moment</a>";
+        $('#form_list').append(p);
+        Materialize.toast('No forms to fill at the moment', 4000,'',function(){window.open("index.html","_self")})
+      }
+
     },
     error: function(returnval) {
       if (returnval.status!=200) {
         var $toastContent = $('<span>Please Login to view.</span>').add($('<a href="login.html"><button class="btn-flat toast-action">OK</button></a>'));
-Materialize.toast($toastContent, 4000,'',function(){window.open("login.html","_self")})
+        Materialize.toast($toastContent, 4000,'',function(){window.open("login.html","_self")})
       }
     }
   });
@@ -75,7 +81,7 @@ function hide_allForms() {
 }
 
 function create_newElem(field) {
-  console.log(field);
+
   if (field.kind == 'text') {
     s = "<div class=\"input-field col s6\"><input id=" + field.id + " type=\"text\" " + "><label for=" + field.id + ">" + field.label + "</label></div>"
     // s = "<div class=\"input-field col s6\"><input id=" + field.id + " type=" + field.misc[0].spec + "><label for=" + field.id + ">" + field.label + "</label></div>"
@@ -145,7 +151,8 @@ function load_form(formID) {
 
 //called on click of form name from list.
 function create_form(s) {
-  fields_returned = s
+  fields_returned = s;
+  console.log(fields_returned);
   Cookies.set('fields_returned', fields_returned);
   //checks if variable is defined
   if (typeof fields_returned !== 'undefined') {
@@ -156,6 +163,8 @@ function create_form(s) {
     $('#' + lastElem).append(h);
     di = "<div class=\"divider\"></div>"
     // $('#' + lastElem).append(di);
+    console.log(fields_returned.fields);
+    finaldat = fields_returned.fields;
     for (var i = 0; i < fields_returned.fields.length; i++) {
       create_newElem(fields_returned.fields[i]);
     }
@@ -205,7 +214,7 @@ function logout() {
       if (xhr.status == 200) {
         Cookies.remove('currenttoken');
         Cookies.remove('email');
-        Materialize.toast('User Logout Successful', 4000,'',function(){window.open("activity_bank.html","_self")})
+        Materialize.toast('User Logout Successful', 4000,'',function(){window.open("index.html","_self")})
       }
     }
   });}
@@ -257,12 +266,12 @@ function doSubmit() {
       data: JSON.stringify(dataRet),
       success: function(data, st, xhr) {
         if (xhr.status==200) {
-          Materialize.toast('Form Submitted Succesfully', 4000,'',function(){window.open("activity_bank.html","_self")})
+          Materialize.toast('Form Submitted Succesfully', 4000,'',function(){window.open("index.html","_self")})
         }
       },
       error: function(returnval) {
         if (returnval.status!=200) {
-          Materialize.toast('Form Submit Failed', 4000,'',function(){window.open("activity_bank.html","_self")})
+          Materialize.toast('Form Submit Failed', 4000,'',function(){window.open("index.html","_self")})
         }
       }
     });

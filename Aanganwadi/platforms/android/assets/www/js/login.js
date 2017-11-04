@@ -1,5 +1,5 @@
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
-// var link = 'http://192.168.225.163:8000';
+// var link = 'http://192.168.43.126:8000';
 var currenttoken = '';
 //runs functions to be executed at page load
 $(document).ready(function() {
@@ -21,6 +21,18 @@ function check_password(input) {
 
 // Hash Function
 //used in login/signup
+/**
+ * JS Implementation of MurmurHash3 (r136) (as of May 20, 2011)
+ *
+ * @author <a href="mailto:gary.court@gmail.com">Gary Court</a>
+ * @see http://github.com/garycourt/murmurhash-js
+ * @author <a href="mailto:aappleby@gmail.com">Austin Appleby</a>
+ * @see http://sites.google.com/site/murmurhash/
+ *
+ * @param {string} key ASCII only
+ * @param {number} seed Positive integer only
+ * @return {number} 32-bit positive integer hash
+ */
 //source https://github.com/garycourt/murmurhash-js/blob/master/murmurhash3_gc.js
 function murmurhash3_32_gc(key, seed) {
     var remainder, bytes, h1, h1b, c1, c1b, c2, c2b, k1, i;
@@ -95,23 +107,20 @@ function dologin(){
     $("#preloader").show();
     var email = $('#emailinput').val();
     var pwd = $("#pwdinput").val();
+    pwd = murmurhash3_32_gc(pwd,24);
+    pws =  pwd.toString();
     var tok = genToken();
     $.ajax({
+
         url: (link+'/user/login'),
         type: 'post',
         contentType: 'application/json',
-        data: JSON.stringify( { "email": email, "pwd": pwd, "token": tok} ),
+        data: JSON.stringify( { "email": email, "pwd": pws, "token": tok} ),
         success: function(data, st, xhr){
-            // $('#emailinput').hide();
-            // $("#pwdinput").hide();
-            // $("#loginbutton").hide();
-            // $("#logoutbutton").show();
-            // $("#username").text(email);
-            tok;
             Cookies.set('currenttoken', tok);
             Cookies.set('email', email);
             Materialize.toast('Login Successful', 4000);
-            window.open("activity_bank.html","_self")
+            window.open("index.html","_self")
         },
         error: function(returnval) {
           Materialize.toast(returnval, 4000);

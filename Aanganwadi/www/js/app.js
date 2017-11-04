@@ -146,7 +146,7 @@ function sign_up() {
         address: addr,
         mobile: ph
     };
-
+    console.log(data);
     $.ajax({
         url: link+'/user/create',
         type: "POST",
