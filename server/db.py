@@ -346,11 +346,10 @@ class DB:
             q = {'newlink': link}
             fnames = list(self.client.aang.content_links.find(q))
             if len(fnames) >= 1:
-                self.client.aang.content_links.find_one_and_delete(q)
-                data = fnames[0]
+                data = self.client.aang.content_links.find_one_and_delete(q)
                 if data['count'] >= 1:  # put it back if not yet done
                     data['count'] -= 1
-                    self.client.aand.content_links.insert_one(data)
+                    self.client.aang.content_links.insert_one(data)
                 fname = data['fname']
         else:
             fnames = [i for i in self.content_links if i['newlink'] == link]

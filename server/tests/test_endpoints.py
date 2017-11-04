@@ -547,7 +547,7 @@ def test_dummy_file_retreival_fails_for_multiple_use_of_link(loggeduser):
                 for block in r.iter_content(1024):
                     handle.write(block)
             if os.path.exists('TEMP/'+fname):
-                assert filecmp.cmp(fname, 'TEMP/'+fname)
+                assert filecmp.cmp(fname, 'TEMP/'+fname), part
         r = requests.get(point(r1.json()['url']))
         assert r.status_code == 404
         os.remove(fname)

@@ -667,10 +667,7 @@ def form_delete():
 
 @app.get('/static/<link>')
 def staticfiles(link):
-    fname = None
-    print('before', link, fname, os.listdir(utils.upath), db.content_links)
     fname = db.content_get_fname_for_link(link)
-    print('after', link, fname, os.listdir(utils.upath), db.content_links)
     if fname is not None:
         return bottle.static_file(fname, root=utils.upath)
     else:
