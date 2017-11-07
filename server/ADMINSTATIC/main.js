@@ -1,11 +1,13 @@
+//These globals are needed
+// CONFIG
 var user_token="";
 var token_length = 100;
 var murmur_seed_value = 24;
 var form_data = {};
+var category_trail = [];
 
 
 $( document ).ready(function() {
-    // CONFIG
 
     // function definitions for everything
     function cleanSlate(){ $("#mainContainer").html('');};
@@ -88,6 +90,9 @@ $( document ).ready(function() {
           h1 ^= h1 >>> 16;
           return h1 >>> 0;
     }   // MURMUR3 hash function
+
+
+    // ============================================= FORMS
 
 
     function makePart(config, formid){
@@ -443,6 +448,7 @@ $( document ).ready(function() {
     $("#formtab").click(getFormList); // form tab
 
     $("#contenttab").click(function (){
+        showCategory('_ROOT_');
     }); // content tab
 
     $("#login_button").click(function (){
@@ -466,14 +472,54 @@ $( document ).ready(function() {
     }); // logout click
 
     $("#home_link").click(cleanSlate);
+    // ======================================== CONTENT
+
+    function addCategoryItem(item){
+        var listitem = makeTag("li", item["title"],
+                               {"class": "list-group-item"});
+        listitem.click(function (){
+            if(item["id"][0] == "_"){ showCategory(item["id"]);}
+            else{ // content list/del/add # TODO
+            }
+        });
+        $("#categories_list").append(listitem);
+    } // category item
+
+    function showCategory(catid){
+        hitApi("/category", {"catid": catid}, function(d, s, x){
+            $("#mainContainer").html("");
+            var list = makeTag("ul", "", {"class": "list-group", "id": "categories_list"});
+            $("#mainContainer").append(list);
+            // add back button ----------------------------
+            if(catid!="_ROOT_"){
+                var listitem = makeTag("li", ".. back",
+                                       {"class": "list-group-item"});
+                listitem.click(function (){
+                    console.log("before pop", category_trail);
+                    category_trail.pop();
+                    var ident = category_trail[category_trail.length-1]
+                    console.log("after pop", ident, category_trail);
+                    showCategory(ident);
+                });
+                $("#categories_list").append(listitem);
+                console.log(category_trail);
+            }
+            if(category_trail[category_trail.length-1] != catid){category_trail.push(catid);}
+            // add rest of items ----------------------------
+            var n_items = d["contains"].length;
+            for(var i=0; i<n_items; i++){
+                addCategoryItem(d["contains"][i], catid);
+            }
+        });
+    } // show category
 
     // ========================================= CALLS
     cleanSlate();
     $("#logout_button").hide();
     // TODO: remove this
-    // $("#login_pwd").val("hash");
-    // $("#login_email").val("arjoonn.94@gmail.com");
-    // $("#login_button").click();
-    // $("#formtab").click();
+    $("#login_pwd").val("hash");
+    $("#login_email").val("arjoonn.94@gmail.com");
+    $("#login_button").click();
+    $("#contenttab").click();
 
 }); // DOCUMENT READY
