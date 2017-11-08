@@ -800,7 +800,11 @@ def category_list():
         contains = []
         for i in cat['contains']:
             if i[0] == '_':
-                title = db.category_data(i)['title']
+                title = db.category_data(i)
+                if title is None:
+                    continue
+                else:
+                    title = title['title']
             else:
                 meta = db.content_meta_data(i)
                 if meta is not None and meta['title'] is not None:

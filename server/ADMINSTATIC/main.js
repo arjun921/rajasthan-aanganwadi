@@ -476,9 +476,19 @@ $( document ).ready(function() {
     // ======================================== CONTENT
 
     function addCategoryItem(item){
-        var listitem = makeTag("li", item["title"],
-                               {"class": "list-group-item"});
-        listitem.click(function (){
+        var listitem = makeTag("li", "", {"class": "list-group-item"});
+        var name = makeTag("button", item["title"], {"class": "btn"});
+        var del = makeTag("button", "X", {"class": "btn btn-danger"});
+        listitem.append(del);
+        listitem.append(name);
+        del.click(function (){
+            if(item["id"][0] == "_"){
+                hitApi("/category/delete", {"catid": item["id"]}, function (d, s, x){
+                    showCategory(category_trail[category_trail.length-1]);
+                });
+            }
+        });
+        name.click(function (){
             if(item["id"][0] == "_"){ showCategory(item["id"]);}
             else{
                 hitApi("/content", {"fname": item["id"]},
@@ -502,7 +512,7 @@ $( document ).ready(function() {
             // ADD BACK BUTTON ----------------------------
             if(catid!="_ROOT_"){
                 var listitem = makeTag("li", ".. back",
-                                       {"class": "list-group-item"});
+                                       {"class": "bg-info list-group-item"});
                 listitem.click(function (){
                     console.log("before pop", category_trail);
                     category_trail.pop();
