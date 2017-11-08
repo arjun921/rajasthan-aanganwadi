@@ -107,7 +107,7 @@ def resource(tmpdir, admin):
     p = tmpdir.mkdir("sub").join("hello.txt")
     p.write("content")
     files = {'upload': p.open('rb')}
-    values = {'token': admin['token']}
+    values = {'token': admin['token'], "title": "test", "desc": "testd"}
     r = requests.post(point('/content/create'), files=files, data=values)
     assert r.status_code == 200, r.text
     yield r.text, p.open('rb'), admin['token']
@@ -315,12 +315,16 @@ def test_resource_create_fails_for_non_admin(resource, loggeduser):
     assert r.status_code == 403, r.text
 
 
-def test_resource_create_works(resource):
-    fname, f, tok = resource
-    files = {'upload': f}
-    values = {'token': tok}
+def test_resource_create_works(tmpdir, admin):
+    p = tmpdir.mkdir("sub").join("hello.txt")
+    p.write("content")
+    files = {'upload': p.open('rb')}
+    values = {'token': admin['token'], "title": "test", "desc": "testd",
+              "parent": "_ROOT_"}
     r = requests.post(point('/content/create'), files=files, data=values)
     assert r.status_code == 200, r.text
+    data = {'token': admin['token'], 'fname': r.text}
+    r = requests.post(point('/content/delete'), json=data)
 
 
 def test_form_retreival_fails_for_unlogged_user(form, loggeduser):

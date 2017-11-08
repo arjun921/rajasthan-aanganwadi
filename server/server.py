@@ -309,10 +309,11 @@ def content_create():
     db.content_meta_create(fname, title, desc)
     # -----------update category to contain this content
     parent = bottle.request.forms.get('parent')
-    data = db.category_data(parent)
-    data['contains'].append(fname)
-    db.category_delete(parent)
-    db.category_insert(data)
+    if parent is not None:
+        data = db.category_data(parent)
+        data['contains'].append(fname)
+        db.category_delete(parent)
+        db.category_insert(data)
     # save
     savepath = utils.get_savepath(fname)
     file.file.seek(0)
