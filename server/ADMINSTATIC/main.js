@@ -487,6 +487,11 @@ $( document ).ready(function() {
                     showCategory(category_trail[category_trail.length-1]);
                 });
             }
+            else{
+                hitApi("/content/delete", {"fname": item["id"]}, function (d, s, x){
+                    showCategory(category_trail[category_trail.length-1]);
+                });
+            }
         });
         name.click(function (){
             if(item["id"][0] == "_"){ showCategory(item["id"]);}

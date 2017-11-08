@@ -350,6 +350,14 @@ def content_delete():
     fname = bottle.request.json['fname']
     # TODO: should clean this path
     utils.del_uploaded(fname)
+    meta = db.content_meta_data(fname)
+    if meta is not None and 'parent' in meta:
+        parent = meta['parent']
+        cat = db.category_data(parent)
+        if cat is not None:
+            cat['contains'] = [i for i in cat['contains'] if i != fname]
+            db.category_delete(parent)
+            db.category_insert(cat)
     return 'OK'
 
 
