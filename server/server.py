@@ -280,6 +280,9 @@ def content_create():
     Expects a normal html multipart form with
         token       : a string signifying user token
         upload      : the file being uploaded
+        title       : Title of the content
+        parent      : Which category contains this content?
+        description : Description of the content
 
     Returns file name on successful creation
     """
@@ -304,6 +307,12 @@ def content_create():
     title = bottle.request.forms.get('title')
     desc = bottle.request.forms.get('description')
     db.content_meta_create(fname, title, desc)
+    # -----------update category to contain this content
+    parent = bottle.request.forms.get('parent')
+    data = db.category_data(parent)
+    data['contains'].append(fname)
+    db.category_delete(parent)
+    db.category_insert(data)
     # save
     savepath = utils.get_savepath(fname)
     file.file.seek(0)

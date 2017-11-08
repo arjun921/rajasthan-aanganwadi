@@ -11,6 +11,7 @@ $( document ).ready(function() {
 
     // function definitions for everything
     function cleanSlate(){ $("#mainContainer").html('');};
+    function getCurrentToken(){return user_token;};
 
 
     function genToken() {
@@ -488,9 +489,9 @@ $( document ).ready(function() {
     function showCategory(catid){
         hitApi("/category", {"catid": catid}, function(d, s, x){
             $("#mainContainer").html("");
-            var list = makeTag("ul", "", {"class": "list-group", "id": "categories_list"});
+            var list = makeTag("ul", "", {"class": "list-group col-md-4", "id": "categories_list"});
             $("#mainContainer").append(list);
-            // add back button ----------------------------
+            // ADD BACK BUTTON ----------------------------
             if(catid!="_ROOT_"){
                 var listitem = makeTag("li", ".. back",
                                        {"class": "list-group-item"});
@@ -505,16 +506,15 @@ $( document ).ready(function() {
                 console.log(category_trail);
             }
             if(category_trail[category_trail.length-1] != catid){category_trail.push(catid);}
-            // add rest of items ----------------------------
+            // ADD REST OF ITEMS ----------------------------
             var n_items = d["contains"].length;
             for(var i=0; i<n_items; i++){
                 addCategoryItem(d["contains"][i], catid);
             }
-            // add NEW CATEGORY Button
+            // ADD NEW CATEGORY BUTTON
             var item = makeTag("li", "", {"class": "list-group-item input-group"});
             var button = makeTag("div", "", {"class": "input-group-btn"});
             var add = makeTag("button", "+", {"class": "btn btn-success"});
-            // ----------------
             var inp = makeTag("input", "", {"class": "form-control", "placeholder": "Add new Category"});
             add.click(function (){
                 var newcat = {"title": inp.val(), "id": "_"+genToken(),
@@ -528,6 +528,27 @@ $( document ).ready(function() {
             button.append(add);
             item.append(button);
             item.append(inp);
+            $("#categories_list").append(item);
+            // ADD NEW CONTENT BUTTON----------------
+            var item = makeTag("li", "", {"class": "list-group-item"});
+            var form = makeTag("form", "", {"class": "form-group",
+                                            "action": "/content/create",
+                                            "method": "post",
+                                            "enctype": "multipart/form-data",
+                                           });
+            item.append(form);
+            // ----------------
+            var title = makeTag("input", "", {"class": "form-control", "placeholder": "Content Title", "name": "title"});
+            var desc = makeTag("input", "", {"class": "form-control", "placeholder": "Description", "name": "description"});
+            var upload = makeTag("input", "", {"class": "form-control", "type": "file", "name": "upload"});
+            var button = makeTag("button", "Upload", {"class": "btn btn-primary", "type": "submit"});
+            var tok = makeTag("input", "", {"type": "hidden", "name": "token", "value": getCurrentToken() });
+            var par = makeTag("input", "", {"type": "hidden", "name": "parent", "value":catid });
+            form.append(makeTag("b", "New Content"));
+            form.append(title); form.append(desc);
+            form.append(tok); form.append(par);
+            form.append(upload); form.append(button);
+
             $("#categories_list").append(item);
         });
     } // show category
