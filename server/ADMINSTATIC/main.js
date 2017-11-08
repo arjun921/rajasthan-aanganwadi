@@ -480,7 +480,13 @@ $( document ).ready(function() {
                                {"class": "list-group-item"});
         listitem.click(function (){
             if(item["id"][0] == "_"){ showCategory(item["id"]);}
-            else{ // content list/del/add # TODO
+            else{
+                hitApi("/content", {"fname": item["id"]},
+                    function (d, s, x){
+                        var url = d["url"];
+                        window.location.href=url;
+                    }  // on success of content
+                );
             }
         });
         $("#categories_list").append(listitem);
@@ -490,7 +496,9 @@ $( document ).ready(function() {
         hitApi("/category", {"catid": catid}, function(d, s, x){
             $("#mainContainer").html("");
             var list = makeTag("ul", "", {"class": "list-group col-md-4", "id": "categories_list"});
+            var view = makeTag("div", "", {"class": "col-md-8", "id": "content_view"});
             $("#mainContainer").append(list);
+            $("#mainContainer").append(view);
             // ADD BACK BUTTON ----------------------------
             if(catid!="_ROOT_"){
                 var listitem = makeTag("li", ".. back",
@@ -511,6 +519,7 @@ $( document ).ready(function() {
             for(var i=0; i<n_items; i++){
                 addCategoryItem(d["contains"][i], catid);
             }
+            $("#categories_list").append(makeTag("hr", "", {"class": "nav-divider"}));
             // ADD NEW CATEGORY BUTTON
             var item = makeTag("li", "", {"class": "list-group-item input-group"});
             var button = makeTag("div", "", {"class": "input-group-btn"});
