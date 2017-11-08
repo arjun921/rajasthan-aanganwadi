@@ -510,6 +510,25 @@ $( document ).ready(function() {
             for(var i=0; i<n_items; i++){
                 addCategoryItem(d["contains"][i], catid);
             }
+            // add NEW CATEGORY Button
+            var item = makeTag("li", "", {"class": "list-group-item input-group"});
+            var button = makeTag("div", "", {"class": "input-group-btn"});
+            var add = makeTag("button", "+", {"class": "btn btn-success"});
+            // ----------------
+            var inp = makeTag("input", "", {"class": "form-control", "placeholder": "Add new Category"});
+            add.click(function (){
+                var newcat = {"title": inp.val(), "id": "_"+genToken(),
+                              "parent": category_trail[category_trail.length-1],
+                              "contains": []};
+                hitApi("/category/create", newcat,
+                       function (d, s, x){
+                           showCategory(category_trail[category_trail.length-1]);
+                       });
+            });
+            button.append(add);
+            item.append(button);
+            item.append(inp);
+            $("#categories_list").append(item);
         });
     } // show category
 
