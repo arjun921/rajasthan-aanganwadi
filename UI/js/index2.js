@@ -4,7 +4,16 @@ var lastElem = "form";
 var formslist = [];
 var data;
 var old_id = [];
+$.ajaxSetup({
+    timeout: 15000 //Time in milliseconds
+});
 
+$(document).ajaxError(function (event, jqXHR, options, thrownError) {
+    if (thrownError== 'timeout') {
+        $("#preloader").hide();
+        Materialize.toast('Timed Out', 4000);
+    }
+})
 $( document ).ajaxStart(function() {
   NProgress.start();
 });

@@ -4,7 +4,7 @@ var currenttoken = '';
 
 //runs functions to be executed at page load
 $.ajaxSetup({
-    timeout: 60000 //Time in milliseconds
+    timeout: 15000 //Time in milliseconds
 });
 
 $(document).ajaxError(function (event, jqXHR, options, thrownError) {

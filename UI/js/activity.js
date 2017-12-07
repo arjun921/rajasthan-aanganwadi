@@ -3,7 +3,16 @@ var link = 'https://rajasthan-aanganwadi.herokuapp.com';
 var lastElem = "form";
 var formslist = [];
 var data;
+$.ajaxSetup({
+    timeout: 15000 //Time in milliseconds
+});
 
+$(document).ajaxError(function (event, jqXHR, options, thrownError) {
+    if (thrownError== 'timeout') {
+        $("#preloader").hide();
+        Materialize.toast('Timed Out', 4000);
+    }
+})
 function create_list() {
   $.ajax({
     url: (link + '/content/list'),

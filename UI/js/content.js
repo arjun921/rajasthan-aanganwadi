@@ -1,6 +1,17 @@
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
 medias = Cookies.get('media');
 medias = JSON.parse(medias);
+
+$.ajaxSetup({
+    timeout: 15000 //Time in milliseconds
+});
+
+$(document).ajaxError(function (event, jqXHR, options, thrownError) {
+    if (thrownError== 'timeout') {
+        $("#preloader").hide();
+        Materialize.toast('Timed Out', 4000);
+    }
+})
 // Cookies.set('mediaCont', false);
 $(document).ready(function() {
   window.history.pushState({page: 1}, "", "");
