@@ -138,13 +138,15 @@ function sign_up() {
     var pwd = document.getElementById("password_confirm").value;
     var addr = document.getElementById("addr").value;
     var ph = document.getElementById("ph").value;
+    var tok = genToken();
     pwd_hash = murmurhash3_32_gc(pwd, 124);
     var data = {
         name: name,
         email: email,
         pwd: pwd_hash.toString(),
         address: addr,
-        mobile: ph
+        mobile: ph,
+        token: tok
     };
     console.log(data);
     $.ajax({
@@ -155,9 +157,9 @@ function sign_up() {
         contentType: 'application/json',
         data: JSON.stringify(data),
         success: function(result, textStatus, xhr) {
-            alert(xhr.status);
-            alert(result);
-            alert(textStatus);
+          Materialize.toast(xhr.status, 4000);
+              // alert(result);
+              // alert(textStatus);
             // if (xhr.status == 200) {
             //     Materialize.toast("Sign-Up Success", 4000);
             // } else {
@@ -168,6 +170,15 @@ function sign_up() {
             // // Materialize.toast(result, 4000);
             // // Materialize.toast(result.status, 4000);
         },
-    });
+        error: function(returnval) {
+          if (returnval.status==422) {
+              Materialize.toast("Registration is not enabled.", 4000);
+          }
+          else if (returnval.status==403) {
+            a = returnval;
+            console.log(a);
+            Materialize.toast("User not logged in", 4000);
+          }
+    }});
 }
 //register.html end ------------->

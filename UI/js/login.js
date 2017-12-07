@@ -1,7 +1,19 @@
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
 // var link = 'http://192.168.43.126:8000';
 var currenttoken = '';
+
 //runs functions to be executed at page load
+$.ajaxSetup({
+    timeout: 60000 //Time in milliseconds
+});
+
+$(document).ajaxError(function (event, jqXHR, options, thrownError) {
+    if (thrownError== 'timeout') {
+        $("#preloader").hide();
+        Materialize.toast('Timed Out', 4000);
+    }
+})
+
 $(document).ready(function() {
     $(".button-collapse").sideNav();
           $("#preloader").hide();
