@@ -12,9 +12,6 @@ $( document ).ajaxStart(function() {
 $(document).ajaxSuccess(function() {
   NProgress.done();
 });
-// $( ".trigger" ).click(function() {
-//   console.log("Ajax End");
-// });
 
 function createNav(id) {
   $('#navi').html('');
@@ -24,6 +21,7 @@ function createNav(id) {
         contentType: 'application/json',
         data: JSON.stringify({'catid': id}),
         success: function(data, st, xhr) {
+          $('#navi').html('');
           var files = [];
           for (var i = 0; i < data.contains.length; i++) {
             cont = data.contains[i];
@@ -41,7 +39,7 @@ function createNav(id) {
           if (Cookies.get('mediaCont')) {
             s = Cookies.get('media');
             s = JSON.parse(s);
-            Cookies.remove('mediaCont');
+            // Cookies.remove('mediaCont');
             window.open('content.html', '_self', 'location=yes');
           }
           else {
@@ -63,7 +61,6 @@ function navClick(id) {
   url = window.location.href.split('#')[0]
   url = url+'#'+id;
   window.location.href = url;
-  console.log(window.location.href+'#'+id);
   if (id[0]=="_") {
       createNav(id);
   }
@@ -74,24 +71,7 @@ function navClick(id) {
   }
   $("#_ROOT_").hide();
 }
-var d = {
-    "title": "ROOT",
-    "id": "_ROOT_",
-    "contains": [
-        {
-            "title": "Supplementary Nutrition",
-            "id": "_0"
-        },
-        {
-            "title": "Early Childhood Education",
-            "id": "_1"
-        },
-        {
-            "title": "Health Check Up",
-            "id": "_2"
-        }
-    ]
-};
+
 function loadSideMenu() {
   $.ajax({
       url: (link + '/category'),
@@ -99,7 +79,6 @@ function loadSideMenu() {
       contentType: 'application/json',
       data: JSON.stringify({'catid': '_ROOT_'}),
       success: function(data, st, xhr) {
-        console.log(data);
         for (var i = 0; i < data.contains.length; i++) {
           item = data.contains[i];
           // s = "<li><a class=\"dropdown-button\" onclick=\"$('.button-collapse').sideNav('hide');navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a></li>"
@@ -130,6 +109,10 @@ function loadSideMenu() {
 }
 
 function reINT() {
+  console.log(Cookies.get('mediaCont'));
+  if (Cookies.get('mediaCont')) {
+    window.history.back();
+  }
   $("#profile_pic").hide();
   $('select').material_select();
   //enables nav
@@ -138,6 +121,9 @@ function reINT() {
   //hides login/login based on cookie present/absent
   if (window.location.href.split('#').length==1) {
     createNav('_ROOT_');
+  }
+  else {
+    navClick(window.location.href.split('#')[1]);
   }
   loadSideMenu();
   // doYourStuff();
@@ -196,8 +182,8 @@ function load_content(contentID) {
     },
     error: function(returnval) {
       if (returnval.status!=200) {
-        var $toastContent = $('<span>Please Login to view.</span>').add($('<a href="../UI/login.html"><button class="btn-flat toast-action">OK</button></a>'));
-        Materialize.toast($toastContent, 4000,'',function(){window.open("../UI/login.html","_self")})
+        var $toastContent = $('<span>Please Login to view.</span>').add($('<a href="login.html"><button class="btn-flat toast-action">OK</button></a>'));
+        Materialize.toast($toastContent, 4000,'',function(){window.open("login.html","_self")})
       }
 
     }
@@ -220,18 +206,23 @@ function logout() {
       if (xhr.status == 200) {
         Cookies.remove('currenttoken');
         Cookies.remove('email');
-        Materialize.toast('User Logout Successful', 4000,'',function(){window.open("../UI/index.html","_self")})
+        Materialize.toast('User Logout Successful', 4000,'',function(){window.open("index.html","_self")})
       }
     }
   });}
 
 
 function doYourStuff() {
-  // console.log("Hash Changed!");
-  if (window.location.href.split('#')[1][0]=='_') {
-    // console.log(window.location.href.split('#')[1]);
-    console.log(window.location.href.split('#'));
-    navClick(window.location.href.split('#')[1]);
+  if (window.location.href.split('#').length>1) {
+    if (window.location.href.split('#')[1][0]=='_') {
+      console.log(window.location.href.split('#')[1]);
+      // console.log(window.location.href.split('#'));
+      reINT();
+      // navClick(window.location.href.split('#')[1]);
+    }
+  }
+  else {
+    reINT();
   }
 
 

@@ -17,6 +17,14 @@ $(document).ready(function() {
     }
 });
 
+$( document ).ajaxStart(function() {
+  NProgress.start();
+});
+
+$(document).ajaxSuccess(function() {
+  NProgress.done();
+});
+
 function out_changes() {
   $("#profile_pic").attr('src',"images/empty-profile.gif");
   $("#loggedIn").hide();

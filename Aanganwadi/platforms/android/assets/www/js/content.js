@@ -1,7 +1,20 @@
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
 medias = Cookies.get('media');
 medias = JSON.parse(medias);
+// Cookies.set('mediaCont', false);
 $(document).ready(function() {
+  window.history.pushState({page: 1}, "", "");
+  window.onpopstate = function(event) {
+  // "event" object seems to contain value only when the back button is clicked
+  // and if the pop state event fires due to clicks on a button
+  // or a link it comes up as "undefined"
+  if(event){
+window.open('index.html', '_self', 'location=yes');
+  }
+  else{
+    // Continue user action through link or button
+  }
+}
     $(".button-collapse").sideNav();
     $("#loggedIn").show();
     $("#noLogin").hide();
@@ -24,6 +37,7 @@ $(document).ready(function() {
 
 load_contentTabs();
 });
+
 
 function load_contentTabs() {
   for (var i = 0; i < medias.files.length; i++) {
