@@ -8,10 +8,12 @@ $.ajaxSetup({
 
 $(document).ajaxError(function (event, jqXHR, options, thrownError) {
     if (thrownError== 'timeout') {
+      NProgress.done();
+      Materialize.toast('Timed Out', 4000);
         $("#preloader").hide();
-        Materialize.toast('Timed Out', 4000);
+
     }
-})
+});
 // Cookies.set('mediaCont', false);
 $(document).ready(function() {
   window.history.pushState({page: 1}, "", "");
