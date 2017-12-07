@@ -108,4 +108,6 @@
     <preference name="loglevel" value="DEBUG" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="android-minSdkVersion" value="14" />
+    <preference name="FadeSplashScreenDuration" value="200" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
 </widget>
