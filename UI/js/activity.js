@@ -35,6 +35,13 @@ Materialize.toast($toastContent, 4000,'',function(){window.open("../UI/login.htm
     }
   });
 }
+$( document ).ajaxStart(function() {
+  NProgress.start();
+});
+
+$(document).ajaxSuccess(function() {
+  NProgress.done();
+});
 
 $(document).ready(function() {
   $('select').material_select();

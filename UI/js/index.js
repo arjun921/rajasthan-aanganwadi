@@ -4,7 +4,18 @@ var lastElem = "form";
 var formslist = [];
 var data;
 var old_id = [];
-// var media = false;
+
+$( document ).ajaxStart(function() {
+  NProgress.start();
+});
+
+$(document).ajaxSuccess(function() {
+  NProgress.done();
+});
+// $( ".trigger" ).click(function() {
+//   console.log("Ajax End");
+// });
+
 function createNav(id) {
   $('#navi').html('');
   if (id=="_up") {
@@ -13,6 +24,7 @@ function createNav(id) {
     $('#content').html('');
   }
   else {
+
     $.ajax({
         url: (link + '/category'),
         type: 'post',
@@ -103,6 +115,7 @@ function loadSideMenu() {
         if (Cookies.get('currenttoken')) {
           $("#email_menu").text(Cookies.get('email'));
           $("#name_menu").text("Arjoonn Sharma");
+          $("#profile_pic").show();
           $("#profile_pic").attr('src',"images/turban22.png");
           $("#login_menu_but").hide();
           $("#login_menu_butD").hide();
@@ -110,11 +123,14 @@ function loadSideMenu() {
         else {
           out_changes();
         }
+      NProgress.set(1.0);
       }
+
     });
 }
 
 function reINT() {
+  $("#profile_pic").hide();
   $('select').material_select();
   //enables nav
   $(".button-collapse").sideNav();
@@ -132,6 +148,7 @@ $(document).ready(function() {
 });
 
 function out_changes() {
+  $("#profile_pic").show();
   $("#profile_pic").attr('src',"images/empty-profile.gif");
   $("#loggedIn").hide();
   $("#logout_menu_but").hide();
