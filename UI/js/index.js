@@ -81,11 +81,6 @@ function navClick(id) {
       createNav(id);
     }
   }
-  else {
-    $('#navi').html('');
-    $('#content').show();
-    load_content(id);
-  }
   $("#_ROOT_").hide();
 }
 
@@ -99,7 +94,6 @@ function loadSideMenu() {
         if ($.inArray(data.id, old_id)==-1) {
           old_id.push(data.id);
         }
-
         for (var i = 0; i < data.contains.length; i++) {
           item = data.contains[i];
           // s = "<li><a class=\"dropdown-button\" onclick=\"$('.button-collapse').sideNav('hide');navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a></li>"
@@ -118,7 +112,6 @@ function loadSideMenu() {
           $("#profile_pic").show();
           $("#profile_pic").attr('src',"images/turban22.png");
           $("#login_menu_but").hide();
-          $("#login_menu_butD").hide();
         }
         else {
           out_changes();
@@ -140,7 +133,6 @@ function reINT() {
     createNav('_ROOT_');
   }
   loadSideMenu();
-  doYourStuff();
 }
 
 $(document).ready(function() {
@@ -152,62 +144,17 @@ function out_changes() {
   $("#profile_pic").attr('src',"images/empty-profile.gif");
   $("#loggedIn").hide();
   $("#logout_menu_but").hide();
-  $("#logout_menu_butD").hide();
+
   $("#login_menu_but").show();
-  $("#login_menu_butD").show();
+
   $("#name_menu").text(" ");
   $("#noLogin").show();
+  Cookies.remove('currenttoken');
+  Cookies.remove('email');
 }
-
-
-
-function load_content(contentID) {
-  $('#content').html('');
-  $.ajax({
-    url: (link + '/content'),
-    type: 'post',
-    contentType: 'application/json',
-    data: JSON.stringify({
-      "token": Cookies.get('currenttoken'),
-      'fname': contentID
-    }),
-    success: function(data, st, xhr) {
-      data = data;
-      ftype = (data.url.split('.').pop());
-
-      if (ftype == "mp4") {
-        $("#contentT").hide();
-        p = "<video class=\"responsive-video\" style=\"width:100%; padding-top: 25px;\" controls><source src="+link+data.url+" type=\"video/mp4\"></video>"
-        $('#content').append(p);
-        p = "<div class=\"fixed-action-btn\" onclick=\"$('#content').html('');$('#contentCat').show();$('#content').hide();\"><a class=\"btn-floating btn-large red\" ><i class=\"large material-icons\">arrow_back</i></a></div>"
-        $('#content').append(p);
-      }
-      else if (ftype=="mp3") {
-        $("#contentT").hide();
-        p = "<audio controls=\"controls\" style=\"width:100%; padding-top: 25px;\" id = \"player\"><source src = "+link+data.url+" /></audio>"
-        $('#content').append(p);
-        p = "<div class=\"fixed-action-btn\" onclick=\"$('#content').html('');$('#contentCat').show();$('#content').hide();\"><a class=\"btn-floating btn-large red\" ><i class=\"large material-icons\">arrow_back</i></a></div>"
-        $('#content').append(p);
-      }
-      else if (ftype=="pdf") {
-        window.open('https://docs.google.com/viewer?url='+link+data.url, '_self', 'location=yes');
-      }
-
-    },
-    error: function(returnval) {
-      if (returnval.status!=200) {
-        var $toastContent = $('<span>Please Login to view.</span>').add($('<a href="../UI/login.html"><button class="btn-flat toast-action">OK</button></a>'));
-        Materialize.toast($toastContent, 4000,'',function(){window.open("../UI/login.html","_self")})
-      }
-
-    }
-  });
-  //load form based on id requested
-  // return create
-}
-
 //<Logout begins
 function logout() {
+  out_changes();
   $.ajax({
     url: (link + '/user/logout'),
     type: 'post',
@@ -216,23 +163,11 @@ function logout() {
       "token": Cookies.get('currenttoken')
     }),
     success: function(data, st, xhr) {
-      out_changes();
       if (xhr.status == 200) {
-        Cookies.remove('currenttoken');
-        Cookies.remove('email');
         Materialize.toast('User Logout Successful', 4000,'',function(){window.open("../UI/index.html","_self")})
       }
+    },
+    error: function(returnval) {
+      NProgress.done();
     }
   });}
-
-
-function doYourStuff() {
-  // console.log("Hash Changed!");
-  if (window.location.href.split('#')[1][0]=='_') {
-    console.log(window.location.href.split('#')[1]);
-    navClick(window.location.href.split('#')[1]);
-  }
-
-
-}
-window.onhashchange = function() { doYourStuff(); }
