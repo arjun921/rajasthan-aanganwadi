@@ -55,6 +55,8 @@ function createNav(id) {
 
 function navClick(id) {
   $('#navi').html('');
+  url = window.location.href.split('#')[0]+"#"+id;
+  window.location.href = url;
   if (id[0]=="_") {
     createNav(id);
   }
@@ -71,8 +73,28 @@ function reINT() {
   if (window.location.href.split('#').length==1) {
     createNav('_ROOT_');
   }
+  else {
+    createNav(window.location.href.split('#')[1]);
+  }
   loadSideMenu();
 }
+
 window.onpageshow = function(event) {
     reINT();
 };
+
+
+window.onhashchange = change;
+
+//and read location.hash in the change function instead
+function change(){
+  reINT()
+  console.log("Hash changed!");
+    var hash = "asda"
+    hash = location.hash;
+    if (hash=="") {
+      console.log("Hash Empty");
+    }
+    console.log(hash);
+
+}

@@ -1,10 +1,11 @@
-var link = 'https://rajasthan-aanganwadi.herokuapp.com';
-// var link = 'http://192.168.43.126:8000';
 var currenttoken = '';
 //runs functions to be executed at page load
 $(document).ready(function() {
     $(".button-collapse").sideNav();
           $("#preloader").hide();
+          if (Cookies.get('currenttoken')) {
+            window.open("index.html","_self")
+          }
 
 });
 
@@ -123,7 +124,11 @@ function dologin(){
             window.open("index.html","_self")
         },
         error: function(returnval) {
-          Materialize.toast(returnval, 4000);
+          if (returnval.status==401) {
+              Materialize.toast("Username or password incorrect", 4000);
+          }
+          console.log(returnval.status);
+          // Materialize.toast(returnval, 4000);
           $("#Main_Body").show();
           $("#preloader").hide();
         }

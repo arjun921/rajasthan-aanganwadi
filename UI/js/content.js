@@ -4,6 +4,20 @@ medias = JSON.parse(medias);
 
 
 $(document).ready(function() {
+  window.history.pushState({page: 1}, "", "");
+ window.onpopstate = function(event) {
+ // "event" object seems to contain value only when the back button is clicked
+ // and if the pop state event fires due to clicks on a button
+ // or a link it comes up as "undefined"
+ if(event){
+// window.open('index.html', '_self', 'location=yes');
+window.history.go(-2);
+ }
+ else{
+   // Continue user action through link or button
+ }
+}
+
   loadSideMenu();
   $(".button-collapse").sideNav();
   $("#loggedIn").show();
