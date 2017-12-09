@@ -12,8 +12,10 @@ function reINT() {
   //hides login/login based on cookie present/absent
   if (window.location.href.split('#').length==1) {
     createNav('_ROOT_');
+    document.getElementById('crumbtitle').innerHTML = "Home";
   }
   else {
+    document.getElementById('crumbtitle').innerHTML = "Activity";
     createNav(window.location.href.split('#')[1]);
   }
   loadSideMenu();
@@ -29,12 +31,7 @@ window.onhashchange = change;
 //and read location.hash in the change function instead
 function change(){
   reINT()
-  console.log("Hash changed!");
     var hash = "asda"
-    hash = location.hash;
-    if (hash=="") {
-      console.log("Hash Empty");
-    }
 }
 
 
@@ -50,7 +47,6 @@ function createNav(id) {
           if ($.inArray(data.id, old_id)==-1) {
             old_id.push(data.id);
           }
-          // console.log(data.contains);
           var files = [];
           for (var i = 0; i < data.contains.length; i++) {
             cont = data.contains[i];
