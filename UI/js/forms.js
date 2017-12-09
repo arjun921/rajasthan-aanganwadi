@@ -28,6 +28,7 @@ function create_list() {
     },
     error: function(returnval) {
       if (returnval.status!=200) {
+        out_changes();
         var $toastContent = $('<span>Please Login to view.</span>').add($('<a href="../UI/login.html"><button class="btn-flat toast-action">OK</button></a>'));
         Materialize.toast($toastContent, 4000,'',function(){window.open("../UI/login.html","_self")})
       }
@@ -200,7 +201,13 @@ function doSubmit() {
     } else if (temp.kind == 'radio') {
       s = "input[name='" + id + "']:checked"
       val['id'] = id;
-      val['value'] = $(s).val();
+      if ($(s).val()) {
+          val['value'] = $(s).val();
+      }
+      else {
+        val['value'] = "";
+      }
+
 
     } else if (temp.kind == 'checkbox') {
       te = []
@@ -227,12 +234,13 @@ function doSubmit() {
       data: JSON.stringify(dataRet),
       success: function(data, st, xhr) {
         if (xhr.status==200) {
-          Materialize.toast('Form Submitted Succesfully', 4000,'',function(){window.open("../UI/index.html","_self")})
+          Materialize.toast('Form Submitted Succesfully', 4000,'',function(){window.open("../UI/index.html","_self")});
         }
       },
       error: function(returnval) {
         if (returnval.status!=200) {
-          Materialize.toast('Form Submit Failed', 4000,'',function(){window.open("../UI/index.html","_self")})
+          // Materialize.toast('Form Submit Failed', 4000,'',function(){window.open("../UI/index.html","_self")});
+          Materialize.toast('Form Submit Failed', 4000);
         }
       }
     });
