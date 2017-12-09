@@ -23,12 +23,14 @@ function sign_up() {
     var addr = document.getElementById("addr").value;
     var ph = document.getElementById("ph").value;
     pwd_hash = murmurhash3_32_gc(pwd, 124);
+    var tok = genToken();
     var data = {
         name: name,
         email: email,
         pwd: pwd_hash.toString(),
         address: addr,
-        mobile: ph
+        mobile: ph,
+        token: tok
     };
     console.log(data);
     $.ajax({
@@ -54,8 +56,13 @@ function sign_up() {
         },
         error: function(returnval) {
           if (returnval.status == 401) {
-            out_changes();
             var $toastContent = $('<span>Sign Up is disabled.</span>').add($('<a href="login.html"><button class="btn-flat toast-action">OK</button></a>'));
+            Materialize.toast($toastContent, 4000, '', function() {
+              window.open("login.html", "_self");
+            })
+          }
+          else if (returnval.status == 403) {
+            var $toastContent = $('<span>Only an admin can create users.</span>').add($('<a href="login.html"><button class="btn-flat toast-action">OK</button></a>'));
             Materialize.toast($toastContent, 4000, '', function() {
               window.open("login.html", "_self");
             })
