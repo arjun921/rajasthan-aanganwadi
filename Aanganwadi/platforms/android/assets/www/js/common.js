@@ -62,15 +62,16 @@ function loadSideMenu() {
       'catid': '_ROOT_'
     }),
     success: function(data, st, xhr) {
+      $('#submen').html('');
       for (var i = 0; i < data.contains.length; i++) {
         item = data.contains[i];
         // s = "<li><a class=\"dropdown-button\" onclick=\"$('.button-collapse').sideNav('hide');navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a></li>"
         s = "<li><a class=\"dropdown-button\" " + item.id + "\" onclick=\"$('.button-collapse').sideNav('hide');navClick(this.id);\" id=\"" + item.id + "\">" + item.title + "</a></li>"
-        $('#mobile-demo').append(s);
+        $('#submen').append(s);
 
       }
       s = "<li><div class=\"divider\"></div></li><li><a class=\"waves-effect \" href=\"index.html\"><i class=\"material-icons\">home</i>Home</a></li><li><a class=\"waves-effect \"  ><i class=\"material-icons\">settings</i>Settings</a></li><li><a class=\"waves-effect\" href=\"all_forms.html\"><i class=\"material-icons\">format_align_left</i>Forms to Fill</a></li><li><a class=\"waves-effect\"   onclick=\"logout()\" id=\"logout_menu_but\"><i class=\"material-icons\">exit_to_app</i>Logout</a></li><li><a class=\"waves-effect\" href=\"login.html\" id=\"login_menu_but\"><i class=\"material-icons\">exit_to_app</i>Login</a></li>"
-      $('#mobile-demo').append(s);
+      $('#submen').append(s);
       $("#loggedIn").show();
       $("#noLogin").hide();
       //sets navigation menu profile content

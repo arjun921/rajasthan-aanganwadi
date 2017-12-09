@@ -3,14 +3,51 @@ var formslist = [];
 var data;
 var old_id = [];
 
-function createNav(id) {
-  $('#navi').html('');
-  if (id=="_up") {
-    old_id.pop();
-    createNav(old_id[old_id.length-1]);
-    $('#content').html('');
+function reINT() {
+  $("#profile_pic").hide();
+  $('select').material_select();
+  //enables nav
+  $(".button-collapse").sideNav();
+  //generates forms list
+  //hides login/login based on cookie present/absent
+  if (window.location.href.split('#').length==1) {
+    createNav('_ROOT_');
   }
   else {
+    createNav(window.location.href.split('#')[1]);
+  }
+  loadSideMenu();
+}
+
+window.onpageshow = function(event) {
+    reINT();
+};
+
+
+window.onhashchange = change;
+
+//and read location.hash in the change function instead
+function change(){
+  reINT()
+  console.log("Hash changed!");
+    var hash = "asda"
+    hash = location.hash;
+    if (hash=="") {
+      console.log("Hash Empty");
+    }
+    else {
+      console.log(hash);
+        console.log();
+      // createNav(hash.substring(1,));
+    }
+
+
+}
+
+
+function createNav(id) {
+  $('#navi').html('');
+
     $.ajax({
         url: (link + '/category'),
         type: 'post',
@@ -49,55 +86,16 @@ function createNav(id) {
           }
         }
       });
-  }
+
 }
 
 
 function navClick(id) {
   $('#navi').html('');
   url = window.location.href.split('#')[0]+"#"+id;
-  console.log(url);
   window.location.href = url;
-  if (id[0]=="_") {
-    createNav(id);
-  }
+  // if (id[0]=="_") {
+  //   createNav(id);
+  // }
   $("#_ROOT_").hide();
-}
-
-function reINT() {
-  $("#profile_pic").hide();
-  $('select').material_select();
-  //enables nav
-  $(".button-collapse").sideNav();
-  //generates forms list
-  //hides login/login based on cookie present/absent
-  if (window.location.href.split('#').length==1) {
-    createNav('_ROOT_');
-  }
-  else {
-    createNav(window.location.href.split('#')[1]);
-  }
-  loadSideMenu();
-}
-
-window.onpageshow = function(event) {
-    reINT();
-};
-
-
-window.onhashchange = change;
-
-//and read location.hash in the change function instead
-function change(){
-    var hash = "asda"
-    hash = location.hash;
-    if (hash=="") {
-      console.log("Hash Empty");
-      reINT()
-    }
-    else {
-      reINT()
-    }
-    console.log(hash);
-
 }
