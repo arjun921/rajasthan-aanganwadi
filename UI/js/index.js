@@ -54,7 +54,6 @@ function load_content(contentID) {
         $('#content').append(p);
       } else if (ftype == "pdf") {
         flink = 'https://docs.google.com/viewer?url=' + link + data.url+"&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
-
         p = "<iframe src=\""+flink+"\" style=\"position:fixed; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;\">Your browser doesn't support iframes</iframe>"
         $('#content').append(p);
       }
