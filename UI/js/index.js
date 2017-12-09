@@ -91,9 +91,6 @@ function loadSideMenu() {
       contentType: 'application/json',
       data: JSON.stringify({'catid': '_ROOT_'}),
       success: function(data, st, xhr) {
-        if ($.inArray(data.id, old_id)==-1) {
-          old_id.push(data.id);
-        }
         for (var i = 0; i < data.contains.length; i++) {
           item = data.contains[i];
           // s = "<li><a class=\"dropdown-button\" onclick=\"$('.button-collapse').sideNav('hide');navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a></li>"
@@ -144,17 +141,14 @@ function out_changes() {
   $("#profile_pic").attr('src',"images/empty-profile.gif");
   $("#loggedIn").hide();
   $("#logout_menu_but").hide();
-
   $("#login_menu_but").show();
-
   $("#name_menu").text(" ");
   $("#noLogin").show();
   Cookies.remove('currenttoken');
   Cookies.remove('email');
 }
-//<Logout begins
+
 function logout() {
-  out_changes();
   $.ajax({
     url: (link + '/user/logout'),
     type: 'post',
@@ -170,4 +164,6 @@ function logout() {
     error: function(returnval) {
       NProgress.done();
     }
-  });}
+  });
+  out_changes();
+}
