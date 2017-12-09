@@ -3,10 +3,6 @@ var formslist = [];
 var data;
 var old_id = [];
 
-// $( ".trigger" ).click(function() {
-//   console.log("Ajax End");
-// });
-
 function createNav(id) {
   $('#navi').html('');
   if (id=="_up") {
@@ -15,7 +11,6 @@ function createNav(id) {
     $('#content').html('');
   }
   else {
-
     $.ajax({
         url: (link + '/category'),
         type: 'post',
@@ -39,7 +34,6 @@ function createNav(id) {
                 Cookies.set('media', { files});
               }
             }
-
           if (Cookies.get('mediaCont')) {
             s = Cookies.get('media');
             s = JSON.parse(s);
@@ -57,7 +51,6 @@ function createNav(id) {
       });
   }
 }
-
 
 
 function navClick(id) {
@@ -80,7 +73,6 @@ function reINT() {
   }
   loadSideMenu();
 }
-
-$(document).ready(function() {
-  reINT();
-});
+window.onpageshow = function(event) {
+    reINT();
+};
