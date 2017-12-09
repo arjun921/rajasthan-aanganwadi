@@ -132,7 +132,7 @@ class DB:
                     self.category_insert(sc)
                 category['contains'] = category_contains
                 self.category_insert(category)
-            root = {'title': 'ROOT',
+            root = {'title': 'Home',
                     'id': '_ROOT_',
                     'contains': root_contains}
             self.category_insert(root)
