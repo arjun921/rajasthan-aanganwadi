@@ -44,42 +44,20 @@ function createNav(id) {
         contentType: 'application/json',
         data: JSON.stringify({'catid': id}),
         success: function(data, st, xhr) {
-          if ($.inArray(data.id, old_id)==-1) {
-            old_id.push(data.id);
-          }
-          var files = [];
-          for (var i = 0; i < data.contains.length; i++) {
-            cont = data.contains[i];
-            if (cont.id[0]!='_') {
-              ftype = cont.id.split('.').pop();
-              file = {}
-              file[ftype] = [data.contains[i]];
-              file['type'] = ftype;
-              files.push(file)
-                Cookies.set('mediaCont', true);
-                Cookies.set('media', { files});
+              for (var i = 0; i < data.contains.length; i++) {
+                item = data.contains[i];
+                console.log(item);
+                p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
+                $('#navi').append(p);
               }
             }
-          if (Cookies.get('mediaCont')) {
-            s = Cookies.get('media');
-            s = JSON.parse(s);
-            Cookies.remove('mediaCont');
-            window.open('content.html', '_self', 'location=yes');
-          }
-          else {
-            for (var i = 0; i < data.contains.length; i++) {
-              item = data.contains[i];
-              p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
-              $('#navi').append(p);
-            }
-          }
-        }
       });
 
 }
 
 
 function navClick(id) {
+  console.log(document.getElementById(id).innerHTML);
   $('#navi').html('');
   url = window.location.href.split('#')[0]+"#"+id;
   window.location.href = url;
