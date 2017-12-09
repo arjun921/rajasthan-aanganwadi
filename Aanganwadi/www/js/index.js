@@ -1,7 +1,13 @@
 var lastElem = "form";
 var formslist = [];
 var data;
-var old_id = [];
+
+window.onpageshow = function(event) {
+    reINT();
+};
+
+
+window.onhashchange = change;
 
 function reINT() {
   $("#profile_pic").hide();
@@ -19,7 +25,6 @@ function reINT() {
     if (location.hash.split(".").length<2) {
       createNav(window.location.href.split('#')[1]);
     } else {
-      console.log("Load content");
       load_content(window.location.href.split('#')[1]);
     }
 
@@ -27,13 +32,7 @@ function reINT() {
   loadSideMenu();
 }
 
-window.onpageshow = function(event) {
 
-    reINT();
-};
-
-
-window.onhashchange = change;
 
 //and read location.hash in the change function instead
 function change(){
@@ -75,7 +74,7 @@ function load_content(contentID) {
       } else if (ftype == "pdf") {
         // "https://docs.google.com/viewer?srcid=[YOUR_FILE'S_ID_HERE]&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
         flink = 'https://docs.google.com/viewer?url=' + link + data.url+"&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
-        console.log(flink);
+
         p = "<iframe src=\""+flink+"\" style=\"position:fixed; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;\">Your browser doesn't support iframes</iframe>"
         // window.open('https://docs.google.com/viewer?url=' + link + data.url, '_self', 'location=yes');
         $('#content').append(p);
@@ -108,7 +107,6 @@ function createNav(id) {
         success: function(data, st, xhr) {
               for (var i = 0; i < data.contains.length; i++) {
                 item = data.contains[i];
-                console.log(item);
                 p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
                 $('#navi').append(p);
               }
@@ -119,9 +117,6 @@ function createNav(id) {
 
 
 function navClick(id) {
-
-  // console.log(id.split('.')[id.split('.').length-1]);
-
   $('#navi').html('');
   url = window.location.href.split('#')[0]+"#"+id;
   window.location.href = url;

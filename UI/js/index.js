@@ -1,48 +1,35 @@
-var lastElem = "form";
-var formslist = [];
-var data;
-
 window.onpageshow = function(event) {
+  document.getElementById('crumbtitle').innerHTML = "Activity"
     reINT();
 };
 
-
 window.onhashchange = change;
+
+function change(){
+  $('#content').html('');
+  $('#content').hide();
+  reINT();
+}
 
 function reINT() {
   $("#profile_pic").hide();
   $('select').material_select();
-  //enables nav
   $(".button-collapse").sideNav();
-  //generates forms list
-  //hides login/login based on cookie present/absent
   if (window.location.href.split('#').length==1) {
     createNav('_ROOT_');
     document.getElementById('crumbtitle').innerHTML = "Home";
   }
   else {
-    document.getElementById('crumbtitle').innerHTML = "Activity";
     if (location.hash.split(".").length<2) {
       createNav(window.location.href.split('#')[1]);
+      document.getElementById('crumbtitle').innerHTML = "Activity";
     } else {
       load_content(window.location.href.split('#')[1]);
+      document.getElementById('crumbtitle').innerHTML = "Media";
     }
-
   }
   loadSideMenu();
 }
-
-
-
-//and read location.hash in the change function instead
-function change(){
-  $('#content').html('');
-  $('#contentCat').show();
-  $('#content').hide();
-  reINT()
-    var hash = "asda"
-}
-
 
 function load_content(contentID) {
   $('#navi').html('');
@@ -58,28 +45,19 @@ function load_content(contentID) {
     }),
     success: function(data, st, xhr) {
       data = data;
-      d = data;
       ftype = (data.url.split('.').pop());
-
       if (ftype == "mp4") {
         p = "<video class=\"responsive-video\" style=\"width:100%; padding-top: 25px;\" controls><source src=" + link + data.url + " type=\"video/mp4\"></video>"
         $('#content').append(p);
-        // p = "<div class=\"fixed-action-btn\" onclick=\"$('#content').html('');$('#contentCat').show();$('#content').hide();\"><a class=\"btn-floating btn-large red\" ><i class=\"large material-icons\">arrow_back</i></a></div>"
-        // $('#content').append(p);
       } else if (ftype == "mp3"){
         p = "<p>"+contentID+"</p><audio controls=\"controls\" style=\"width:100%; padding-top: 25px;\" id = \"player\"><source src = " + link + data.url + " /></audio>"
         $('#content').append(p);
-        // p = "<div class=\"fixed-action-btn\" onclick=\"$('#content').html('');$('#contentCat').show();$('#content').hide();\"><a class=\"btn-floating btn-large red\" ><i class=\"large material-icons\">arrow_back</i></a></div>"
-        // $('#content').append(p);
       } else if (ftype == "pdf") {
-        // "https://docs.google.com/viewer?srcid=[YOUR_FILE'S_ID_HERE]&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
         flink = 'https://docs.google.com/viewer?url=' + link + data.url+"&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
 
         p = "<iframe src=\""+flink+"\" style=\"position:fixed; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;\">Your browser doesn't support iframes</iframe>"
-        // window.open('https://docs.google.com/viewer?url=' + link + data.url, '_self', 'location=yes');
         $('#content').append(p);
       }
-
     },
     error: function(returnval) {
       if (returnval.status != 200) {
@@ -89,13 +67,9 @@ function load_content(contentID) {
           window.open("../UI/login.html", "_self")
         })
       }
-
     }
   });
-  //load form based on id requested
-  // return create
 }
-
 
 function createNav(id) {
   $('#navi').html('');
@@ -112,16 +86,11 @@ function createNav(id) {
               }
             }
       });
-
 }
 
-
 function navClick(id) {
+  // document.getElementById('crumbtitle').innerHTML = document.getElementById(id).innerHTML;
   $('#navi').html('');
   url = window.location.href.split('#')[0]+"#"+id;
   window.location.href = url;
-  // if (id[0]=="_") {
-  //   createNav(id);
-  // }
-  $("#_ROOT_").hide();
 }
