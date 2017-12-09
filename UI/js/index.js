@@ -63,14 +63,7 @@ function createNav(id) {
 function navClick(id) {
   $('#navi').html('');
   if (id[0]=="_") {
-    if (id!="_ROOT_") {
-      createNav(id);
-      p = "<a class=\"collection-item\" onclick=\"navClick('_up')\" id=\""+old_id[old_id.length-1]+"\">"+".. Go Up"+"</a>";
-      $('#navi').append(p);
-    }
-    else {
-      createNav(id);
-    }
+    createNav(id);
   }
   $("#_ROOT_").hide();
 }

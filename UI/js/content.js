@@ -1,5 +1,8 @@
+// $('#contentCat').hide();
 medias = Cookies.get('media');
 medias = JSON.parse(medias);
+
+
 $(document).ready(function() {
   loadSideMenu();
   $(".button-collapse").sideNav();
@@ -13,7 +16,7 @@ $(document).ready(function() {
   if (Cookies.get('currenttoken')) {
     $("#email_menu").text(Cookies.get('email'));
     $("#name_menu").text("Arjoonn Sharma");
-    $("#profile_pic").attr('src', "https://avatars3.githubusercontent.com/u/7693265?v=4&s=400");
+    $("#profile_pic").attr('src', "images/empty-profile.gif");
     $("#login_menu_but").hide();
   } else {
     out_changes();
@@ -55,6 +58,7 @@ function loadContent(type) {
 
 //new
 function navClick(id) {
+  $('#contentCat').hide();
   $('#navi').html('');
   if (id[0] == "_") {
     if (id != "_ROOT_") {
@@ -107,6 +111,7 @@ function load_content(contentID) {
     },
     error: function(returnval) {
       if (returnval.status != 200) {
+        out_changes();
         var $toastContent = $('<span>Please Login to view.</span>').add($('<a href="../UI/login.html"><button class="btn-flat toast-action">OK</button></a>'));
         Materialize.toast($toastContent, 4000, '', function() {
           window.open("../UI/login.html", "_self")

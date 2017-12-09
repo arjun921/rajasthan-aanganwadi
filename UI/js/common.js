@@ -1,5 +1,5 @@
-// var link = 'https://rajasthan-aanganwadi.herokuapp.com';
-var link = 'http://192.168.0.2:8000';
+var link = 'https://rajasthan-aanganwadi.herokuapp.com';
+// var link = 'http://192.168.0.2:8000';
 $(document).ajaxStart(function() {
   NProgress.start();
 });
