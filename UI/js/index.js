@@ -38,7 +38,7 @@ function reINT() {
 
       }
       else if (location.hash.split(".").length<2 ) {
-      createNav(window.location.href.split('#')[1]);
+      createNav(window.location.href.split('#')[1]); 
       }
     else {
       if (Cookies.get('currenttoken')) {
