@@ -71,7 +71,6 @@ function load_content(contentID) {
 
 function createNav(id) {
   $('#navi').html('');
-  document.getElementById('crumbtitle').innerHTML = "Loading...";
     $.ajax({
         url: (link + '/category'),
         type: 'post',

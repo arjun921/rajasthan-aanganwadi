@@ -1,14 +1,26 @@
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
 // var link = 'http://192.168.0.2:8000';
+
+
+function nextSpinner(){
+    var spinners="⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏";
+    var index = spinners.indexOf(document.getElementById("spinner").textContent);
+    if(index == -1){index = 0}
+    index = (index + 1) % spinners.length;
+    document.getElementById("spinner").textContent = spinners[index];
+}
+
 $(document).ajaxStart(function() {
-  NProgress.start();
+  spinid = setInterval(nextSpinner, 50);
+  $("#spinner").show();
 });
 $(document).ajaxSuccess(function() {
-  NProgress.done();
+  clearInterval(spinid);
+  $("#spinner").hide();
 });
 
+
 $( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
-  NProgress.done();
   if (jqxhr.readyState == 4) {
             // HTTP error (can be checked by XMLHttpRequest.status and XMLHttpRequest.statusText)
   }
@@ -137,7 +149,6 @@ function loadSideMenu() {
         s = "<li><a class=\"dropdown-button\" " + item.id + "\" onclick=\"$('.button-collapse').sideNav('hide');navClick(this.id);\" id=\"" + item.id + "\">" + item.title + "</a></li>"
         $('#submen').append(s);
       }
-      NProgress.set(1.0);
     }
   });
 }
