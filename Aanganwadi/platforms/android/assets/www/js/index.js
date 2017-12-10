@@ -24,8 +24,7 @@ function reINT() {
       ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
       },
       complete: function() { $('.button-collapse').sideNav('hide'); window.location.href = window.location.href;} // Callback for Modal close
-    }
-  );
+    });
   $('#preloader').hide();
   $("#profile_pic").hide();
   $('select').material_select();
@@ -39,13 +38,19 @@ function reINT() {
 
       }
       else if (location.hash.split(".").length<2 ) {
-      createNav(window.location.href.split('#')[1]);
+      createNav(window.location.href.split('#')[1]); 
       }
     else {
-      load_content(window.location.href.split('#')[1]);
-      document.getElementById('docIframe').onload = function() {
-        $('#preloader').hide();
+      if (Cookies.get('currenttoken')) {
+        load_content(window.location.href.split('#')[1]);
+        document.getElementById('docIframe').onload = function() {
+          $('#preloader').hide();
+        }
       }
+      else {
+        window.location.href = "login.html";
+      }
+
     }
   }
   loadSideMenu();
