@@ -18,13 +18,15 @@
     }
   </style>
 </head>
-
+<script type="text/javascript">
+  $('.tooltipped').tooltip({delay: 50});
+</script>
 <body>
   <nav>
     <div class="nav-wrapper">
 
       <span class="breadcrumb hide-on-med-and-up" id="crumbtitle"></span>
-      <b><span class="right" style="padding-right: 25px;" id="loginStatus">●</span></b>
+      <b><span class="right tooltipped" data-position="left" data-delay="50" data-tooltip="Shows login status" style="padding-right: 25px;" id="loginStatus">●</span></b>
       <b><span class="breadcrumb" id="spinner"></span></b>
       <!-- <span id="spinner"></span> -->
       <a class="brand-logo show-on-medium-and-up hide-on-small-only" style="padding-left: 10px;" id="crumbtitle">Activity</a>
