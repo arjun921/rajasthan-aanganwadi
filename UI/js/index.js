@@ -41,10 +41,16 @@ function reINT() {
       createNav(window.location.href.split('#')[1]);
       }
     else {
-      load_content(window.location.href.split('#')[1]);
-      document.getElementById('docIframe').onload = function() {
-        $('#preloader').hide();
+      if (Cookies.get('currenttoken')) {
+        load_content(window.location.href.split('#')[1]);
+        document.getElementById('docIframe').onload = function() {
+          $('#preloader').hide();
+        }
       }
+      else {
+        window.location.href = "login.html";
+      }
+
     }
   }
   loadSideMenu();

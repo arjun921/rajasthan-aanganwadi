@@ -73,11 +73,6 @@ $(document).ready(function() {
 });
 
 
-//hides all forms list.
-function hide_allForms() {
-  $("#form_list").hide();
-}
-
 function create_newElem(field) {
 
   if (field.kind == 'text') {
@@ -154,7 +149,7 @@ function create_form(s) {
   //checks if variable is defined
   if (typeof fields_returned !== 'undefined') {
     //hides all forms list
-    hide_allForms();
+    $("#form_list").hide();
     //dynamically generates forms in same view
     h = "<h5>" + fields_returned.title + "</h5>"
     $('#' + lastElem).append(h);

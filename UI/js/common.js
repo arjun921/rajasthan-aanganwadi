@@ -73,8 +73,10 @@ function checkLogin() {
     $("#profile_pic").show();
     $("#profile_pic").attr('src', "images/turban22.png");
     $("#login_menu_but").hide();
+    return true;
   } else {
     out_changes();
+    return false;
   }
 }
 
