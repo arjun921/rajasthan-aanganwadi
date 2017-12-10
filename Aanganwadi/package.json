@@ -4,7 +4,8 @@
     "displayName": "Aanganwadi",
     "cordova": {
         "platforms": [
-            "android"
+            "android",
+            "ios"
         ],
         "plugins": {
             "cordova-plugin-battery-status": {},
@@ -32,6 +33,7 @@
     },
     "dependencies": {
         "cordova-android": "^6.2.2",
+        "cordova-ios": "^4.4.0",
         "cordova-plugin-battery-status": "~1.1.1",
         "cordova-plugin-camera": "~2.1.1",
         "cordova-plugin-console": "~1.0.2",
