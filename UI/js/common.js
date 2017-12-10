@@ -67,8 +67,8 @@ function logout() {
 
 function checkLogin() {
   if (Cookies.get('currenttoken')) {
-    $("#loginStatus").removeClass('deep-orange-text');
-    $("#loginStatus").addClass('green-text');
+    $("#loginStatus").removeClass('deep-orange-text text-accent-3');
+    $("#loginStatus").addClass('green-text text-accent-3');
     $("#email_menu").text(Cookies.get('email'));
     $("#name_menu").text("Arjoonn Sharma");
     document.getElementById("formLink").href = "all_forms.html";
