@@ -13,6 +13,19 @@ function change(){
 }
 
 function reINT() {
+  // $('.modal').modal();
+  $('.modal').modal({
+      dismissible: true, // Modal can be dismissed by clicking outside of the modal
+      opacity: .5, // Opacity of modal background
+      inDuration: 300, // Transition in duration
+      outDuration: 200, // Transition out duration
+      startingTop: '4%', // Starting top style attribute
+      endingTop: '10%', // Ending top style attribute
+      ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
+      },
+      complete: function() { $('.button-collapse').sideNav('hide'); window.location.href = window.location.href;} // Callback for Modal close
+    }
+  );
   $('#preloader').hide();
   $("#profile_pic").hide();
   $('select').material_select();
@@ -22,9 +35,13 @@ function reINT() {
     document.getElementById('crumbtitle').innerHTML = "Home";
   }
   else {
-    if (location.hash.split(".").length<2) {
+    if (window.location.href.split('#')[1]=="help") {
+
+      }
+      else if (location.hash.split(".").length<2 ) {
       createNav(window.location.href.split('#')[1]);
-    } else {
+      }
+    else {
       load_content(window.location.href.split('#')[1]);
       document.getElementById('docIframe').onload = function() {
         $('#preloader').hide();

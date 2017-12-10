@@ -53,8 +53,8 @@
           <div class="divider"></div>
         </li>
         <li><a class="waves-effect " href="index.html"><i class="material-icons">home</i>Home</a></li>
-        <li><a class="waves-effect "><i class="material-icons">settings</i>Settings</a></li>
         <li><a class="waves-effect" id="formLink" href="all_forms.html"><i class="material-icons">format_align_left</i>Forms to Fill</a></li>
+        <li><a class="waves-effect" onclick="$('.button-collapse').sideNav('hide');$('#help').modal('open');"><i class="material-icons">help</i>Help</a></li>
         <li><a class="waves-effect" onclick="logout()" id="logout_menu_but"><i class="material-icons">exit_to_app</i>Logout</a></li>
         <li><a class="waves-effect" href="login.html" id="login_menu_but"><i class="material-icons">exit_to_app</i>Login</a></li>
       </ul>
@@ -68,10 +68,82 @@
 
     </ul>
     <div class="" id="content">
+      <div id="preloader">
+        <div class="row">
+          <div class="col s5">
+          </div>
+          <div class="col s2">
+            <div class="preloader-wrapper small active">
+                 <div class="spinner-layer spinner-blue">
+                   <div class="circle-clipper left">
+                     <div class="circle"></div>
+                   </div><div class="gap-patch">
+                     <div class="circle"></div>
+                   </div><div class="circle-clipper right">
+                     <div class="circle"></div>
+                   </div>
+                 </div>
 
+                 <div class="spinner-layer spinner-red">
+                   <div class="circle-clipper left">
+                     <div class="circle"></div>
+                   </div><div class="gap-patch">
+                     <div class="circle"></div>
+                   </div><div class="circle-clipper right">
+                     <div class="circle"></div>
+                   </div>
+                 </div>
+
+                 <div class="spinner-layer spinner-yellow">
+                   <div class="circle-clipper left">
+                     <div class="circle"></div>
+                   </div><div class="gap-patch">
+                     <div class="circle"></div>
+                   </div><div class="circle-clipper right">
+                     <div class="circle"></div>
+                   </div>
+                 </div>
+
+                 <div class="spinner-layer spinner-green">
+                   <div class="circle-clipper left">
+                     <div class="circle"></div>
+                   </div><div class="gap-patch">
+                     <div class="circle"></div>
+                   </div><div class="circle-clipper right">
+                     <div class="circle"></div>
+                   </div>
+                 </div>
+               </div>
+          </div>
+          <div class="col s5">
+          </div>
+        </div>
+
+      </div>
     </div>
-  </div>
 
+  </div>
+  <div id="help" class="modal modal-fixed-footer">
+  <div class="modal-content">
+    <h5>Help</h5>
+    <br>
+    <b>Home</b>
+    <p>The home page shows Activity Bank. On opening an activity, the categories of the Activity are shown.
+      On going further, the content associated with the activity is shown.
+      Currently only MP4, MP3 and PDF files are supported for viewing in app.
+     </p>
+     <b>Forms to Fill</b>
+     <p>The forms that are available to fill will be listed here. If a user has already filled the form,
+       the same form will no longer be available.
+        If there are no forms to fill, you will be automatically redirected to Home.
+        To view forms a user must be logged in, hence if the user is not logged in and tries to view a form, the user will be automatically
+        redirected to login page.
+      </p>
+  </div>
+  <div class="modal-footer">
+    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+  </div>
+  </div>
 
   <!--Import jQuery before materialize.js-->
   <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
