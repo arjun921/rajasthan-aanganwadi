@@ -24,8 +24,7 @@ function reINT() {
       ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
       },
       complete: function() { $('.button-collapse').sideNav('hide'); window.location.href = window.location.href;} // Callback for Modal close
-    }
-  );
+    });
   $('#preloader').hide();
   $("#profile_pic").hide();
   $('select').material_select();

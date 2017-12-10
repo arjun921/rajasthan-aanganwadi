@@ -80,22 +80,23 @@ function checkLogin() {
 
 function loadSideMenu() {
   checkLogin();
-  $.ajax({
-    url: (link + '/category'),
-    type: 'post',
-    contentType: 'application/json',
-    data: JSON.stringify({
-      'catid': '_ROOT_'
-    }),
-    success: function(data, st, xhr) {
-      $('#submen').html('');
-      for (var i = 0; i < data.contains.length; i++) {
-        item = data.contains[i];
-        s = "<li><a class=\"dropdown-button\" " + item.id + "\" onclick=\"$('.button-collapse').sideNav('hide');navClick(this.id);\" id=\"" + item.id + "\">" + item.title + "</a></li>"
-        $('#submen').append(s);
-      }
-    }
-  });
+  //##########Uncomment to enable sidebar activities
+  // $.ajax({
+  //   url: (link + '/category'),
+  //   type: 'post',
+  //   contentType: 'application/json',
+  //   data: JSON.stringify({
+  //     'catid': '_ROOT_'
+  //   }),
+  //   success: function(data, st, xhr) {
+  //     $('#submen').html('');
+  //     for (var i = 0; i < data.contains.length; i++) {
+  //       item = data.contains[i];
+  //       s = "<li><a class=\"dropdown-button\" " + item.id + "\" onclick=\"$('.button-collapse').sideNav('hide');navClick(this.id);\" id=\"" + item.id + "\">" + item.title + "</a></li>"
+  //       $('#submen').append(s);
+  //     }
+  //   }
+  // });
 }
 
 function out_changes() {
