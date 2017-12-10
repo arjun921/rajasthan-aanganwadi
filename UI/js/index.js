@@ -26,12 +26,12 @@ function reINT() {
       createNav(window.location.href.split('#')[1]);
     } else {
       load_content(window.location.href.split('#')[1]);
+      document.getElementById('docIframe').onload = function() {
+        $('#preloader').hide();
+      }
     }
   }
   loadSideMenu();
-  document.getElementById('docIframe').onload = function() {
-    $('#preloader').hide();
-  }
 }
 
 function load_content(contentID) {
