@@ -1,5 +1,6 @@
 window.onpageshow = function(event) {
   document.getElementById('crumbtitle').innerHTML = "Activity"
+  document.getElementById('crumbtitle2').innerHTML = document.getElementById('crumbtitle').innerHTML;
     reINT();
 };
 
@@ -13,32 +14,18 @@ function change(){
 }
 
 function reINT() {
-  // $('.modal').modal();
-  $('.modal').modal({
-      dismissible: true, // Modal can be dismissed by clicking outside of the modal
-      opacity: .5, // Opacity of modal background
-      inDuration: 300, // Transition in duration
-      outDuration: 200, // Transition out duration
-      startingTop: '4%', // Starting top style attribute
-      endingTop: '10%', // Ending top style attribute
-      ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
-      },
-      complete: function() { $('.button-collapse').sideNav('hide'); window.location.href = window.location.href;} // Callback for Modal close
-    });
   $('#preloader').hide();
-  $("#profile_pic").hide();
-  $('select').material_select();
-  $(".button-collapse").sideNav();
   if (window.location.href.split('#').length==1) {
     createNav('_ROOT_');
     document.getElementById('crumbtitle').innerHTML = "Home";
+    document.getElementById('crumbtitle2').innerHTML = document.getElementById('crumbtitle').innerHTML;
   }
   else {
     if (window.location.href.split('#')[1]=="help") {
 
       }
       else if (location.hash.split(".").length<2 ) {
-      createNav(window.location.href.split('#')[1]); 
+      createNav(window.location.href.split('#')[1]);
       }
     else {
       if (Cookies.get('currenttoken')) {
@@ -53,13 +40,13 @@ function reINT() {
 
     }
   }
-  loadSideMenu();
 }
 
 function load_content(contentID) {
   $('#preloader').show();
   $('#navi').html('');
   $('#crumbtitle').html("Loading file");
+  $('#crumbtitle2').html("Loading file");
   $.ajax({
     url: (link + '/content'),
     type: 'post',
@@ -69,10 +56,10 @@ function load_content(contentID) {
       'fname': contentID
     }),
     success: function(data, st, xhr) {
-
       $('#content').show();
       $('#content').html('');
       $('#crumbtitle').html(contentID);
+      $('#crumbtitle2').html(contentID);
       ftype = (data.url.split('.').pop());
       if (ftype == "mp4") {
         p = "<video class=\"responsive-video\" style=\"width:100%; padding-top: 25px;\" controls><source src=" + link + data.url + " type=\"video/mp4\"></video>"
@@ -109,6 +96,7 @@ function createNav(id) {
         success: function(data, st, xhr) {
               $('#navi').html('');
               $('#crumbtitle').html(data.title);
+              $('#crumbtitle2').html(data.title);
               for (var i = 0; i < data.contains.length; i++) {
                 item = data.contains[i];
                 p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";

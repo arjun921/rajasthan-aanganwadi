@@ -18,18 +18,15 @@
     }
   </style>
 </head>
-<script type="text/javascript">
-  $('.tooltipped').tooltip({delay: 50});
-</script>
 <body>
   <nav>
     <div class="nav-wrapper">
 
       <span class="breadcrumb hide-on-med-and-up" id="crumbtitle"></span>
       <b><span class="right tooltipped" data-position="left" data-delay="50" data-tooltip="Shows login status" style="padding-right: 25px;" id="loginStatus">●</span></b>
-      <b><span class="breadcrumb" id="spinner"></span></b>
+      <b><span class="breadcrumb right" style="padding-right: 10px;" id="spinner"></span></b>
       <!-- <span id="spinner"></span> -->
-      <a class="brand-logo show-on-medium-and-up hide-on-small-only" style="padding-left: 10px;" id="crumbtitle">Activity</a>
+      <a class="brand-logo show-on-medium-and-up hide-on-small-only" style="padding-left: 10px;" id="crumbtitle2">Activity</a>
       <!-- <span class="breadcrumb">Activity Bank</span> -->
       <!-- <a class="brand-logo left-align">Logo</a> -->
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
@@ -142,6 +139,15 @@
         To view forms a user must be logged in, hence if the user is not logged in and tries to view a form, the user will be automatically
         redirected to login page.
       </p>
+      <b>Status Icons</b>
+      <p class="valign-wrapper"><img src="images/help/loader.png" style="max-height: 3em;padding-right: 15px;" alt="Loader Image"> Indicates page loading.</p>
+      <p class="valign-wrapper"><img src="images/help/status_green.png" style="max-height: 3em;padding-right: 15px;" alt="Loader Image">Indicates user logged in.</p>
+      <p class="valign-wrapper"><img src="images/help/status_red.png" style="max-height: 3em;padding-right: 15px;" alt="Loader Image">Indicates user not logged.</p>
+      <b>Reset App</b>
+      <p>Reset if your app is not functioning as expected.</p>
+      <button class="btn waves-effect waves-light" onclick="resetApp();">Reset
+        <i class="material-icons right">history</i>
+      </button>
   </div>
   <div class="modal-footer">
     <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>

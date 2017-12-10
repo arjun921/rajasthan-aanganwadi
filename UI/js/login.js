@@ -20,17 +20,6 @@ function check_password(input) {
 }
 
 
-
-var genToken = function() {
-                var text = "";
-                var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
-                for(var i = 0; i < 100; i++) {
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-                }
-                return text;
-            }
-
-
 //<------------- Login begin
 
 function dologin(){
@@ -43,7 +32,6 @@ function dologin(){
     pws =  pwd.toString();
     var tok = genToken();
     $.ajax({
-
         url: (link+'/user/login'),
         type: 'post',
         contentType: 'application/json',
@@ -51,6 +39,7 @@ function dologin(){
         success: function(data, st, xhr){
             Cookies.set('currenttoken', tok);
             Cookies.set('email', email);
+            Cookies.set('fname', data.name);
             Materialize.toast('Login Successful', 4000);
             window.open("../UI/index.html","_self")
         },

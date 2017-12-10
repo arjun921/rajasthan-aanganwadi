@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Package IgnorableNamespaces="uap mp" xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10">
+    <Identity Name="com.arjoonn.aanganwadi" Publisher="CN=$username$" Version="1.0.0.0" />
+    <mp:PhoneIdentity PhoneProductId="8b95d540-dd89-11e7-be55-e1ff936690df" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+    <Properties>
+        <DisplayName>Aanganwadi</DisplayName>
+        <PublisherDisplayName>PhoneGap Team</PublisherDisplayName>
+        <Logo>images\StoreLogo.png</Logo>
+        <Description>Hello World sample application that responds to the deviceready event.</Description>
+    </Properties>
+    <Dependencies>
+        <TargetDeviceFamily MaxVersionTested="10.0.10240.0" MinVersion="10.0.10240.0" Name="Windows.Universal" />
+    </Dependencies>
+    <Resources>
+        <Resource Language="x-generate" />
+    </Resources>
+    <Applications>
+        <Application Id="com.arjoonn.aanganwadi" StartPage="ms-appx-web://com.arjoonn.aanganwadi/www/index.html">
+            <uap:VisualElements BackgroundColor="#464646" Description="Hello World sample application that responds to the deviceready event." DisplayName="Aanganwadi" Square150x150Logo="images\Square150x150Logo.png" Square44x44Logo="images\Square44x44Logo.png">
+                <uap:SplashScreen Image="images\splashscreen.png" />
+                <uap:DefaultTile ShortName="Aanganwadi" Square310x310Logo="images\Square310x310Logo.png" Square71x71Logo="images\Square71x71Logo.png" Wide310x150Logo="images\Wide310x150Logo.png" />
+                <uap:InitialRotationPreference>
+                    <uap:Rotation Preference="portrait" />
+                    <uap:Rotation Preference="landscape" />
+                    <uap:Rotation Preference="landscapeFlipped" />
+                </uap:InitialRotationPreference>
+            </uap:VisualElements>
+            <uap:ApplicationContentUriRules>
+                <uap:Rule Match="https://rajasthan-aanganwadi.herokuapp.com/*" Type="include" WindowsRuntimeAccess="all" />
+                <uap:Rule Match="https://docs.google.com/*" Type="include" WindowsRuntimeAccess="all" />
+                <uap:Rule Match="ms-appx-web:///" Type="include" WindowsRuntimeAccess="all" />
+            </uap:ApplicationContentUriRules>
+        </Application>
+    </Applications>
+    <Capabilities>
+        <Capability Name="internetClient" />
+        <uap:Capability Name="contacts" />
+        <DeviceCapability Name="webcam" />
+        <DeviceCapability Name="location" />
+        <DeviceCapability Name="microphone" />
+    </Capabilities>
+</Package>

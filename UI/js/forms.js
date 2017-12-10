@@ -40,16 +40,7 @@ $(document).ready(function() {
   //generates forms list
   create_list();
   //sets navigation menu profile content
-  if (Cookies.get('currenttoken')) {
-    $("#email_menu").text(Cookies.get('email'));
-    $("#name_menu").text("Arjoonn Sharma");
-    $("#profile_pic").attr('src',"https://avatars3.githubusercontent.com/u/7693265?v=4&s=400");
-    $("#login_menu_but").hide();
-    $("#login_menu_butD").hide();
-  }
-  else {
-    out_changes();
-  }
+  
 });
 
 

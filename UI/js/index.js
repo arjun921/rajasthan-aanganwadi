@@ -40,7 +40,6 @@ function reINT() {
 
     }
   }
-
 }
 
 function load_content(contentID) {

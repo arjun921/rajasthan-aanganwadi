@@ -16,6 +16,13 @@ $("#profile_pic").hide();
 $(".button-collapse").sideNav();
 $('select').material_select();
 loadSideMenu();
+function resetApp() {
+  data = Cookies.getJSON();
+  for (var key in data) {
+    Cookies.remove(item);
+  }
+  window.location.href = "index.html";
+}
 
 function nextSpinner(){
     var spinners="⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏";
@@ -41,6 +48,8 @@ $( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
   }
   else if (jqxhr.readyState == 0) {
             // Network error (i.e. connection refused, access denied due to CORS, etc.)
+            clearInterval(spinid);
+            $("#spinner").hide();
             Materialize.toast('Connectivity Issue', 4000);
   }
   else {
@@ -48,13 +57,13 @@ $( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
   }
 });
 
-var genToken = function() {
-                var text = "";
-                var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
-                for(var i = 0; i < 100; i++) {
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-                }
-                return text;
+function genToken() {
+  var text = "";
+  var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+  for(var i = 0; i < 100; i++) {
+  text += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return text;
 }
 
 
@@ -84,8 +93,9 @@ function checkLogin() {
   if (Cookies.get('currenttoken')) {
     $("#loginStatus").removeClass('deep-orange-text text-accent-3');
     $("#loginStatus").addClass('green-text text-accent-3');
+    $("#loginStatus").attr("data-tooltip","Logged in");
     $("#email_menu").text(Cookies.get('email'));
-    $("#name_menu").text("Arjoonn Sharma");
+    $("#name_menu").text(Cookies.get('fname'));
     document.getElementById("formLink").href = "all_forms.html";
     $("#profile_pic").show();
     $("#profile_pic").attr('src', "images/turban22.png");
@@ -121,6 +131,7 @@ function loadSideMenu() {
 function out_changes() {
   $("#loginStatus").addClass('deep-orange-text');
   $("#loginStatus").removeClass('green-text');
+  $("#loginStatus").attr("data-tooltip","Not Logged in");
   $("#email_menu").text("User not Logged In");
   $("#name_menu").text(" ");
   $("#profile_pic").show();
@@ -130,4 +141,5 @@ function out_changes() {
   document.getElementById("formLink").href = "login.html"
   Cookies.remove('currenttoken');
   Cookies.remove('email');
+  Cookies.remove('fname');
 }
