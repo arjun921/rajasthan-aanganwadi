@@ -67,6 +67,8 @@ function logout() {
 
 function checkLogin() {
   if (Cookies.get('currenttoken')) {
+    $("#loginStatus").removeClass('deep-orange-text');
+    $("#loginStatus").addClass('green-text');
     $("#email_menu").text(Cookies.get('email'));
     $("#name_menu").text("Arjoonn Sharma");
     document.getElementById("formLink").href = "all_forms.html";
@@ -102,6 +104,8 @@ function loadSideMenu() {
 }
 
 function out_changes() {
+  $("#loginStatus").addClass('deep-orange-text');
+  $("#loginStatus").removeClass('green-text');
   $("#email_menu").text("User not Logged In");
   $("#name_menu").text(" ");
   $("#profile_pic").show();
