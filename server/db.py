@@ -310,6 +310,16 @@ class DB:
             return len(list(1 for i in self.users
                        if i['email'] == user_email)) > 0
 
+    def user_info(self, user_email):
+        "Returns all info about the user"
+        if not self.dev:  # NOTE: remove this
+            u = self.client.aang.users.find({"email": user_email})
+        else:
+            u = [u for u in self.users if u['email'] == user_email]
+        u = list(u)
+        if u:
+            return u[0]
+
     def content_meta_create(self, fname, title, desc):
         "Add meta about the content"
         data = {'fname': fname,

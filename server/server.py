@@ -154,14 +154,14 @@ def user_login():
 
     ----------
 
-    Returns OK in case of successful login
+    Returns {"name": <string>} in case of successful login
     """
     json = bottle.request.json
     pwd, token, email = json['pwd'], json['token'], json['email']
     if db.user_pwd_present(email, pwd):
         if not db.token_present(token):
             db.token_insert(token, email)
-            return 'OK'
+            return {'name': db.user_info(email)['name']}
         else:
             raise raisehttp(422, body='regenerate token')
     else:
