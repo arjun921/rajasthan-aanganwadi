@@ -22,16 +22,15 @@ function reINT() {
   else {
     if (location.hash.split(".").length<2) {
       createNav(window.location.href.split('#')[1]);
-      document.getElementById('crumbtitle').innerHTML = "Activity";
     } else {
       load_content(window.location.href.split('#')[1]);
-      document.getElementById('crumbtitle').innerHTML = "Media";
     }
   }
   loadSideMenu();
 }
 
 function load_content(contentID) {
+  $('#crumbtitle').html("Loading...");
   $('#navi').html('');
   $('#content').show();
   $('#content').html('');
@@ -44,13 +43,13 @@ function load_content(contentID) {
       'fname': contentID
     }),
     success: function(data, st, xhr) {
-      data = data;
+      $('#crumbtitle').html(contentID);
       ftype = (data.url.split('.').pop());
       if (ftype == "mp4") {
         p = "<video class=\"responsive-video\" style=\"width:100%; padding-top: 25px;\" controls><source src=" + link + data.url + " type=\"video/mp4\"></video>"
         $('#content').append(p);
       } else if (ftype == "mp3"){
-        p = "<p>"+contentID+"</p><audio controls=\"controls\" style=\"width:100%; padding-top: 25px;\" id = \"player\"><source src = " + link + data.url + " /></audio>"
+        p = "<p></p><audio controls=\"controls\" style=\"width:100%; padding-top: 25px;\" id = \"player\"><source src = " + link + data.url + " /></audio>"
         $('#content').append(p);
       } else if (ftype == "pdf") {
         flink = 'https://docs.google.com/viewer?url=' + link + data.url+"&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
@@ -72,12 +71,14 @@ function load_content(contentID) {
 
 function createNav(id) {
   $('#navi').html('');
+  document.getElementById('crumbtitle').innerHTML = "Loading...";
     $.ajax({
         url: (link + '/category'),
         type: 'post',
         contentType: 'application/json',
         data: JSON.stringify({'catid': id}),
         success: function(data, st, xhr) {
+              $('#crumbtitle').html(data.title);
               for (var i = 0; i < data.contains.length; i++) {
                 item = data.contains[i];
                 p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
