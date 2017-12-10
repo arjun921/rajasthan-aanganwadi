@@ -125,6 +125,7 @@ function checkLogin() {
   if (Cookies.get('currenttoken')) {
     $("#email_menu").text(Cookies.get('email'));
     $("#name_menu").text("Arjoonn Sharma");
+    document.getElementById("formLink").href = "all_forms.html";
     $("#profile_pic").show();
     $("#profile_pic").attr('src', "images/turban22.png");
     $("#login_menu_but").hide();
@@ -160,6 +161,7 @@ function out_changes() {
   $("#profile_pic").attr('src', "images/empty-profile.gif");
   $("#logout_menu_but").hide();
   $("#login_menu_but").show();
+  document.getElementById("formLink").href = "login.html"
   Cookies.remove('currenttoken');
   Cookies.remove('email');
 }

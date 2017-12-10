@@ -24,9 +24,9 @@
     <div class="nav-wrapper">
 
       <span class="breadcrumb hide-on-med-and-up" id="crumbtitle"></span>
-      <span class="" id="spinner"></span>
+      <b><span class="breadcrumb" id="spinner"></span></b>
       <!-- <span id="spinner"></span> -->
-      <a class="brand-logo show-on-medium-and-up hide-on-small-only" style="padding-left: 10px;">Activity</a>
+      <a class="brand-logo show-on-medium-and-up hide-on-small-only" style="padding-left: 10px;" id="crumbtitle">Activity</a>
       <!-- <span class="breadcrumb">Activity Bank</span> -->
       <!-- <a class="brand-logo left-align">Logo</a> -->
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
@@ -54,7 +54,7 @@
         </li>
         <li><a class="waves-effect " href="index.html"><i class="material-icons">home</i>Home</a></li>
         <li><a class="waves-effect "><i class="material-icons">settings</i>Settings</a></li>
-        <li><a class="waves-effect" href="all_forms.html"><i class="material-icons">format_align_left</i>Forms to Fill</a></li>
+        <li><a class="waves-effect" id="formLink" href="all_forms.html"><i class="material-icons">format_align_left</i>Forms to Fill</a></li>
         <li><a class="waves-effect" onclick="logout()" id="logout_menu_but"><i class="material-icons">exit_to_app</i>Logout</a></li>
         <li><a class="waves-effect" href="login.html" id="login_menu_but"><i class="material-icons">exit_to_app</i>Login</a></li>
       </ul>
@@ -80,7 +80,6 @@
   <script type="text/javascript" src="js/common.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
   <script type="text/javascript" src="js/materialize.js"></script>
-  <script type="text/javascript" src="js/nprogress.js"></script>
 </body>
 
 </html>
