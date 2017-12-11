@@ -6,6 +6,9 @@ window.onpageshow = function(event) {
 
 window.onhashchange = change;
 
+function search(key) {
+
+}
 
 function change(){
   $('#content').html('');
@@ -84,7 +87,7 @@ function load_content(contentID) {
     }
   });
 }
-
+var d;
 function createNav(id) {
     $.ajax({
         url: (link + '/category'),
@@ -95,8 +98,13 @@ function createNav(id) {
               $('#navi').html('');
               $('#crumbtitle').html(data.title);
               $('#crumbtitle2').html(data.title);
+              d = data;
+              console.log(data);
+              p = "<div class=\"search\" style=\"margin-left: 10px;margin-right: 10px;\"><input type=\"text\" placeholder=\"Search\" name=\"\" value=\"\" id=\"txtSearch\"></div>";
+              $('#navi').append(p);
               for (var i = 0; i < data.contains.length; i++) {
                 item = data.contains[i];
+                console.log(item);
                 p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
                 $('#navi').append(p);
               }
