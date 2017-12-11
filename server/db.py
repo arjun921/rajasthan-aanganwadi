@@ -132,7 +132,16 @@ class DB:
                     self.category_insert(sc)
                 category['contains'] = category_contains
                 self.category_insert(category)
-            root = {'title': 'Home',
+            mp3 = {"id": "_all_mp3", "title": 'All MP3 files','contains': ['laadki.mp3']}
+            mp4 = {"id": "_all_mp4", "title": 'All MP4 files','contains': ['rajasthan.mp4']}
+            pdf = {"id": "_all_pdf", "title": 'All PDF files','contains': ['proposal.pdf']}
+            self.category_insert(mp3)
+            self.category_insert(mp4)
+            self.category_insert(pdf)
+            root_contains.append('_all_mp3')
+            root_contains.append('_all_mp4')
+            root_contains.append('_all_pdf')
+            root = {'title': 'Files',
                     'id': '_ROOT_',
                     'contains': root_contains}
             self.category_insert(root)
