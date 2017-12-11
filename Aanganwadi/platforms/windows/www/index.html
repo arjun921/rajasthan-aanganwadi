@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+          <meta charset="UTF-8">
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!--Import materialize.css-->
+  <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection" />
+  <link href='css/nprogress.css' rel='stylesheet' />
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style type="text/css">
+    .title {
+      padding-top: 4em;
+      font-size: 2em;
+      font-weight: 100;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-wrapper">
+
+      <span class="breadcrumb hide-on-med-and-up" id="crumbtitle"></span>
+      <b><span class="right tooltipped" data-position="left" data-delay="50" data-tooltip="Shows login status" style="padding-right: 25px;" id="loginStatus">●</span></b>
+      <b><span class="breadcrumb right" style="padding-right: 10px;" id="spinner"></span></b>
+      <!-- <span id="spinner"></span> -->
+      <a class="brand-logo show-on-medium-and-up hide-on-small-only" style="padding-left: 10px;" id="crumbtitle2">Activity</a>
+      <!-- <span class="breadcrumb">Activity Bank</span> -->
+      <!-- <a class="brand-logo left-align">Logo</a> -->
+      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+
+      <ul class="right hide-on-med-and-down">
+
+      </ul>
+      <ul class="side-nav" id="mobile-demo">
+        <li>
+          <div class="user-view">
+            <div class="background deep-purple">
+              <!-- <img src="images/bg.jpg" style="min-width: 100%; max-width: 100%;"> -->
+              <img style="min-width: 100%; max-width: 100%">
+            </div>
+            <a><img class="circle" id="profile_pic"></a>
+            <a><span class="white-text name" id="name_menu"></span></a>
+            <a><span class="white-text email" id="email_menu"></span></a>
+          </div>
+        </li>
+        <!-- <div id="submen">
+
+        </div>
+        <li>
+          <div class="divider"></div>
+        </li> -->
+        <li><a class="waves-effect " href="index.html"><i class="material-icons">home</i>Home</a></li>
+        <li><a class="waves-effect" id="formLink" href="all_forms.html"><i class="material-icons">format_align_left</i>Forms to Fill</a></li>
+        <li><a class="waves-effect" onclick="$('.button-collapse').sideNav('hide');$('#help').modal('open');"><i class="material-icons">help</i>Help</a></li>
+        <li><a class="waves-effect" onclick="logout()" id="logout_menu_but"><i class="material-icons">exit_to_app</i>Logout</a></li>
+        <li><a class="waves-effect" href="login.html" id="login_menu_but"><i class="material-icons">exit_to_app</i>Login</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container" id="container">
+    <div class="" id="content">
+
+    </div>
+    <ul class="collection" id="navi">
+
+    </ul>
+    <div class="" id="content">
+      <div id="preloader">
+        <div class="row">
+          <div class="col s5">
+          </div>
+          <div class="col s2">
+            <div class="preloader-wrapper small active">
+                 <div class="spinner-layer spinner-blue">
+                   <div class="circle-clipper left">
+                     <div class="circle"></div>
+                   </div><div class="gap-patch">
+                     <div class="circle"></div>
+                   </div><div class="circle-clipper right">
+                     <div class="circle"></div>
+                   </div>
+                 </div>
+
+                 <div class="spinner-layer spinner-red">
+                   <div class="circle-clipper left">
+                     <div class="circle"></div>
+                   </div><div class="gap-patch">
+                     <div class="circle"></div>
+                   </div><div class="circle-clipper right">
+                     <div class="circle"></div>
+                   </div>
+                 </div>
+
+                 <div class="spinner-layer spinner-yellow">
+                   <div class="circle-clipper left">
+                     <div class="circle"></div>
+                   </div><div class="gap-patch">
+                     <div class="circle"></div>
+                   </div><div class="circle-clipper right">
+                     <div class="circle"></div>
+                   </div>
+                 </div>
+
+                 <div class="spinner-layer spinner-green">
+                   <div class="circle-clipper left">
+                     <div class="circle"></div>
+                   </div><div class="gap-patch">
+                     <div class="circle"></div>
+                   </div><div class="circle-clipper right">
+                     <div class="circle"></div>
+                   </div>
+                 </div>
+               </div>
+          </div>
+          <div class="col s5">
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+  <div id="help" class="modal modal-fixed-footer">
+  <div class="modal-content">
+    <h5>Help</h5>
+    <br>
+    <b>Home</b>
+    <p>The home page shows Activity Bank. On opening an activity, the categories of the Activity are shown.
+      On going further, the content associated with the activity is shown.
+      Currently only MP4, MP3 and PDF files are supported for viewing in app.
+     </p>
+     <b>Forms to Fill</b>
+     <p>The forms that are available to fill will be listed here. If a user has already filled the form,
+       the same form will no longer be available.
+        If there are no forms to fill, you will be automatically redirected to Home.
+        To view forms a user must be logged in, hence if the user is not logged in and tries to view a form, the user will be automatically
+        redirected to login page.
+      </p>
+      <b>Status Icons</b>
+      <p class="valign-wrapper"><img src="images/help/loader.png" style="max-height: 3em;padding-right: 15px;" alt="Loader Image"> Indicates page loading.</p>
+      <p class="valign-wrapper"><img src="images/help/status_green.png" style="max-height: 3em;padding-right: 15px;" alt="Loader Image">Indicates user logged in.</p>
+      <p class="valign-wrapper"><img src="images/help/status_red.png" style="max-height: 3em;padding-right: 15px;" alt="Loader Image">Indicates user not logged.</p>
+      <b>Reset App</b>
+      <p>Reset if your app is not functioning as expected.</p>
+      <button class="btn waves-effect waves-light" onclick="resetApp();">Reset
+        <i class="material-icons right">history</i>
+      </button>
+  </div>
+  <div class="modal-footer">
+    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+  </div>
+  </div>
+
+  <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="js/materialize.min.js"></script>
+  <script type="text/javascript" src="js/js.cookie.js"></script>
+  <script type="text/javascript" src="js/common.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
+  <script type="text/javascript" src="js/materialize.js"></script>
+</body>
+
+</html>

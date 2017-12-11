@@ -17,8 +17,6 @@ function reINT() {
   $('#preloader').hide();
   if (window.location.href.split('#').length==1) {
     createNav('_ROOT_');
-    document.getElementById('crumbtitle').innerHTML = "Home";
-    document.getElementById('crumbtitle2').innerHTML = document.getElementById('crumbtitle').innerHTML;
   }
   else {
     if (window.location.href.split('#')[1]=="help") {

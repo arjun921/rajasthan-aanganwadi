@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection" />
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style type="text/css">
+        .title {
+            padding-top: 4em;
+            font-size: 2em;
+            font-weight: 100;
+        }
+    </style>
+</head>
+
+<body>
+    <center>
+        <div class="title">
+            REGISTER
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="name" type="text" class="validate" pattern="[A-Za-z ]{3,50}">
+                    <label for="name">Full Name</label>
+                </div>
+                <div class="input-field col s12">
+                    <input id="email" type="email" class="validate">
+                    <label for="email">Email</label>
+                </div>
+                <div class="input-field col s12">
+                    <input id="ph" type="tel" class="validate" pattern="[0-9]{10}">
+                    <label for="ph" data-error="Enter 10 Digit Phone Number" data-success="Valid Number">Phone</label>
+                </div>
+                <form class="col s12">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <textarea id="addr" type="Address" class="materialize-textarea"></textarea>
+                            <label for="addr">Address</label>
+                        </div>
+                    </div>
+                </form>
+                <div class="input-field col s12">
+                    <input name="password" id="password" type="password" class="validate" >
+                    <label for="password"  data-success="Password Valid">Password</label>
+                </div>
+                <div class="input-field col s12">
+                    <input id="password_confirm" type="password" class="validate" name="password_confirm" oninput="check_password(this);" >
+                    <label for="password_confirm" data-error="Both Passwords should match" data-success="Passwords Match">Re-Enter Password</label>
+                </div>
+            </div>
+            <div class="row">
+                <a id="submit" class="waves-effect waves-light btn deep-purple col s8 offset-s2" onclick="sign_up()">Sign up</a>
+            </div>
+            <a href="login.html">Login</a>
+        </div>
+        <!--Import jQuery before materialize.js-->
+        <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="js/materialize.min.js"></script>
+        <script type="text/javascript" src="js/js.cookie.js"></script>
+        <script type="text/javascript" src="js/hash.js"></script>
+        <script type="text/javascript" src="js/common.js"></script>
+        <script type="text/javascript" src="js/register.js"></script>
+    </center>
+</body>
+
+</html>
