@@ -60,7 +60,23 @@
       </ul>
     </div>
   </nav>
+
   <div class="container" id="container">
+    <form id="searchForm" style="padding-top: 10px;">
+        <div class="form-group">
+          <label for="searchInput">
+            Filter text
+            <span id="bookCountBadge" class="badge"></span>
+          </label>
+          <input class="form-control" type="search" id="searchInput" placeholder="Search..">
+        </div>
+      </form>
+      <table id="indexedCategoriesTable" class="table">
+
+      <tbody>
+
+      </tbody>
+      </table>
     <div class="" id="content">
 
     </div>
@@ -153,6 +169,11 @@
     <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
   </div>
   </div>
+  <div class="fixed-action-btn" onclick="$('#searchForm').toggle();document.getElementById('searchInput').focus();">
+    <a class="btn-floating btn-large red">
+      <i class="large material-icons">search</i>
+    </a>
+  </div>
 
   <!--Import jQuery before materialize.js-->
   <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
@@ -161,6 +182,9 @@
   <script type="text/javascript" src="js/common.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
   <script type="text/javascript" src="js/materialize.js"></script>
+  <script type="text/javascript" src="js/porterstemmer.js"></script>
+  <script type="text/javascript" src="js/search.js"></script>
+  <script type="text/javascript" src="js/searchScript.js"></script>
 </body>
 
 </html>

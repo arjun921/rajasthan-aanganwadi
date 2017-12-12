@@ -1,3 +1,5 @@
+// p = "<form><div class=\"form-group\"><label for=\"searchInput\">Filter text<span id=\"bookCountBadge\" class=\"badge\"></span></label><input class=\"form-control\" type=\"search\" id=\"searchInput\" style=\"padding-left:15px;\" placeholder=\"Search..\"></div></form>";
+// $('#navi').append(p);
 window.onpageshow = function(event) {
   document.getElementById('crumbtitle').innerHTML = "Activity"
   document.getElementById('crumbtitle2').innerHTML = document.getElementById('crumbtitle').innerHTML;
@@ -18,6 +20,7 @@ function change(){
 
 function reINT() {
   $('#preloader').hide();
+  $('#searchForm').hide();
   if (window.location.href.split('#').length==1) {
     createNav('_ROOT_');
   }
@@ -87,7 +90,6 @@ function load_content(contentID) {
     }
   });
 }
-var d;
 function createNav(id) {
     $.ajax({
         url: (link + '/category'),
@@ -95,25 +97,22 @@ function createNav(id) {
         contentType: 'application/json',
         data: JSON.stringify({'catid': id}),
         success: function(data, st, xhr) {
-              $('#navi').html('');
               $('#crumbtitle').html(data.title);
               $('#crumbtitle2').html(data.title);
-              d = data;
-              console.log(data);
-              p = "<div class=\"search\" style=\"margin-left: 10px;margin-right: 10px;\"><input type=\"text\" placeholder=\"Search\" name=\"\" value=\"\" id=\"txtSearch\"></div>";
-              $('#navi').append(p);
-              for (var i = 0; i < data.contains.length; i++) {
-                item = data.contains[i];
-                console.log(item);
-                p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
-                $('#navi').append(p);
-              }
+              listing = data.contains;
+              searchInput.oninput = searchCategories;
+              var updateBookCount = function(numCategories) {
+                bookCountBadge.innerText = numCategories + ' items';
+              };
+              updateBookCount(listing.length);
+              showElement(indexedCategoriesTable);
+              rebuildSearchIndex();
+              updateCategoriesTable(listing);
             }
       });
 }
 
 function navClick(id) {
-  // document.getElementById('crumbtitle').innerHTML = document.getElementById(id).innerHTML;
   url = window.location.href.split('#')[0]+"#"+id;
   window.location.href = url;
 }
