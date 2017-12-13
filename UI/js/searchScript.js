@@ -53,7 +53,7 @@ var updateCategoriesTable = function(Categories) {
 
   var tokens = search.tokenizer.tokenize(searchInput.value);
   document.getElementById('navi').innerHTML = '';
-  if (totalCategories>50 && start>=50) {
+  if (totalCategories>paginateSplit && start>=paginateSplit) {
     p = "<a class=\"collection-item\" onclick=\"loadPreviousList50()\" id=\""+item.id+"\">Previous..</a>";
     $('#navi').append(p);
   }

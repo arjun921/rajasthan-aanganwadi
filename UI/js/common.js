@@ -25,7 +25,7 @@ function resetApp() {
 }
 
 function nextSpinner(){
-    var spinners="⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏";
+    var spinners="⣷⣯⣟⡿⢿⣻⣽⣾";
     var index = spinners.indexOf(document.getElementById("spinner").textContent);
     if(index == -1){index = 0}
     index = (index + 1) % spinners.length;
@@ -33,7 +33,7 @@ function nextSpinner(){
 }
 
 $(document).ajaxStart(function() {
-  spinid = setInterval(nextSpinner, 50);
+  spinid = setInterval(nextSpinner, 60);
   $("#spinner").show();
 });
 $(document).ajaxSuccess(function() {

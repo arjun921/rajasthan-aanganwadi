@@ -1,5 +1,5 @@
 var start,end;
-
+var paginateSplit = 25;
 window.onpageshow = function(event) {
   reINT();
   document.getElementById('crumbtitle').innerHTML = "Activity"
@@ -108,9 +108,9 @@ function createNav(id) {
               };
               updateBookCount(listing.length);
               totalCategories = listing.length;
-              if (totalCategories>50) {
+              if (totalCategories>paginateSplit) {
                 start = 0;
-                end = 50;
+                end = paginateSplit;
               }
               else {
                 start= 0;
@@ -133,13 +133,13 @@ var count=0;
 
 function loadNextList50() {
   count+=1
-  var numTimesPaginate = Math.floor(totalCategories/50);
+  var numTimesPaginate = Math.floor(totalCategories/paginateSplit);
   if (count<numTimesPaginate) {
-    start += 50
-    end = start+50
+    start += paginateSplit
+    end = start+paginateSplit
   }
   else {
-    start +=50
+    start +=paginateSplit
     end = start+(totalCategories-start);
   }
   updateCategoriesTable(listing);
@@ -148,13 +148,13 @@ function loadNextList50() {
 
 function loadPreviousList50() {
   count-=1
-  var numTimesPaginate = Math.floor(totalCategories/50);
+  var numTimesPaginate = Math.floor(totalCategories/paginateSplit);
   if (count<numTimesPaginate) {
-    start -=50
-    end = start+50
+    start -=paginateSplit
+    end = start+paginateSplit
   }
   else {
-    start -=50
+    start -=paginateSplit
     end = start+(totalCategories-start);
   }
   updateCategoriesTable(listing);
