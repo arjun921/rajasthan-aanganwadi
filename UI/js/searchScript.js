@@ -50,46 +50,54 @@ var showElement = function(element) {
 };
 var bo = true;
 var updateCategoriesTable = function(Categories) {
-
   var tokens = search.tokenizer.tokenize(searchInput.value);
   document.getElementById('navi').innerHTML = '';
   document.getElementById('pagination').innerHTML = '';
-  var c = count+1;
-  first = true;
-  if (totalCategories>paginateSplit && start>=paginateSplit) {
-    // p = "<p class=\"center\">Page: "+c+"</p>"
-    // $('#navi').append(p);
-    document.getElementById('pagination').innerHTML = '';
-    p = "<li class=\"waves-effect\" onclick=\"loadPreviousList50()\"><a><i class=\"material-icons\">chevron_left</i></a></li>";
-    $('#pagination').append(p);
-    if (first) {
-      p="<li class=\"center\"><a id=\"pageNo\">Page: "+c+"</a></li>"
-      $('#pagination').append(p);
-      first = false;
+  if (Categories.length<paginateSplit) {
+    for (var i = 0, length = Categories.length; i < length; i++) {
+      item = Categories[i];
+      p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
+      $('#navi').append(p);
     }
   }
-  for (var i = start, length = end; i < length; i++) {
-    item = Categories[i];
-    p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
-    $('#navi').append(p);
-  }
-
-  if (Categories.length>end) {
-    //conditionally show next button
-    if (first) {
-      p = "<li class=\"disabled\"><a><i class=\"material-icons\">chevron_left</i></a></li>";
+  else {
+    var c = count+1;
+    first = true;
+    if (totalCategories>paginateSplit && start>=paginateSplit) {
+      // p = "<p class=\"center\">Page: "+c+"</p>"
+      // $('#navi').append(p);
+      document.getElementById('pagination').innerHTML = '';
+      p = "<li class=\"waves-effect\" onclick=\"loadPreviousList50()\"><a><i class=\"material-icons\">chevron_left</i></a></li>";
       $('#pagination').append(p);
-      p="<li class=\"center\"><a id=\"pageNo\">Page: "+c+"</a></li>"
-      $('#pagination').append(p);
-      first = false;
+      if (first) {
+        p="<li class=\"center\"><a id=\"pageNo\">Page: "+c+"</a></li>"
+        $('#pagination').append(p);
+        first = false;
+      }
     }
-    p = "<li class=\"waves-effect\" onclick=\"loadNextList50()\"><a><i class=\"material-icons\">chevron_right</i></a></li>";
-    $('#pagination').append(p);
+    for (var i = start, length = end; i < length; i++) {
+      item = Categories[i];
+      p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
+      $('#navi').append(p);
+    }
 
-  }
-  else if (Categories.length==end) {
-    p = "<li class=\"disabled\" ><a><i class=\"material-icons\">chevron_right</i></a></li>";
-    $('#pagination').append(p);
+    if (Categories.length>end) {
+      //conditionally show next button
+      if (first) {
+        p = "<li class=\"disabled\"><a><i class=\"material-icons\">chevron_left</i></a></li>";
+        $('#pagination').append(p);
+        p="<li class=\"center\"><a id=\"pageNo\">Page: "+c+"</a></li>"
+        $('#pagination').append(p);
+        first = false;
+      }
+      p = "<li class=\"waves-effect\" onclick=\"loadNextList50()\"><a><i class=\"material-icons\">chevron_right</i></a></li>";
+      $('#pagination').append(p);
+
+    }
+    else if (Categories.length==end) {
+      p = "<li class=\"disabled\" ><a><i class=\"material-icons\">chevron_right</i></a></li>";
+      $('#pagination').append(p);
+    }
   }
 
 };

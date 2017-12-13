@@ -1,5 +1,5 @@
 var start,end;
-var paginateSplit = 50;
+var paginateSplit = 20;
 
 window.onpageshow = function(event) {
   reINT();
@@ -139,12 +139,10 @@ function loadNextList50() {
   count+=1
   var numTimesPaginate = Math.floor(totalCategories/paginateSplit);
   if (count<numTimesPaginate) {
-    console.log("If Next 50");
     start += paginateSplit
     end = start+paginateSplit
   }
   else {
-    console.log("Else Next 50");
     start +=paginateSplit
     end = start+(totalCategories-start);
   }
@@ -156,12 +154,10 @@ function loadPreviousList50() {
   count-=1
   var numTimesPaginate = Math.floor(totalCategories/paginateSplit);
   if (count<numTimesPaginate) {
-    console.log("If Previous 50");
     start -=paginateSplit
     end = start+paginateSplit
   }
   else {
-    console.log("Else Previous 50");
     start -=paginateSplit
     end = start+(totalCategories-start);
   }
