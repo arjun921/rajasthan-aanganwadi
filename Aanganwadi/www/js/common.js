@@ -19,7 +19,7 @@ loadSideMenu();
 function resetApp() {
   data = Cookies.getJSON();
   for (var key in data) {
-    Cookies.remove(item);
+    Cookies.remove(key);
   }
   window.location.href = "index.html";
 }

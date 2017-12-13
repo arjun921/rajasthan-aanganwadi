@@ -83,11 +83,23 @@ function load_content(contentID) {
       }
     },
     error: function(returnval) {
-      if (returnval.status != 200) {
+      if (returnval.status == 404) {
+        var $toastContent = $('<span>File Not Found</span>').add($('<a onclick="window.history.back();"><button class="btn-flat toast-action">OK</button></a>'));
+        Materialize.toast($toastContent, 4000, '', function() {
+          window.history.back();
+        });
+      }
+      else if (returnval.status == 403) {
         out_changes();
         var $toastContent = $('<span>Please Login to view.</span>').add($('<a href="login.html"><button class="btn-flat toast-action">OK</button></a>'));
         Materialize.toast($toastContent, 4000, '', function() {
-          window.open("login.html", "_self")
+          // window.open("login.html", "_self")
+        })
+      }
+      else {
+        var $toastContent = $('<span>Please Reset app from Help.</span>').add($('<a onclick="$(\'.button-collapse\').sideNav(\'show\');"><button class="btn-flat toast-action">RESET</button></a>'));
+        Materialize.toast($toastContent, 4000, '', function() {
+          $('.button-collapse').sideNav('show');
         })
       }
     }
