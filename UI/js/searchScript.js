@@ -50,21 +50,20 @@ var showElement = function(element) {
 };
 
 var updateCategoriesTable = function(Categories) {
-  console.log("Start:"+start);
-  end = start+50;
-  console.log("End:"+end);
+
   var tokens = search.tokenizer.tokenize(searchInput.value);
   document.getElementById('navi').innerHTML = '';
-  if (start>=50) {
+  if (totalCategories>50 && start>=50) {
     p = "<a class=\"collection-item\" onclick=\"loadPreviousList50()\" id=\""+item.id+"\">Previous..</a>";
     $('#navi').append(p);
   }
-  for (var i = start, length = start+50; i < length; i++) {
+  for (var i = start, length = end; i < length; i++) {
     item = Categories[i];
+    console.log(item);
     p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
     $('#navi').append(p);
   }
-  if (Categories.length>50) {
+  if (Categories.length>end) {
     p = "<a class=\"collection-item\" onclick=\"loadNextList50()\" id=\""+item.id+"\">More..</a>";
     $('#navi').append(p);
   }

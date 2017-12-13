@@ -19,11 +19,7 @@ function check_password(input) {
     }
 }
 
-
-//<------------- Login begin
-
 function dologin(){
-
     $("#Main_Body").hide();
     $("#preloader").show();
     var email = $('#emailinput').val();
@@ -47,13 +43,8 @@ function dologin(){
           if (returnval.status==401) {
               Materialize.toast("Username or password incorrect", 4000);
           }
-          console.log(returnval.status);
-          // Materialize.toast(returnval, 4000);
           $("#Main_Body").show();
           $("#preloader").hide();
         }
     });
-
 };
-
-//Login end ------------->

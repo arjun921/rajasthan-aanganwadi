@@ -1,3 +1,4 @@
+// source https://github.com/bvaughn/js-search
 var search, results, listing = [];
 
 
@@ -49,11 +50,21 @@ var showElement = function(element) {
 };
 
 var updateCategoriesTable = function(Categories) {
-  document.getElementById('navi').innerHTML = '';
+
   var tokens = search.tokenizer.tokenize(searchInput.value);
-  for (var i = 0, length = Categories.length; i < length; i++) {
+  document.getElementById('navi').innerHTML = '';
+  if (totalCategories>50 && start>=50) {
+    p = "<a class=\"collection-item\" onclick=\"loadPreviousList50()\" id=\""+item.id+"\">Previous..</a>";
+    $('#navi').append(p);
+  }
+  for (var i = start, length = end; i < length; i++) {
     item = Categories[i];
+    console.log(item);
     p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
+    $('#navi').append(p);
+  }
+  if (Categories.length>end) {
+    p = "<a class=\"collection-item\" onclick=\"loadNextList50()\" id=\""+item.id+"\">More..</a>";
     $('#navi').append(p);
   }
 };

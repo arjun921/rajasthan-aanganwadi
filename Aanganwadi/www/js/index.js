@@ -1,9 +1,10 @@
-// p = "<form><div class=\"form-group\"><label for=\"searchInput\">Filter text<span id=\"bookCountBadge\" class=\"badge\"></span></label><input class=\"form-control\" type=\"search\" id=\"searchInput\" style=\"padding-left:15px;\" placeholder=\"Search..\"></div></form>";
-// $('#navi').append(p);
+var start,end;
+
 window.onpageshow = function(event) {
+  reINT();
   document.getElementById('crumbtitle').innerHTML = "Activity"
   document.getElementById('crumbtitle2').innerHTML = document.getElementById('crumbtitle').innerHTML;
-    reINT();
+
 };
 
 window.onhashchange = change;
@@ -90,6 +91,7 @@ function load_content(contentID) {
     }
   });
 }
+var totalCategories;
 function createNav(id) {
     $.ajax({
         url: (link + '/category'),
@@ -105,6 +107,15 @@ function createNav(id) {
                 bookCountBadge.innerText = numCategories + ' items';
               };
               updateBookCount(listing.length);
+              totalCategories = listing.length;
+              if (totalCategories>50) {
+                start = 0;
+                end = 50;
+              }
+              else {
+                start= 0;
+                end = totalCategories;
+              }
               showElement(indexedCategoriesTable);
               rebuildSearchIndex();
               updateCategoriesTable(listing);
@@ -112,7 +123,39 @@ function createNav(id) {
       });
 }
 
+
 function navClick(id) {
   url = window.location.href.split('#')[0]+"#"+id;
   window.location.href = url;
+}
+
+var count=0;
+
+function loadNextList50() {
+  count+=1
+  var numTimesPaginate = Math.floor(totalCategories/50);
+  if (count<numTimesPaginate) {
+    start += 50
+    end = start+50
+  }
+  else {
+    start +=50
+    end = start+(totalCategories-start);
+  }
+  updateCategoriesTable(listing);
+  window.scrollTo(0, 0);
+}
+
+function loadPreviousList50() {
+  count-=1
+  var numTimesPaginate = Math.floor(totalCategories/50);
+  if (count<numTimesPaginate) {
+    start -=50
+    end = start+50
+  }
+  else {
+    start -=50
+    end = start+(totalCategories-start);
+  }
+  updateCategoriesTable(listing);
 }
