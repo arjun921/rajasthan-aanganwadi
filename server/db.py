@@ -132,7 +132,7 @@ class DB:
                     self.category_insert(sc)
                 category['contains'] = category_contains
                 self.category_insert(category)
-            random1kpdfs = ['proposal.pdf']
+            random1kpdfs = ['Proposal.pdf']
             random1kpdfs += [randstring(8)+'.pdf' for _ in range(1000)]
             mp3 = {"id": "_all_mp3", "title": 'All MP3','contains': ['laadki.mp3']}
             mp4 = {"id": "_all_mp4", "title": 'All MP4','contains': ['rajasthan.mp4']}
