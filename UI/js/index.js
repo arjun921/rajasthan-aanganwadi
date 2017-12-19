@@ -1,11 +1,10 @@
 var start,end;
 var paginateSplit = 20;
-
+var count=0;
 window.onpageshow = function(event) {
   reINT();
   document.getElementById('crumbtitle').innerHTML = "Activity"
   document.getElementById('crumbtitle2').innerHTML = document.getElementById('crumbtitle').innerHTML;
-
 };
 
 window.onhashchange = change;
@@ -21,6 +20,7 @@ function change(){
 }
 
 function reINT() {
+  count=0;
   $('#preloader').hide();
   $('#searchForm').hide();
   $('#pagination').hide();
@@ -69,11 +69,11 @@ function load_content(contentID) {
       $('#crumbtitle2').html(contentID);
       ftype = (data.url.split('.').pop());
       if (ftype == "mp4") {
-        p = "<video class=\"responsive-video\" style=\"width:100%; padding-top: 25px;\" controls><source src=" + link + data.url + " type=\"video/mp4\"></video>"
+        p = "<video class=\"responsive-video\" style=\"width:100%; padding-top: 25px;\" controls controlsList=\"nodownload\"><source src=" + link + data.url + " type=\"video/mp4\"></video>"
         $('#preloader').hide();
         $('#content').append(p);
       } else if (ftype == "mp3"){
-        p = "<p></p><audio controls=\"controls\" style=\"width:100%; padding-top: 25px;\" id = \"player\"><source src = " + link + data.url + " /></audio>"
+        p = "<p></p><audio  controlsList=\"nodownload\" controls=\"controls\" style=\"width:100%; padding-top: 25px;\" id = \"player\"><source src = " + link + data.url + " /></audio>"
         $('#preloader').hide();
         $('#content').append(p);
       } else if (ftype == "pdf") {
@@ -145,7 +145,7 @@ function navClick(id) {
   window.location.href = url;
 }
 
-var count=0;
+
 
 function loadNextList50() {
   count+=1

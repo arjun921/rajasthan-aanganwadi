@@ -4,7 +4,7 @@
 <head>
           <meta charset="UTF-8">
   <!--Import Google Icon Font-->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/fonts.css" rel="stylesheet">
   <!--Import materialize.css-->
   <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection" />
   <link href='css/nprogress.css' rel='stylesheet' />
@@ -20,7 +20,7 @@
 </head>
 <body>
   <nav>
-    <div class="nav-wrapper">
+    <div class="nav-wrapper z-depth-3">
 
       <span class="breadcrumb hide-on-med-and-up" id="crumbtitle"></span>
       <b><span class="right tooltipped" data-position="left" data-delay="50" data-tooltip="Shows login status" style="padding-right: 25px;" id="loginStatus">●</span></b>
@@ -61,7 +61,7 @@
     </div>
   </nav>
 
-  <div class="container" id="container">
+  <div class="container" id="container" style="padding-top: 10px;">
     <form id="searchForm" style="padding-top: 10px;">
         <div class="form-group">
           <label for="searchInput">
@@ -81,7 +81,7 @@
 
     </div>
 
-    <ul class="collection" id="navi">
+    <ul class="collection" id="navi" >
 
     </ul>
     <div class="row">
@@ -179,8 +179,8 @@
     <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
   </div>
   </div>
-  <div class="fixed-action-btn" onclick="$('#searchForm').toggle();document.getElementById('searchInput').focus();">
-    <a class="btn-floating btn-large red">
+  <div class="fixed-action-btn noselect" onclick="$('#searchForm').toggle();document.getElementById('searchInput').focus();">
+    <a class="btn-floating btn-large red z-depth-5">
       <i class="large material-icons">search</i>
     </a>
   </div>
