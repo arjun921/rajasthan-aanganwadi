@@ -63,7 +63,7 @@ var updateCategoriesTable = function(Categories) {
   if (Categories.length<paginateSplit) {
     for (var i = 0, length = Categories.length; i < length; i++) {
       item = Categories[i];
-      p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
+      p = itemStringtoAppend(item);
       $('#navi').append(p);
     }
   }
@@ -84,7 +84,7 @@ var updateCategoriesTable = function(Categories) {
     }
     for (var i = start, length = end; i < length; i++) {
       item = Categories[i];
-      p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
+      p = itemStringtoAppend(item);
       $('#navi').append(p);
     }
 

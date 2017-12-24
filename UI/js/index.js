@@ -3,15 +3,11 @@ var paginateSplit = 20;
 var count=0;
 window.onpageshow = function(event) {
   reINT();
-  document.getElementById('crumbtitle').innerHTML = "Activity"
-  document.getElementById('crumbtitle2').innerHTML = document.getElementById('crumbtitle').innerHTML;
+  setTitle("Activity");
 };
 
 window.onhashchange = change;
 
-function search(key) {
-
-}
 
 function change(){
   $('#content').html('');
@@ -28,11 +24,12 @@ function reINT() {
     createNav('_ROOT_');
   }
   else {
-    if (window.location.href.split('#')[1]=="help") {
-
+      if (window.location.href.split('#')[1]=="help") {
+        //do nothing for loading help modal
       }
       else if (location.hash.split(".").length<2 ) {
-      createNav(window.location.href.split('#')[1]);
+        //if hash value present, split and create nav for hash
+        createNav(window.location.href.split('#')[1]);
       }
     else {
       if (Cookies.get('currenttoken')) {
@@ -52,8 +49,7 @@ function reINT() {
 function load_content(contentID) {
   $('#preloader').show();
   $('#navi').html('');
-  $('#crumbtitle').html("Loading file");
-  $('#crumbtitle2').html("Loading file");
+  setTitle("Loading file");
   $.ajax({
     url: (link + '/content'),
     type: 'post',
@@ -65,8 +61,7 @@ function load_content(contentID) {
     success: function(data, st, xhr) {
       $('#content').show();
       $('#content').html('');
-      $('#crumbtitle').html(contentID);
-      $('#crumbtitle2').html(contentID);
+      setTitle(contentID);
       ftype = (data.url.split('.').pop());
       if (ftype == "mp4") {
         p = "<video class=\"responsive-video\" style=\"width:100%; padding-top: 25px;\" controls controlsList=\"nodownload\"><source src=" + link + data.url + " type=\"video/mp4\"></video>"
@@ -113,8 +108,7 @@ function createNav(id) {
         contentType: 'application/json',
         data: JSON.stringify({'catid': id}),
         success: function(data, st, xhr) {
-              $('#crumbtitle').html(data.title);
-              $('#crumbtitle2').html(data.title);
+              setTitle(data.title)
               // listing = da.contains;
               listing = data.contains;
               searchInput.oninput = searchCategories;
@@ -175,4 +169,41 @@ function loadPreviousList50() {
   }
   updateCategoriesTable(listing);
   window.scrollTo(0, 100000);
+}
+
+function getFileType(item) {
+  fileType = item.id.split(".")[1];
+  if (fileType) {
+      fileType = fileType.toUpperCase();
+  }
+  return fileType
+}
+
+function getIcon(fileType) {
+  if (fileType=="MP3") {
+    return "audiotrack"
+  }
+  else if (fileType=="PDF") {
+    return "picture_as_pdf"
+  }
+  else if (fileType=="MP4") {
+    return "video_library"
+  }
+  else {
+    return ""
+  }
+}
+
+function itemStringtoAppend(item) {
+  fileType = getFileType(item);
+  strBegin = " <li class=\"collection-item deep-purple-text\" id=\""+item.id+"\" onclick=\"navClick(this.id)\"><div>"+item.title+"<div class=\"secondary-content\"><i class=\"material-icons\">"
+  icon = getIcon(fileType);
+  strEnd = "</i></div></li>"
+  p = strBegin+icon+strEnd
+  return p
+}
+
+function setTitle(stri) {
+  $('#crumbtitle').html(stri);
+  $('#crumbtitle2').html(stri);
 }
