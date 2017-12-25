@@ -4,7 +4,6 @@ from distutils.dir_util import copy_tree
 copy_tree('UI/','Aanganwadi/www/')
 jsList = os.listdir('Aanganwadi/www/js/')
 path = 'Aanganwadi/www/js/'
-print('Editing files..')
 for x in jsList:
     if x != '.DS_Store':
         # print("File {} has been edited.".format(x))
@@ -15,7 +14,6 @@ for x in jsList:
         write_file = open(path+x,'w')
         write_file.write(s)
         write_file.close()
-print('Edit complete')
 print('Copying Complete')
 with open("Aanganwadi/config.xml","r+") as f:
     old = f.read()
@@ -35,4 +33,3 @@ os.system('open Aanganwadi/platforms/android/build/outputs/apk')
 os.system('git add .')
 message = '\"App run version update v'+newVersion+'\"'
 os.system('git commit -m '+message)
-os.system('git push')
