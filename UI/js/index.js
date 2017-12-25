@@ -75,6 +75,7 @@ function change(){
 function reINT() {
   //run functions to be run on document ready
   count=0;
+  showSearch();
   $('#preloader').hide();
   $('#searchForm').hide();
   $('#pagination').hide();
@@ -198,10 +199,21 @@ function loadFileByType(data) {
   }
 }
 
+function hideSearch() {
+  $('#backFab').show();
+  $('#searchFab').hide();
+}
+
+function showSearch() {
+  $('#backFab').hide();
+  $('#searchFab').show();
+}
+
 function onContentLoad() {
   $('#preloader').show();
   $('#navi').html('');
   setTitle("Loading file");
+  hideSearch();
 }
 
 function contentNotFound() {
