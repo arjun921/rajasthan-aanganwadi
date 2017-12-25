@@ -31,5 +31,5 @@ print('Version updated to v'+newVersion)
 os.system('cd Aanganwadi && phonegap run android')
 os.system('open Aanganwadi/platforms/android/build/outputs/apk')
 os.system('git add .')
-message = '\"App run version update v'+newVersion+'\"'
+message = '\"Run version update v'+newVersion+'\"'
 os.system('git commit -m '+message)

@@ -28,7 +28,7 @@ with open("Aanganwadi/config.xml","r+") as f:
     f.write(updated)
 print('Version updated to v'+newVersion)
 os.system('cd Aanganwadi && phonegap build android --release  -- --keystore="/Users/arjun921/working_directory/rajasthan/key/Aanganwadi.keystore" --storePassword=aanganwadi --alias=aanganwadi')
-os.system('open /Users/arjun921/working_directory/rajasthan/Aanganwadi/platforms/android/build/outputs/apk')
+os.system('open Aanganwadi/platforms/android/build/outputs/apk')
 os.system('git add .')
-message = '\"App run version update v'+newVersion+'\"'
+message = '\"Build version update v'+newVersion+'\"'
 os.system('git commit -m '+message)
