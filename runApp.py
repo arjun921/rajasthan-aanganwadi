@@ -1,5 +1,6 @@
 import os
 from distutils.dir_util import copy_tree
+from jsmin import jsmin
 
 copy_tree('UI/','Aanganwadi/www/')
 jsList = os.listdir('Aanganwadi/www/js/')
@@ -12,7 +13,7 @@ for x in jsList:
         s = s.replace('../UI/','')
         open_file.close()
         write_file = open(path+x,'w')
-        write_file.write(s)
+        write_file.write(jsmin(s))
         write_file.close()
 print('Copying Complete')
 with open("Aanganwadi/config.xml","r+") as f:
