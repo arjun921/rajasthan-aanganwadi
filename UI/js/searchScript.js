@@ -22,12 +22,12 @@ var updateBookCountAndTable = function() {
   updateBookCount(results.length);
 
   if (results.length > 0) {
-    updateCategoriesTable(results);
+    updateCategoriesTable(results,Cookies.get('CurrPage'));
   } else if (!!searchInput.value) {
-    updateCategoriesTable([]);
+    updateCategoriesTable([],Cookies.get('CurrPage'));
   } else {
     updateBookCount(listing.length);
-    updateCategoriesTable(listing);
+    updateCategoriesTable(listing,Cookies.get('CurrPage'));
   }
 };
 

@@ -35,6 +35,7 @@ function createNav(id) {
   apisuccess = function (data, st, xhr) {
         setTitle(data.title)
         listing = data.contains;
+        Cookies.set('CurrPage',data.id);
         searchInput.oninput = searchCategories;
         var updateBookCount = function(numCategories) {
           bookCountBadge.innerText = numCategories + ' items';
