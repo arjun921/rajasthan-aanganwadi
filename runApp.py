@@ -30,6 +30,6 @@ with open("Aanganwadi/config.xml","r+") as f:
 print('Version updated to v'+newVersion)
 os.system('cd Aanganwadi && phonegap run android')
 os.system('open Aanganwadi/platforms/android/build/outputs/apk')
-os.system('git add .')
-message = '\"Run version update v'+newVersion+'\"'
-os.system('git commit -m '+message)
+# os.system('git add .')
+# message = '\"Run version update v'+newVersion+'\"'
+# os.system('git commit -m '+message)

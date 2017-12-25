@@ -121,6 +121,8 @@ function loadpdf(data) {
   flink = 'https://docs.google.com/viewer?url=' + link + data.url+"&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
   p = getHTMLPDFViewer(flink);
   $('#content').append(p);
+  $('#backFab').addClass('fixed-action-btn-mod');
+  $('#backFab').removeClass('fixed-action-btn');
 }
 
 function navClick(id) {

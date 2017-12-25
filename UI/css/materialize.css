@@ -14,6 +14,16 @@
                                   supported by Chrome and Opera */
 }
 
+.fixed-action-btn-mod{
+  position: fixed;
+  right: 23px;
+  bottom: 3.5em;
+  padding-top: 15px;
+  margin-bottom: 0;
+  z-index: 997;
+}
+
+
 .materialize-red {
   background-color: #e51c23 !important;
 }
