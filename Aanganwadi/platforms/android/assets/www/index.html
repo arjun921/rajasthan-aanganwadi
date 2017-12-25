@@ -174,24 +174,35 @@
       <button class="btn waves-effect waves-light" onclick="resetApp();">Reset
         <i class="material-icons right">history</i>
       </button>
+
+      <div class="">
+        <br>
+        <b>Support</b>
+        <p>For any queries or issues in the app,<br>
+          <a href="mailto:incoming+theSage21/rajasthan@gitlab.com?Subject=App%20Feedback" target="_top">Contact Us</a>
+        </p>
+      </div>
+
   </div>
   <div class="modal-footer">
     <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
   </div>
   </div>
-  <div class="fixed-action-btn noselect" onclick="$('#searchForm').toggle();document.getElementById('searchInput').focus();">
-    <a class="btn-floating btn-large red z-depth-5">
+  <div class="fixed-action-btn noselect">
+    <a id="backFab" onclick="window.history.go(-1);" onclick="window.history.go(-1);" class="btn-floating btn-large red z-depth-5">
+      <i class="large material-icons">arrow_back</i>
+    </a>
+    <a id="searchFab" onclick="$('#searchForm').toggle();document.getElementById('searchInput').focus();" class="btn-floating btn-large red z-depth-5">
       <i class="large material-icons">search</i>
     </a>
   </div>
-
   <!--Import jQuery before materialize.js-->
+  <script type="text/javascript" src="js/returnHtml.js"></script>
   <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="js/materialize.min.js"></script>
   <script type="text/javascript" src="js/js.cookie.js"></script>
   <script type="text/javascript" src="js/common.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
-  <script type="text/javascript" src="js/materialize.js"></script>
   <script type="text/javascript" src="js/porterstemmer.js"></script>
   <script type="text/javascript" src="js/search.js"></script>
   <script type="text/javascript" src="js/searchScript.js"></script>

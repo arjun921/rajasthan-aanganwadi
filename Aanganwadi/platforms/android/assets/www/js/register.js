@@ -17,58 +17,57 @@ function check_password(input) {
 }
 
 function sign_up() {
-    var name = document.getElementById("name").value;
-    var email = document.getElementById("email").value;
-    var pwd = document.getElementById("password_confirm").value;
-    var addr = document.getElementById("addr").value;
-    var ph = document.getElementById("ph").value;
-    pwd_hash = murmurhash3_32_gc(pwd, 124);
-    var tok = genToken();
-    var data = {
-        name: name,
-        email: email,
+    var nameval = document.getElementById("name").value;
+    var emailval = document.getElementById("email").value;
+    var pwdval = document.getElementById("password_confirm").value;
+    var addrval = document.getElementById("addr").value;
+    var phval = document.getElementById("ph").value;
+    pwd_hash = murmurhash3_32_gc(phval, 124);
+    var tokval = genToken();
+    url='/user/create';
+    sendData = {
+        name: nameval,
+        email: emailval,
         pwd: pwd_hash.toString(),
-        address: addr,
-        mobile: ph,
-        token: tok
-    };
-    console.log(data);
-    $.ajax({
-        url: link+'/user/create',
-        type: "POST",
-        dataType: 'json',
-        crossDomain: true,
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function(result, textStatus, xhr) {
-            // alert(xhr.status);
-            // alert(result);
-            // alert(textStatus);
-            // if (xhr.status == 200) {
-            //     Materialize.toast("Sign-Up Success", 4000);
-            // } else {
-            //     // Materialize.toast(xhr.status, 4000);
-            //     // Materialize.toast(ajaxOptions, 4000);
-            //     Materialize.toast(thrownError, 4000);
-            // }
-            // // Materialize.toast(result, 4000);
-            // // Materialize.toast(result.status, 4000);
-        },
-        error: function(returnval) {
-          if (returnval.status == 401) {
-            var $toastContent = $('<span>Sign Up is disabled.</span>').add($('<a href="login.html"><button class="btn-flat toast-action">OK</button></a>'));
-            Materialize.toast($toastContent, 4000, '', function() {
-              window.open("login.html", "_self");
-            })
-          }
-          else if (returnval.status == 403) {
-            var $toastContent = $('<span>Only an admin can create users.</span>').add($('<a href="login.html"><button class="btn-flat toast-action">OK</button></a>'));
-            Materialize.toast($toastContent, 4000, '', function() {
-              window.open("login.html", "_self");
-            })
-          }
+        address: addrval,
+        mobile: phval,
+        token: tokval
+    }
+    console.log(sendData);
+    apisuccess = function (data, st, xhr) {
+        if (xhr.status == 200) {
+            Materialize.toast("Sign-Up Success", 4000);
         }
-    });
+        // else {
+        //     // Materialize.toast(xhr.status, 4000);
+        //     Materialize.toast(thrownError, 4000);
+        // }
+        // // Materialize.toast(data, 4000);
+        // // Materialize.toast(data.status, 4000);
+    }
+    apierror = function(returnval) {
+      if (returnval.status == 401) {
+        msg = 'Sign Up is disabled.'
+        href = 'login.html'
+        function action() {
+          openLoginPage()
+        }
+        toastWithAction(msg,href,action)
+      }
+      else if (returnval.status == 403) {
+        msg = 'Only an admin can create users.'
+        href = 'login.html'
+        function action() {
+          openLoginPage()
+        }
+        toastWithAction(msg,href,action)
+      }
+    }
+    hitApi(url,sendData,apisuccess,apierror);
+}
+
+function openLoginPage() {
+  window.open("login.html", "_self");
 }
 
 $('#password_confirm').on('input propertychange paste', function() {

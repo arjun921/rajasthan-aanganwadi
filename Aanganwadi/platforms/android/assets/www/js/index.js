@@ -1,17 +1,70 @@
-var start,end;
+var start,end,totalCategories;
 var paginateSplit = 20;
 var count=0;
-window.onpageshow = function(event) {
-  reINT();
-  document.getElementById('crumbtitle').innerHTML = "Activity"
-  document.getElementById('crumbtitle2').innerHTML = document.getElementById('crumbtitle').innerHTML;
-};
+
+// ############### API CALLs Begin #########################---------------------------->
+function load_content(contentID) {
+  onContentLoad();
+  sendData = {
+    "token": Cookies.get('currenttoken'),
+    'fname': contentID
+  }
+  apisuccess = function (data,st,xhr) {
+    console.log(data.url);
+    $('#content').show();
+    $('#content').html('');
+    setTitle(contentID);
+    loadFileByType(data);
+  };
+  apierror = function (returnval) {
+    if (returnval.status == 404) {
+      contentNotFound()
+    }
+    else if (returnval.status == 403) {
+      contentNoLogin()
+    }
+    else {
+      contentUnkError()
+    }
+  };
+  hitApi('/content',sendData,apisuccess,apierror);
+}//load_content ends -------->
+
+function createNav(id) {
+  sendData = {'catid': id}
+  apisuccess = function (data, st, xhr) {
+        setTitle(data.title)
+        listing = data.contains;
+        Cookies.set('CurrPage',data.id);
+        searchInput.oninput = searchCategories;
+        var updateBookCount = function(numCategories) {
+          bookCountBadge.innerText = numCategories + ' items';
+        };
+        updateBookCount(listing.length);
+        totalCategories = listing.length;
+        if (totalCategories>paginateSplit) {
+          $('#pagination').show();
+          start = 0;
+          end = paginateSplit;
+        }
+        else {
+          start= 0;
+          end = totalCategories;
+        }
+        showElement(indexedCategoriesTable);
+        rebuildSearchIndex();
+        updateCategoriesTable(listing,data.id);
+      }
+  hitApi('/category',sendData,apisuccess,function () {});
+}//create Nav ends --------------------------------------------------->
+
 
 window.onhashchange = change;
 
-function search(key) {
-
-}
+window.onpageshow = function(event) {
+  reINT();
+  setTitle("Activity");
+};
 
 function change(){
   $('#content').html('');
@@ -20,7 +73,9 @@ function change(){
 }
 
 function reINT() {
+  //run functions to be run on document ready
   count=0;
+  showSearch();
   $('#preloader').hide();
   $('#searchForm').hide();
   $('#pagination').hide();
@@ -28,11 +83,12 @@ function reINT() {
     createNav('_ROOT_');
   }
   else {
-    if (window.location.href.split('#')[1]=="help") {
-
+      if (window.location.href.split('#')[1]=="help") {
+        //do nothing for loading help modal
       }
       else if (location.hash.split(".").length<2 ) {
-      createNav(window.location.href.split('#')[1]);
+        //if hash value present, split and create nav for hash
+        createNav(window.location.href.split('#')[1]);
       }
     else {
       if (Cookies.get('currenttoken')) {
@@ -49,103 +105,28 @@ function reINT() {
   }
 }
 
-function load_content(contentID) {
-  $('#preloader').show();
-  $('#navi').html('');
-  $('#crumbtitle').html("Loading file");
-  $('#crumbtitle2').html("Loading file");
-  $.ajax({
-    url: (link + '/content'),
-    type: 'post',
-    contentType: 'application/json',
-    data: JSON.stringify({
-      "token": Cookies.get('currenttoken'),
-      'fname': contentID
-    }),
-    success: function(data, st, xhr) {
-      $('#content').show();
-      $('#content').html('');
-      $('#crumbtitle').html(contentID);
-      $('#crumbtitle2').html(contentID);
-      ftype = (data.url.split('.').pop());
-      if (ftype == "mp4") {
-        p = "<video class=\"responsive-video\" style=\"width:100%; padding-top: 25px;\" controls controlsList=\"nodownload\"><source src=" + link + data.url + " type=\"video/mp4\"></video>"
-        $('#preloader').hide();
-        $('#content').append(p);
-      } else if (ftype == "mp3"){
-        p = "<p></p><audio  controlsList=\"nodownload\" controls=\"controls\" style=\"width:100%; padding-top: 25px;\" id = \"player\"><source src = " + link + data.url + " /></audio>"
-        $('#preloader').hide();
-        $('#content').append(p);
-      } else if (ftype == "pdf") {
-        flink = 'https://docs.google.com/viewer?url=' + link + data.url+"&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
-        p = "<iframe src=\""+flink+"\" id=\"docIframe\" style=\"position:fixed; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;\">Your browser doesn't support iframes</iframe>"
-        $('#content').append(p);
-      }
-    },
-    error: function(returnval) {
-      if (returnval.status == 404) {
-        var $toastContent = $('<span>File Not Found</span>').add($('<a onclick="window.history.back();"><button class="btn-flat toast-action">OK</button></a>'));
-        Materialize.toast($toastContent, 4000, '', function() {
-          window.history.back();
-        });
-      }
-      else if (returnval.status == 403) {
-        out_changes();
-        var $toastContent = $('<span>Please Login to view.</span>').add($('<a href="login.html"><button class="btn-flat toast-action">OK</button></a>'));
-        Materialize.toast($toastContent, 4000, '', function() {
-          // window.open("login.html", "_self")
-        })
-      }
-      else {
-        var $toastContent = $('<span>Please Reset app from Help.</span>').add($('<a onclick="$(\'.button-collapse\').sideNav(\'show\');"><button class="btn-flat toast-action">RESET</button></a>'));
-        Materialize.toast($toastContent, 4000, '', function() {
-          $('.button-collapse').sideNav('show');
-        })
-      }
-    }
-  });
-}
-var totalCategories;
-function createNav(id) {
-    $.ajax({
-        url: (link + '/category'),
-        type: 'post',
-        contentType: 'application/json',
-        data: JSON.stringify({'catid': id}),
-        success: function(data, st, xhr) {
-              $('#crumbtitle').html(data.title);
-              $('#crumbtitle2').html(data.title);
-              // listing = da.contains;
-              listing = data.contains;
-              searchInput.oninput = searchCategories;
-              var updateBookCount = function(numCategories) {
-                bookCountBadge.innerText = numCategories + ' items';
-              };
-              updateBookCount(listing.length);
-              totalCategories = listing.length;
-              if (totalCategories>paginateSplit) {
-                $('#pagination').show();
-                start = 0;
-                end = paginateSplit;
-              }
-              else {
-                start= 0;
-                end = totalCategories;
-              }
-              showElement(indexedCategoriesTable);
-              rebuildSearchIndex();
-              updateCategoriesTable(listing);
-            }
-      });
+function loadmp4(data) {
+  p = getHTMLVideoPlayer(data);
+  $('#preloader').hide();
+  $('#content').append(p);
 }
 
+function loadmp3(data) {
+  p = getHTMLAudioPlayer(data)
+  $('#preloader').hide();
+  $('#content').append(p);
+}
+
+function loadpdf(data) {
+  flink = 'https://docs.google.com/viewer?url=' + link + data.url+"&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
+  p = getHTMLPDFViewer(flink);
+  $('#content').append(p);
+}
 
 function navClick(id) {
   url = window.location.href.split('#')[0]+"#"+id;
   window.location.href = url;
 }
-
-
 
 function loadNextList50() {
   count+=1
@@ -175,4 +156,89 @@ function loadPreviousList50() {
   }
   updateCategoriesTable(listing);
   window.scrollTo(0, 100000);
+}
+
+function getFileType(item) {
+  fileType = item.id.split(".")[1];
+  if (fileType) {
+      return fileType.toUpperCase();
+  }
+}
+
+function getIcon(fileType) {
+  if (fileType=="MP3") {return ["audiotrack",]}
+  else if (fileType=="PDF") {return "picture_as_pdf"}
+  else if (fileType=="MP4") {return "video_library"}
+  else if (fileType=="UP") {
+    console.log("history");
+    return "history"}
+  else {return ""}
+}
+
+function setTitle(stri) {
+  $('#crumbtitle').html(stri);
+  $('#crumbtitle2').html(stri);
+}
+
+function createListingElements(initiation,condition,Categories) {
+  for (var i = initiation; i < condition; i++) {
+    item = Categories[i];
+    p = getHTMLCategoryFileListElement(item);
+    $('#navi').append(p);
+  }
+}
+
+function loadFileByType(data) {
+  ftype = (data.url.split('.').pop());
+  if (ftype == "mp4") {
+    loadmp4(data)
+  } else if (ftype == "mp3"){
+    loadmp3(data)
+  } else if (ftype == "pdf") {
+    loadpdf(data)
+  }
+}
+
+function hideSearch() {
+  $('#backFab').show();
+  $('#searchFab').hide();
+}
+
+function showSearch() {
+  $('#backFab').hide();
+  $('#searchFab').show();
+}
+
+function onContentLoad() {
+  $('#preloader').show();
+  $('#navi').html('');
+  setTitle("Loading file");
+  hideSearch();
+}
+
+function contentNotFound() {
+  msg = 'File Not Found'
+  href = 'javascript:history.back()'
+  action = function() {
+    window.history.back();
+  }
+  toastWithAction(msg,href,action)
+}
+
+function contentNoLogin() {
+  out_changes();
+  msg = 'Please Login to view.'
+  href = 'login.html'
+  action = function() {
+    window.open("login.html", "_self")
+  }
+  toastWithAction(msg,href,action)
+}
+function contentUnkError() {
+  msg = 'Please Reset app from Help.'
+  href = 'javascript:$(\'.button-collapse\').sideNav(\'show\');'
+  action = function() {
+    $('.button-collapse').sideNav('show');
+  }
+  toastWithAction(msg,href,action)
 }

@@ -22,12 +22,12 @@ var updateBookCountAndTable = function() {
   updateBookCount(results.length);
 
   if (results.length > 0) {
-    updateCategoriesTable(results);
+    updateCategoriesTable(results,Cookies.get('CurrPage'));
   } else if (!!searchInput.value) {
-    updateCategoriesTable([]);
+    updateCategoriesTable([],Cookies.get('CurrPage'));
   } else {
     updateBookCount(listing.length);
-    updateCategoriesTable(listing);
+    updateCategoriesTable(listing,Cookies.get('CurrPage'));
   }
 };
 
@@ -48,7 +48,7 @@ var showElement = function(element) {
   element.className = element.className.replace(/\s*hidden/, '');
 };
 var bo = true;
-var updateCategoriesTable = function(Categories) {
+var updateCategoriesTable = function(Categories,parID) {
   var tokens = search.tokenizer.tokenize(searchInput.value);
   var pages =  Math.floor(totalCategories/paginateSplit);
   var remainder = (totalCategories/paginateSplit)-pages;
@@ -60,19 +60,17 @@ var updateCategoriesTable = function(Categories) {
   }
   document.getElementById('navi').innerHTML = '';
   document.getElementById('pagination').innerHTML = '';
+  if (parID!="_ROOT_") {
+    s = getHTMLCategoryUp();
+    $('#navi').append(s);
+  }
   if (Categories.length<paginateSplit) {
-    for (var i = 0, length = Categories.length; i < length; i++) {
-      item = Categories[i];
-      p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
-      $('#navi').append(p);
-    }
+    createListingElements(0,Categories.length,Categories);
   }
   else {
     var c = count+1;
     first = true;
     if (totalCategories>paginateSplit && start>=paginateSplit) {
-      // p = "<p class=\"center\">Page: "+c+"</p>"
-      // $('#navi').append(p);
       document.getElementById('pagination').innerHTML = '';
       p = "<li class=\"waves-effect\" onclick=\"loadPreviousList50()\"><a><i class=\"material-icons\">chevron_left</i></a></li>";
       $('#pagination').append(p);
@@ -82,12 +80,7 @@ var updateCategoriesTable = function(Categories) {
         first = false;
       }
     }
-    for (var i = start, length = end; i < length; i++) {
-      item = Categories[i];
-      p = "<a class=\"collection-item\" onclick=\"navClick(this.id)\" id=\""+item.id+"\">"+item.title+"</a>";
-      $('#navi').append(p);
-    }
-
+    createListingElements(start,end,Categories);
     if (Categories.length>end) {
       //conditionally show next button
       if (first) {
