@@ -72,3 +72,11 @@ function getHTMLCategoryFileListElement(item){
   p = strBegin+icon+strEnd
   return p
 }
+
+function getHTMLCategoryUp(){
+  strBegin = " <li class=\"collection-item deep-purple-text\" onclick=\"window.history.go(-1);\"><div>Go Up...<div class=\"secondary-content center\"  style=\"transform: scaleX(-1)\"><i class=\"material-icons\">"
+  icon = "directions"
+  strEnd = "</i></div></li>"
+  p = strBegin+icon+strEnd
+  return p
+}

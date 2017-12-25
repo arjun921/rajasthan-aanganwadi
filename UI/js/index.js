@@ -2,6 +2,61 @@ var start,end,totalCategories;
 var paginateSplit = 20;
 var count=0;
 
+// ############### API CALLs Begin #########################---------------------------->
+function load_content(contentID) {
+  onContentLoad();
+  sendData = {
+    "token": Cookies.get('currenttoken'),
+    'fname': contentID
+  }
+  apisuccess = function (data,st,xhr) {
+    console.log(data.url);
+    $('#content').show();
+    $('#content').html('');
+    setTitle(contentID);
+    loadFileByType(data);
+  };
+  apierror = function (returnval) {
+    if (returnval.status == 404) {
+      contentNotFound()
+    }
+    else if (returnval.status == 403) {
+      contentNoLogin()
+    }
+    else {
+      contentUnkError()
+    }
+  };
+  hitApi('/content',sendData,apisuccess,apierror);
+}//load_content ends -------->
+
+function createNav(id) {
+  sendData = {'catid': id}
+  apisuccess = function (data, st, xhr) {
+        setTitle(data.title)
+        listing = data.contains;
+        searchInput.oninput = searchCategories;
+        var updateBookCount = function(numCategories) {
+          bookCountBadge.innerText = numCategories + ' items';
+        };
+        updateBookCount(listing.length);
+        totalCategories = listing.length;
+        if (totalCategories>paginateSplit) {
+          $('#pagination').show();
+          start = 0;
+          end = paginateSplit;
+        }
+        else {
+          start= 0;
+          end = totalCategories;
+        }
+        showElement(indexedCategoriesTable);
+        rebuildSearchIndex();
+        updateCategoriesTable(listing,data.id);
+      }
+  hitApi('/category',sendData,apisuccess,function () {});
+}//create Nav ends --------------------------------------------------->
+
 
 window.onhashchange = change;
 
@@ -112,6 +167,9 @@ function getIcon(fileType) {
   if (fileType=="MP3") {return ["audiotrack",]}
   else if (fileType=="PDF") {return "picture_as_pdf"}
   else if (fileType=="MP4") {return "video_library"}
+  else if (fileType=="UP") {
+    console.log("history");
+    return "history"}
   else {return ""}
 }
 
@@ -128,7 +186,7 @@ function createListingElements(initiation,condition,Categories) {
   }
 }
 
-function loadFileByType(ftype) {
+function loadFileByType(data) {
   ftype = (data.url.split('.').pop());
   if (ftype == "mp4") {
     loadmp4(data)
@@ -171,57 +229,3 @@ function contentUnkError() {
   }
   toastWithAction(msg,href,action)
 }
-
-// ############### API CALLs Begin #########################---------------------------->
-function load_content(contentID) {
-  onContentLoad();
-  sendData = {
-    "token": Cookies.get('currenttoken'),
-    'fname': contentID
-  }
-  apisuccess = function (data,st,xhr) {
-    $('#content').show();
-    $('#content').html('');
-    setTitle(contentID);
-    loadFileByType(ftype);
-  };
-  apierror = function (returnval) {
-    if (returnval.status == 404) {
-      contentNotFound()
-    }
-    else if (returnval.status == 403) {
-      contentNoLogin()
-    }
-    else {
-      contentUnkError()
-    }
-  };
-  hitApi('/content',sendData,apisuccess,apierror);
-}//load_content ends -------->
-
-function createNav(id) {
-  sendData = {'catid': id}
-  apisuccess = function (data, st, xhr) {
-        setTitle(data.title)
-        listing = data.contains;
-        searchInput.oninput = searchCategories;
-        var updateBookCount = function(numCategories) {
-          bookCountBadge.innerText = numCategories + ' items';
-        };
-        updateBookCount(listing.length);
-        totalCategories = listing.length;
-        if (totalCategories>paginateSplit) {
-          $('#pagination').show();
-          start = 0;
-          end = paginateSplit;
-        }
-        else {
-          start= 0;
-          end = totalCategories;
-        }
-        showElement(indexedCategoriesTable);
-        rebuildSearchIndex();
-        updateCategoriesTable(listing);
-      }
-  hitApi('/category',sendData,apisuccess,function () {});
-}//createNav ends --------------------------------------------------->

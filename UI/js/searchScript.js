@@ -48,7 +48,7 @@ var showElement = function(element) {
   element.className = element.className.replace(/\s*hidden/, '');
 };
 var bo = true;
-var updateCategoriesTable = function(Categories) {
+var updateCategoriesTable = function(Categories,parID) {
   var tokens = search.tokenizer.tokenize(searchInput.value);
   var pages =  Math.floor(totalCategories/paginateSplit);
   var remainder = (totalCategories/paginateSplit)-pages;
@@ -60,6 +60,10 @@ var updateCategoriesTable = function(Categories) {
   }
   document.getElementById('navi').innerHTML = '';
   document.getElementById('pagination').innerHTML = '';
+  if (parID!="_ROOT_") {
+    s = getHTMLCategoryUp();
+    $('#navi').append(s);
+  }
   if (Categories.length<paginateSplit) {
     createListingElements(0,Categories.length,Categories);
   }
