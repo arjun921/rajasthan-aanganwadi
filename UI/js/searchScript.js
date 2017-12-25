@@ -61,18 +61,12 @@ var updateCategoriesTable = function(Categories) {
   document.getElementById('navi').innerHTML = '';
   document.getElementById('pagination').innerHTML = '';
   if (Categories.length<paginateSplit) {
-    for (var i = 0, length = Categories.length; i < length; i++) {
-      item = Categories[i];
-      p = itemStringtoAppend(item);
-      $('#navi').append(p);
-    }
+    createListingElements(0,Categories.length,Categories);
   }
   else {
     var c = count+1;
     first = true;
     if (totalCategories>paginateSplit && start>=paginateSplit) {
-      // p = "<p class=\"center\">Page: "+c+"</p>"
-      // $('#navi').append(p);
       document.getElementById('pagination').innerHTML = '';
       p = "<li class=\"waves-effect\" onclick=\"loadPreviousList50()\"><a><i class=\"material-icons\">chevron_left</i></a></li>";
       $('#pagination').append(p);
@@ -82,12 +76,7 @@ var updateCategoriesTable = function(Categories) {
         first = false;
       }
     }
-    for (var i = start, length = end; i < length; i++) {
-      item = Categories[i];
-      p = itemStringtoAppend(item);
-      $('#navi').append(p);
-    }
-
+    createListingElements(start,end,Categories);
     if (Categories.length>end) {
       //conditionally show next button
       if (first) {

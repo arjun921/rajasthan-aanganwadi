@@ -27,24 +27,21 @@ function dologin(){
     pwd = murmurhash3_32_gc(pwd,24);
     pws =  pwd.toString();
     var tok = genToken();
-    $.ajax({
-        url: (link+'/user/login'),
-        type: 'post',
-        contentType: 'application/json',
-        data: JSON.stringify( { "email": email, "pwd": pws, "token": tok} ),
-        success: function(data, st, xhr){
-            Cookies.set('currenttoken', tok);
-            Cookies.set('email', email);
-            Cookies.set('fname', data.name);
-            Materialize.toast('Login Successful', 4000);
-            window.open("../UI/index.html","_self")
-        },
-        error: function(returnval) {
-          if (returnval.status==401) {
-              Materialize.toast("Username or password incorrect", 4000);
-          }
-          $("#Main_Body").show();
-          $("#preloader").hide();
-        }
-    });
+    url='/user/login';
+    sendData = { "email": email, "pwd": pws, "token": tok};
+    apisuccess = function (data,st,xhr) {
+        Cookies.set('currenttoken', tok);
+        Cookies.set('email', email);
+        Cookies.set('fname', data.name);
+        Materialize.toast('Login Successful', 4000);
+        window.open("../UI/index.html","_self")
+    };
+    apierror = function (returnval) {
+      if (returnval.status==401) {
+          Materialize.toast("Username or password incorrect", 4000);
+      }
+      $("#Main_Body").show();
+      $("#preloader").hide();
+    };
+    hitApi(url,sendData,apisuccess,apierror);
 };

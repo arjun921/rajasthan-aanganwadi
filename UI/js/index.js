@@ -46,91 +46,98 @@ function reINT() {
   }
 }
 
+function loadmp4(data) {
+  p = "<video class=\"responsive-video\" style=\"width:100%; padding-top: 25px;\" controls controlsList=\"nodownload\"><source src=" + link + data.url + " type=\"video/mp4\"></video>"
+  $('#preloader').hide();
+  $('#content').append(p);
+}
+
+function loadmp3(data) {
+  p = "<p></p><audio  controlsList=\"nodownload\" controls=\"controls\" style=\"width:100%; padding-top: 25px;\" id = \"player\"><source src = " + link + data.url + " /></audio>"
+  $('#preloader').hide();
+  $('#content').append(p);
+}
+
+function loadpdf(data) {
+  flink = 'https://docs.google.com/viewer?url=' + link + data.url+"&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
+  p = "<iframe src=\""+flink+"\" id=\"docIframe\" style=\"position:fixed; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;\">Your browser doesn't support iframes</iframe>"
+  $('#content').append(p);
+}
+
 function load_content(contentID) {
   $('#preloader').show();
   $('#navi').html('');
   setTitle("Loading file");
-  $.ajax({
-    url: (link + '/content'),
-    type: 'post',
-    contentType: 'application/json',
-    data: JSON.stringify({
-      "token": Cookies.get('currenttoken'),
-      'fname': contentID
-    }),
-    success: function(data, st, xhr) {
-      $('#content').show();
-      $('#content').html('');
-      setTitle(contentID);
-      ftype = (data.url.split('.').pop());
-      if (ftype == "mp4") {
-        p = "<video class=\"responsive-video\" style=\"width:100%; padding-top: 25px;\" controls controlsList=\"nodownload\"><source src=" + link + data.url + " type=\"video/mp4\"></video>"
-        $('#preloader').hide();
-        $('#content').append(p);
-      } else if (ftype == "mp3"){
-        p = "<p></p><audio  controlsList=\"nodownload\" controls=\"controls\" style=\"width:100%; padding-top: 25px;\" id = \"player\"><source src = " + link + data.url + " /></audio>"
-        $('#preloader').hide();
-        $('#content').append(p);
-      } else if (ftype == "pdf") {
-        flink = 'https://docs.google.com/viewer?url=' + link + data.url+"&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
-        p = "<iframe src=\""+flink+"\" id=\"docIframe\" style=\"position:fixed; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;\">Your browser doesn't support iframes</iframe>"
-        $('#content').append(p);
-      }
-    },
-    error: function(returnval) {
-      if (returnval.status == 404) {
-        var $toastContent = $('<span>File Not Found</span>').add($('<a onclick="window.history.back();"><button class="btn-flat toast-action">OK</button></a>'));
-        Materialize.toast($toastContent, 4000, '', function() {
-          window.history.back();
-        });
-      }
-      else if (returnval.status == 403) {
-        out_changes();
-        var $toastContent = $('<span>Please Login to view.</span>').add($('<a href="../UI/login.html"><button class="btn-flat toast-action">OK</button></a>'));
-        Materialize.toast($toastContent, 4000, '', function() {
-          // window.open("../UI/login.html", "_self")
-        })
-      }
-      else {
-        var $toastContent = $('<span>Please Reset app from Help.</span>').add($('<a onclick="$(\'.button-collapse\').sideNav(\'show\');"><button class="btn-flat toast-action">RESET</button></a>'));
-        Materialize.toast($toastContent, 4000, '', function() {
-          $('.button-collapse').sideNav('show');
-        })
-      }
+  url='/content';
+  sendData = {
+    "token": Cookies.get('currenttoken'),
+    'fname': contentID
+  };
+  apisuccess = function (data,st,xhr) {
+    $('#content').show();
+    $('#content').html('');
+    setTitle(contentID);
+    ftype = (data.url.split('.').pop());
+    console.log(ftype);
+    if (ftype == "mp4") {
+      loadmp4(data)
+    } else if (ftype == "mp3"){
+      loadmp3(data)
+    } else if (ftype == "pdf") {
+      loadpdf(data)
     }
-  });
+  };
+  apierror = function (returnval) {
+    if (returnval.status == 404) {
+      var $toastContent = $('<span>File Not Found</span>').add($('<a onclick="window.history.back();"><button class="btn-flat toast-action">OK</button></a>'));
+      Materialize.toast($toastContent, 4000, '', function() {
+        window.history.back();
+      });
+    }
+    else if (returnval.status == 403) {
+      out_changes();
+      var $toastContent = $('<span>Please Login to view.</span>').add($('<a href="../UI/login.html"><button class="btn-flat toast-action">OK</button></a>'));
+      Materialize.toast($toastContent, 4000, '', function() {
+        window.open("../UI/login.html", "_self")
+      })
+    }
+    else {
+      var $toastContent = $('<span>Please Reset app from Help.</span>').add($('<a onclick="$(\'.button-collapse\').sideNav(\'show\');"><button class="btn-flat toast-action">RESET</button></a>'));
+      Materialize.toast($toastContent, 4000, '', function() {
+        $('.button-collapse').sideNav('show');
+      })
+    }
+  };
+  hitApi(url,sendData,apisuccess,apierror);
 }
 var totalCategories;
 function createNav(id) {
-    $.ajax({
-        url: (link + '/category'),
-        type: 'post',
-        contentType: 'application/json',
-        data: JSON.stringify({'catid': id}),
-        success: function(data, st, xhr) {
-              setTitle(data.title)
-              // listing = da.contains;
-              listing = data.contains;
-              searchInput.oninput = searchCategories;
-              var updateBookCount = function(numCategories) {
-                bookCountBadge.innerText = numCategories + ' items';
-              };
-              updateBookCount(listing.length);
-              totalCategories = listing.length;
-              if (totalCategories>paginateSplit) {
-                $('#pagination').show();
-                start = 0;
-                end = paginateSplit;
-              }
-              else {
-                start= 0;
-                end = totalCategories;
-              }
-              showElement(indexedCategoriesTable);
-              rebuildSearchIndex();
-              updateCategoriesTable(listing);
-            }
-      });
+  url='/category';
+  sendData = {'catid': id}
+  apisuccess = function (data, st, xhr) {
+        setTitle(data.title)
+        // listing = da.contains;
+        listing = data.contains;
+        searchInput.oninput = searchCategories;
+        var updateBookCount = function(numCategories) {
+          bookCountBadge.innerText = numCategories + ' items';
+        };
+        updateBookCount(listing.length);
+        totalCategories = listing.length;
+        if (totalCategories>paginateSplit) {
+          $('#pagination').show();
+          start = 0;
+          end = paginateSplit;
+        }
+        else {
+          start= 0;
+          end = totalCategories;
+        }
+        showElement(indexedCategoriesTable);
+        rebuildSearchIndex();
+        updateCategoriesTable(listing);
+      }
+  hitApi(url,sendData,apisuccess,function () {});
 }
 
 
@@ -206,4 +213,12 @@ function itemStringtoAppend(item) {
 function setTitle(stri) {
   $('#crumbtitle').html(stri);
   $('#crumbtitle2').html(stri);
+}
+
+function createListingElements(initiation,condition,Categories) {
+  for (var i = initiation; i < condition; i++) {
+    item = Categories[i];
+    p = itemStringtoAppend(item);
+    $('#navi').append(p);
+  }
 }

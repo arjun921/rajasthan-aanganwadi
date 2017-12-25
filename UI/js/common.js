@@ -1,4 +1,5 @@
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
+var server = 'https://rajasthan-aanganwadi.herokuapp.com';
 // var link = 'http://192.168.0.2:8000';
 spinid = setInterval(nextSpinner, 60);
 $("#spinner").show();
@@ -71,24 +72,30 @@ function genToken() {
 
 
 
-
-function logout() {
+function hitApi(url,sendData,apisuccess,apierror) {
   $.ajax({
-    url: (link + '/user/logout'),
+    url: (server + url),
     type: 'post',
     contentType: 'application/json',
-    data: JSON.stringify({
-      "token": Cookies.get('currenttoken')
-    }),
-    success: function(data, st, xhr) {
-      if (xhr.status == 200) {
-        Materialize.toast('User Logout Successful', 4000, '', function() {
-
-          window.open("../UI/index.html", "_self")
-        })
-      }
-    }
+    data: JSON.stringify(sendData),
+    success: function(data, st, xhr) { apisuccess(data,st,xhr) },
+    error: function(returnval) { apierror(returnval) }
   });
+}
+
+
+
+function logout() {
+  url='/user/logout';
+  sendData = { "token": Cookies.get('currenttoken')};
+  apisuccess = function (data,st,xhr) {
+    if (xhr.status == 200) {
+      Materialize.toast('User Logout Successful', 4000, '', function() {
+        window.open("../UI/index.html", "_self")
+      })
+    }
+  };
+  hitApi(url,sendData,apisuccess,function () {});
   out_changes();
 }
 
@@ -112,22 +119,17 @@ function checkLogin() {
 
 function loadSideMenu() {
   checkLogin();
-  $.ajax({
-    url: (link + '/category'),
-    type: 'post',
-    contentType: 'application/json',
-    data: JSON.stringify({
-      'catid': '_ROOT_'
-    }),
-    success: function(data, st, xhr) {
-      $('#submen').html('');
-      for (var i = 0; i < data.contains.length; i++) {
-        item = data.contains[i];
-        s = "<li><a class=\"dropdown-button\" " + item.id + "\" onclick=\"$('.button-collapse').sideNav('hide');navClick(this.id);\" id=\"" + item.id + "\">" + item.title + "</a></li>"
-        $('#submen').append(s);
-      }
-    }
-  });
+  // url='/category';
+  // sendData = {'catid': '_ROOT_'}
+  // apisuccess = function (data,st,xhr) {(data, st, xhr) {
+  //   $('#submen').html('');
+  //   for (var i = 0; i < data.contains.length; i++) {
+  //     item = data.contains[i];
+  //     s = "<li><a class=\"dropdown-button\" " + item.id + "\" onclick=\"$('.button-collapse').sideNav('hide');navClick(this.id);\" id=\"" + item.id + "\">" + item.title + "</a></li>"
+  //     $('#submen').append(s);
+  //   }
+  // }
+  // hitApi(url,sendData,apisuccess,function () {});
 }
 
 function out_changes() {
@@ -144,4 +146,11 @@ function out_changes() {
   Cookies.remove('currenttoken');
   Cookies.remove('email');
   Cookies.remove('fname');
+}
+
+function toastWithAction(msg,href,action) {
+  var $toastContent = $('<span>'+msg+'</span>').add($('<a href="'+href+'"><button class="btn-flat toast-action">OK</button></a>'));
+  Materialize.toast($toastContent, 4000, '', function() {
+    action();
+  })
 }

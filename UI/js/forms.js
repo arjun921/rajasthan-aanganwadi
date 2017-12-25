@@ -1,137 +1,117 @@
-var lastElem = "form";
-var formslist = [];
-var data;
-var finaldat;
-
-function create_list() {
-  $.ajax({
-    url: (link + '/form/list'),
-    type: 'post',
-    contentType: 'application/json',
-    data: JSON.stringify({
-      "token": Cookies.get('currenttoken')
-    }),
-    success: function(data, st, xhr) {
-      if (data.forms.length>0) {
-        for (var i = 0; i < data.forms.length; i++) {
-          item = data.forms[i];
-          p = "<a class=\"collection-item\" onclick=\"load_form(this.id)\" id=\""+item.formid+"\">"+item.title+"</a>";
-          $('#form_list').append(p);
-        }
-      }
-      else{
-        p = "<a class=\"collection-item\" href=\"index.html\">No Forms to fill at the moment</a>";
-        $('#form_list').append(p);
-        Materialize.toast('No forms to fill at the moment', 4000,'',function(){window.open("../UI/index.html","_self")})
-      }
-
-    },
-    error: function(returnval) {
-      if (returnval.status!=200) {
-        out_changes();
-        var $toastContent = $('<span>Please Login to view.</span>').add($('<a href="../UI/login.html"><button class="btn-flat toast-action">OK</button></a>'));
-        Materialize.toast($toastContent, 4000,'',function(){window.open("../UI/login.html","_self")})
-      }
-    }
-  });
-}
+var fields_returned;
 
 $(document).ready(function() {
-  //generates forms list
-  create_list();
-  //sets navigation menu profile content
-  
+  fetchForms();
 });
 
-
-function create_newElem(field) {
-
-  if (field.kind == 'text') {
-    s = "<div class=\"input-field col s6\"><input id=" + field.id + " type=\"text\" " + "><label for=" + field.id + ">" + field.label + "</label></div>"
-    // s = "<div class=\"input-field col s6\"><input id=" + field.id + " type=" + field.misc[0].spec + "><label for=" + field.id + ">" + field.label + "</label></div>"
-    $('#' + lastElem).append(s);
-  } else if (field.kind == 'radio') {
-    p = "<p>" + field.label + "</p>"
-    $('#' + lastElem).append(p);
-    for (var i = 0; i < field.misc.length; i++) {
-      va = field.misc[i];
-      prb = "<p>  <input name=" + field.id + " type=\"radio\" id=" + va.subID + " value=" + va.subID + " />  <label for=" + va.subID + ">" + va.subLabel + "</label></p>"
-      $('#' + lastElem).append(prb);
-    }
-  } else if (field.kind == 'checkbox') {
-    p = "<p>" + field.label + "</p>"
-    $('#' + lastElem).append(p);
-    for (var i = 0; i < field.misc.length; i++) {
-      cbv = field.misc[i];
-      s = "<p><input type=\"checkbox\" id=" + cbv.subID + " /><label for=" + cbv.subID + ">" + cbv.subLabel + "</label></p>"
-      $('#' + lastElem).append(s);
-    }
-  } else if (field.kind == 'select') {
-    p = "<p>" + field.label + "</p>"
-    $('#' + lastElem).append(p);
-    s = "<select id=" + field.id + "><option value=\"\" disabled selected>Choose your option</option></select>"
-    $('#' + lastElem).append(s);
-    for (var i = 0; i < field.misc.length; i++) {
-      vs = field.misc[i];
-      op = "<option value=" + vs.subVal + ">" + vs.subLabel + "</option>"
-      $('#' + field.id).append(op);
-    }
-  } else if (field.kind == 'range') {
-    s = "<p>" + field.label + "</p>"
-    $('#' + lastElem).append(s);
-    sp = "<p class=\"range-field\"><input type=\"range\" id=" + field.id + " min=" + field.misc[0].min + " max=" + field.misc[0].max + " /></p>"
-    $('#' + lastElem).append(sp);
-  } else if (field.kind == 'datepicker') {
-    s = "<p>" + field.label + "</p>"
-    $('#' + lastElem).append(s);
-    pic = "<input type=\"text\" class=\"datepicker\" id=" + field.id + " placeholder=\"Choose Date\">"
-    $('#' + lastElem).append(pic);
-  } else if (field.kind == 'timepicker') {
-    s = "<p>" + field.label + "</p>"
-    $('#' + lastElem).append(s);
-    pic = "<input type=\"text\" class=\"timepicker\" id=" + field.id + " placeholder=\"Select Time\">"
-    $('#' + lastElem).append(pic);
+//Helper functions for abstraction
+function TokenPresent() {
+  if (typeof Cookies.get('currenttoken') !== 'undefined') {
+    return true
+  } else {
+    return false
   }
 }
 
-function load_form(formID) {
-  $.ajax({
-    url: (link + '/form'),
-    type: 'post',
-    contentType: 'application/json',
-    data: JSON.stringify({
-      "token": Cookies.get('currenttoken'),
-      'formid': formID
-    }),
-    success: function(data, st, xhr) {
-      data = data;
-      create_form(data);
-    }
-  });
-  //load form based on id requested
-  // return create
+function makeList(data) {
+  for (var i = 0; i < data.forms.length; i++) {
+    item = data.forms[i];
+    p = getHTMLFormsListElement(item)
+    $('#form_list').append(p);
+  }
 }
-//temp variable s, remove in production
 
-//called on click of form name from list.
-function create_form(s) {
-  fields_returned = s;
-  Cookies.set('fields_returned', fields_returned);
+function noFormsToast() {
+  Materialize.toast('No forms to fill at the moment', 4000, '', function() {window.open("../UI/index.html", "_self")})
+}
+
+
+function createLabel(field) {
+  p = getHTMLLabel(field);
+  $('#form').append(p);
+}
+
+function createTxtField(field) {
+  s = getHTMLTxtField(field);
+  $('#form').append(s);
+}
+
+function createRadio(field) {
+  createLabel(field)
+  for (var i = 0; i < field.misc.length; i++) {
+    va = field.misc[i];
+    prb = getHTMLRadioButtons(field, va);
+    $('#form').append(prb);
+  }
+}
+
+function createCB(field) {
+  createLabel(field)
+  for (var i = 0; i < field.misc.length; i++) {
+    cbv = field.misc[i];
+    s = getHTMLCheckBoxes(cbv);
+    $('#form').append(s);
+  }
+}
+
+function createSelect(field) {
+  createLabel(field)
+  s = getHTMLSelect(field);
+  $('#form').append(s);
+  for (var i = 0; i < field.misc.length; i++) {
+    vs = field.misc[i];
+    op = getHTMLSelectFields(vs);
+    $('#' + field.id).append(op);
+  }
+}
+
+function createRange(field) {
+  createLabel(field);
+  sp = getHTMLRange(field);
+  $('#form').append(sp);
+}
+
+function createDatePicker(field) {
+  createLabel(field)
+  pic = getHTMLDatePicker(field);
+  $('#form').append(pic);
+}
+
+function createTimePicker(field) {
+  createLabel(field)
+  pic = getHTMLTimePicker(field);
+  $('#form').append(pic);
+}
+
+function createFormField(field) {
+  if (field.kind == 'text') {
+    createTxtField(field)
+  } else if (field.kind == 'radio') {
+    createRadio(field)
+  } else if (field.kind == 'checkbox') {
+    createCB(field)
+  } else if (field.kind == 'select') {
+    createSelect(field)
+  } else if (field.kind == 'range') {
+    createRange(field)
+  } else if (field.kind == 'datepicker') {
+    createDatePicker(field)
+  } else if (field.kind == 'timepicker') {
+    createTimePicker(field)
+  }
+}
+
+function create_form(fields_returned) {
   //checks if variable is defined
   if (typeof fields_returned !== 'undefined') {
-    //hides all forms list
     $("#form_list").hide();
-    //dynamically generates forms in same view
-    h = "<h5>" + fields_returned.title + "</h5>"
-    $('#' + lastElem).append(h);
-    di = "<div class=\"divider\"></div>"
-    // $('#' + lastElem).append(di);
-    finaldat = fields_returned.fields;
+    h = getHTMLFormTitle(fields_returned);
+    $('#form').append(h);
     for (var i = 0; i < fields_returned.fields.length; i++) {
-      create_newElem(fields_returned.fields[i]);
+      createFormField(fields_returned.fields[i]);
     }
-    but = "<button style=\"padding-bottom:20px;\" class=\"btn waves-effect waves-light\"onclick=\"doSubmit()\">Submit<i class=\"material-icons right\">send</i></button>"
-    $('#' + lastElem).append(but);
+    but = getHTMLFormSubmitButton()
+    $('#form').append(but);
     //enables time picker
     $('.timepicker').pickatime({
       default: 'now', // Set default time: 'now', '1:30AM', '16:30'
@@ -158,70 +138,102 @@ function create_form(s) {
   }
 }
 
+function getFormValues(fields_returned) {
+  data = []
+  for (var i = 0; i < fields_returned.fields.length; i++) {
+    temp = fields_returned.fields[i];
+    id = temp.id;
+    fieldType = temp.kind;
+    val = {}
+    if ((fieldType == 'text') || (fieldType == 'select') || (fieldType == 'range') || (fieldType == 'datepicker') || (fieldType == 'timepicker')) {
+      // if field is text, select, range, datepicker, timepicker then get string value
+      val['id'] = id;
+      val['value'] = document.getElementById(id).value;
+    } else if (fieldType == 'radio') {
+      s = "input[name='" + id + "']:checked"
+      val['id'] = id;
+      if ($(s).val()) {
+        val['value'] = $(s).val();
+      } else {
+        val['value'] = "";
+      }
+    } else if (fieldType == 'checkbox') {
+      cbval = []
+      for (var j = 0; j < temp.misc.length; j++) {
+        myVals = {};
+        myVals["id"] = temp.misc[j].subID;
+        myVals["value"] = String(document.getElementById(temp.misc[j].subID).checked);
+        cbval.push(myVals);
+      }
+      val['id'] = id;
+      val['value'] = "";
+      val['misc'] = cbval;
+    }
+    data.push(val)
+  }
+  return data
+}
 
+// API Begins here ------------------------------------------------------------------>
+function fetchForms() {
+  sendData = { "token": Cookies.get('currenttoken')}
+  apisuccess = function(data, st, xhr) {
+    //if forms available, make list
+    if (data.forms.length > 0) {
+      makeList(data)
+    }
+    else {
+      $('#form_list').append(getHTMLNoFormsToFill);
+      noFormsToast();
+    }
+  }
+  apierror = function(returnval) {
+    if (returnval.status != 200) {
+      out_changes();
+      msg = 'Please Login to view.'
+      href = '../UI/login.html'
+      action = function() {
+        window.open("../UI/login.html", "_self")
+      }
+      toastWithAction(msg, href, action)
+    }
+  }
+  hitApi('/form/list', sendData, apisuccess, apierror);
+}
+
+function load_form(formID) {
+  sendData = {
+    "token": Cookies.get('currenttoken'),
+    'formid': formID
+  }
+  apisuccess = function (data, st, xhr) {
+    create_form(data);
+  }
+  hitApi('/form',sendData,apisuccess,function() {});
+}
 
 
 function doSubmit() {
   fields_returned = JSON.parse(Cookies.get('fields_returned'));
   dataRet = {}
-  data = []
   dataRet['token'] = Cookies.get('currenttoken');
   dataRet['formid'] = fields_returned.formid;
-  for (var i = 0; i < fields_returned.fields.length; i++) {
-    temp = fields_returned.fields[i];
-    id = temp.id;
-    val = {}
-    if ((temp.kind == 'text') || (temp.kind == 'select') || (temp.kind == 'range') || (temp.kind == 'datepicker') || (temp.kind == 'timepicker')) {
-      val['id'] = id;
-      val['value'] = document.getElementById(id).value;
-
-    } else if (temp.kind == 'radio') {
-      s = "input[name='" + id + "']:checked"
-      val['id'] = id;
-      if ($(s).val()) {
-          val['value'] = $(s).val();
+  dataRet['data'] = getFormValues(fields_returned);
+  if (TokenPresent()) {
+    sendData = dataRet
+    apisuccess = function (data, st, xhr) {
+      if (xhr.status == 200) {
+        Materialize.toast('Form Submitted Succesfully', 4000, '', function() {
+          window.open("../UI/index.html", "_self")
+        });
       }
-      else {
-        val['value'] = "";
-      }
-
-
-    } else if (temp.kind == 'checkbox') {
-      te = []
-      for (var j = 0; j < temp.misc.length; j++) {
-        myVals = {};
-        myVals["id"] = temp.misc[j].subID;
-        myVals["value"] = String(document.getElementById(temp.misc[j].subID).checked);
-        te.push(myVals);
-      }
-      val['id'] = id;
-      val['value'] = "";
-      val['misc'] = te;
-
     }
-    data.push(val)
-
-  }
-  dataRet['data'] = data;
-  if (typeof Cookies.get('currenttoken') !== 'undefined') {
-    $.ajax({
-      url: (link + '/form/submit'),
-      type: 'post',
-      contentType: 'application/json',
-      data: JSON.stringify(dataRet),
-      success: function(data, st, xhr) {
-        if (xhr.status==200) {
-          Materialize.toast('Form Submitted Succesfully', 4000,'',function(){window.open("../UI/index.html","_self")});
-        }
-      },
-      error: function(returnval) {
-        if (returnval.status!=200) {
-          // Materialize.toast('Form Submit Failed', 4000,'',function(){window.open("../UI/index.html","_self")});
-          Materialize.toast('Form Submit Failed', 4000);
-        }
+    apierror = function(returnval) {
+      if (returnval.status != 200) {
+        Materialize.toast('Form Submit Failed', 4000);
       }
-    });
+    }
+    hitApi('/form/submit',sendData,apisuccess,apierror);
   }
 }
-
-//new
+// API ends here ------------------------------------------------------------------>
