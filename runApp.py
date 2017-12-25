@@ -4,9 +4,10 @@ from distutils.dir_util import copy_tree
 copy_tree('UI/','Aanganwadi/www/')
 jsList = os.listdir('Aanganwadi/www/js/')
 path = 'Aanganwadi/www/js/'
+print('Editing files..')
 for x in jsList:
     if x != '.DS_Store':
-        print("File {} has been edited.".format(x))
+        # print("File {} has been edited.".format(x))
         open_file = open(path+x,'r')
         s = open_file.read()
         s = s.replace('../UI/','')
@@ -14,6 +15,8 @@ for x in jsList:
         write_file = open(path+x,'w')
         write_file.write(s)
         write_file.close()
+print('Edit complete')
+print('Copying Complete')
 with open("Aanganwadi/config.xml","r+") as f:
     old = f.read()
     start = old.find('adi\" version=\"')+14
@@ -26,6 +29,7 @@ with open("Aanganwadi/config.xml","r+") as f:
     newVersion = '.'.join(newVerArr)
     updated = old.replace(currentVersion,newVersion)
     f.write(updated)
+print('Version updated to v'+newVersion)
 os.system('cd Aanganwadi && phonegap run android')
 os.system('open Aanganwadi/platforms/android/build/outputs/apk')
 os.system('git add .')
