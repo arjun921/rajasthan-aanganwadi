@@ -1,8 +1,8 @@
 var link = 'https://rajasthan-aanganwadi.herokuapp.com';
 var server = 'https://rajasthan-aanganwadi.herokuapp.com';
 // var link = 'http://192.168.0.2:8000';
-spinid = setInterval(nextSpinner, 60);
-$("#spinner").show();
+// spinid = setInterval(nextSpinner, 60);
+// $("#spinner").show();
 $('.tooltipped').tooltip({delay: 50});
 $('.modal').modal({
     dismissible: true, // Modal can be dismissed by clicking outside of the modal
