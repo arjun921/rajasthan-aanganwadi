@@ -20,12 +20,11 @@ with open("Aanganwadi/config.xml","r+") as f:
     end = old.find('\" xmlns=\"h')
     currentVersion = old[start:end]
     versionArr = currentVersion.split('.')
-    verStr = ''.join(versionArr)
-    newVer = int(verStr)+1
-    newVerArr = [x for x in str(newVer)]
-    newVersion = '.'.join(newVerArr)
-    updated = old.replace(currentVersion,newVersion)
-    f.write(updated)
+    versionArr[-2] = str(int(versionArr[-2])+1)
+    newVersion = '.'.join(versionArr)
+    print(currentVersion,newVersion)
+    # updated = old.replace(currentVersion,newVersion)
+    # f.write(updated)
 print('Version updated to v'+newVersion)
 os.system('cd Aanganwadi && phonegap build android --release  -- --keystore="/Users/arjun921/working_directory/rajasthan/key/Aanganwadi.keystore" --storePassword=aanganwadi --alias=aanganwadi')
 os.system('open Aanganwadi/platforms/android/build/outputs/apk')
