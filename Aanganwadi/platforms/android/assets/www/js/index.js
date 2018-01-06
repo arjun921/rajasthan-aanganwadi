@@ -9,7 +9,7 @@ else{start=0;end=totalCategories;}
 showElement(indexedCategoriesTable);rebuildSearchIndex();updateCategoriesTable(listing,data.id);}
 hitApi('/category',sendData,apisuccess,function(){});}
 window.onhashchange=change;window.onpageshow=function(event){reINT();setTitle("Activity");};function change(){$('#content').html('');$('#content').hide();reINT();}
-function reINT(){count=0;showSearch();$('#preloader').hide();$('#searchForm').hide();$('#pagination').hide();if(window.location.href.split('#').length==1){createNav('_ROOT_');}
+function reINT(){count=0;showSearch();enableHamburgerMenu();$('#preloader').hide();$('#searchForm').hide();$('#pagination').hide();if(window.location.href.split('#').length==1){createNav('_ROOT_');}
 else{if(window.location.href.split('#')[1]=="help"){}
 else if(location.hash.split(".").length<2){createNav(window.location.href.split('#')[1]);}
 else{if(Cookies.get('currenttoken')){load_content(window.location.href.split('#')[1]);document.getElementById('docIframe').onload=function(){$('#preloader').hide();}}
@@ -18,7 +18,7 @@ function loadmp4(data){p=getHTMLVideoPlayer(data);$('#preloader').hide();$('#con
 function loadmp3(data){p=getHTMLAudioPlayer(data)
 $('#preloader').hide();$('#content').append(p);}
 function loadpdf(data){flink='https://docs.google.com/viewer?url='+link+data.url+"&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
-p=getHTMLPDFViewer(flink);$('#content').append(p);$('#backFab').addClass('fixed-action-btn-mod');$('#backFab').removeClass('fixed-action-btn');}
+p=getHTMLPDFViewer(flink);$('#content').append(p);}
 function navClick(id){url=window.location.href.split('#')[0]+"#"+id;window.location.href=url;}
 function loadNextList50(){count+=1
 var numTimesPaginate=Math.floor(totalCategories/paginateSplit);if(count<numTimesPaginate){start+=paginateSplit
@@ -41,9 +41,9 @@ else{return""}}
 function setTitle(stri){$('#crumbtitle').html(stri);$('#crumbtitle2').html(stri);}
 function createListingElements(initiation,condition,Categories){for(var i=initiation;i<condition;i++){item=Categories[i];p=getHTMLCategoryFileListElement(item);$('#navi').append(p);}}
 function loadFileByType(data){ftype=(data.url.split('.').pop());if(ftype=="mp4"){loadmp4(data)}else if(ftype=="mp3"){loadmp3(data)}else if(ftype=="pdf"){loadpdf(data)}}
-function hideSearch(){$('#backFab').show();$('#searchFab').hide();}
-function showSearch(){$('#backFab').hide();$('#searchFab').show();}
-function onContentLoad(){$('#preloader').show();$('#navi').html('');setTitle("Loading file");hideSearch();}
+function hideSearch(){$('#searchFab').hide();}
+function showSearch(){$('#searchFab').show();}
+function onContentLoad(){$('#preloader').show();$('#navi').html('');setTitle("Loading file");hideSearch();disableHamburgerMenu();}
 function contentNotFound(){msg='File Not Found'
 href='javascript:history.back()'
 action=function(){window.history.back();}

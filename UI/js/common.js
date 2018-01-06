@@ -16,7 +16,6 @@ $('.modal').modal({
     complete: function() { $('.button-collapse').sideNav('hide'); window.location.href = window.location.href;} // Callback for Modal close
   });
 $("#profile_pic").hide();
-$(".button-collapse").sideNav();
 $('select').material_select();
 loadSideMenu();
 function resetApp() {
@@ -153,4 +152,23 @@ function toastWithAction(msg,href,action) {
   Materialize.toast($toastContent, 4000, '', function() {
     action();
   })
+}
+
+
+function enableHamburgerMenu() {
+  $('#navi').show();
+  $('#hamburgerMenu').addClass('button-collapse');
+  $('#hamburgerMenu').removeClass('hidden');
+  $('#closeMenu').removeClass('button-collapse');
+  $('#closeMenu').addClass('hidden');
+  $('#closeIcon').removeClass('black-text');
+  $(".button-collapse").sideNav();
+}
+
+function disableHamburgerMenu() {
+  $('#navi').hide();
+  $('#closeMenu').addClass('button-collapse');
+  $('#closeMenu').removeClass('hidden');
+  $('#hamburgerMenu').removeClass('button-collapse');
+  $('#hamburgerMenu').addClass('hidden');
 }

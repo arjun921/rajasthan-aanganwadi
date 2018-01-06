@@ -76,6 +76,7 @@ function reINT() {
   //run functions to be run on document ready
   count=0;
   showSearch();
+  enableHamburgerMenu();
   $('#preloader').hide();
   $('#searchForm').hide();
   $('#pagination').hide();
@@ -117,13 +118,14 @@ function loadmp3(data) {
   $('#content').append(p);
 }
 
+
 function loadpdf(data) {
   flink = 'https://docs.google.com/viewer?url=' + link + data.url+"&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
   p = getHTMLPDFViewer(flink);
   $('#content').append(p);
-  $('#backFab').addClass('fixed-action-btn-mod');
-  $('#backFab').removeClass('fixed-action-btn');
 }
+
+
 
 function navClick(id) {
   url = window.location.href.split('#')[0]+"#"+id;
@@ -202,12 +204,12 @@ function loadFileByType(data) {
 }
 
 function hideSearch() {
-  $('#backFab').show();
+  // $('#backFab').show();
   $('#searchFab').hide();
 }
 
 function showSearch() {
-  $('#backFab').hide();
+  // $('#backFab').hide();
   $('#searchFab').show();
 }
 
@@ -216,6 +218,7 @@ function onContentLoad() {
   $('#navi').html('');
   setTitle("Loading file");
   hideSearch();
+  disableHamburgerMenu();
 }
 
 function contentNotFound() {

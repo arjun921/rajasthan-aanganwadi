@@ -1,4 +1,4 @@
-var fields_returned;$(document).ready(function(){fetchForms();});function TokenPresent(){if(typeof Cookies.get('currenttoken')!=='undefined'){return true}else{return false}}
+var fields_returned;$(document).ready(function(){fetchForms();enableHamburgerMenu();});function TokenPresent(){if(typeof Cookies.get('currenttoken')!=='undefined'){return true}else{return false}}
 function makeList(data){for(var i=0;i<data.forms.length;i++){item=data.forms[i];p=getHTMLFormsListElement(item)
 $('#form_list').append(p);}}
 function noFormsToast(){Materialize.toast('No forms to fill at the moment',4000,'',function(){window.open("index.html","_self")})}

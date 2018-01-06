@@ -2,6 +2,7 @@ var fields_returned;
 
 $(document).ready(function() {
   fetchForms();
+  enableHamburgerMenu();
 });
 
 //Helper functions for abstraction
@@ -103,6 +104,7 @@ function createFormField(field) {
 
 function create_form(fields_returned) {
   //checks if variable is defined
+  Cookies.set('fields_returned',fields_returned)
   if (typeof fields_returned !== 'undefined') {
     $("#form_list").hide();
     h = getHTMLFormTitle(fields_returned);

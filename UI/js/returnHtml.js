@@ -61,7 +61,7 @@ function getHTMLAudioPlayer(data) {
 }
 
 function getHTMLPDFViewer(flink) {
-  return "<iframe src=\""+flink+"\" id=\"docIframe\" style=\"position:fixed; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:4;\">Your browser doesn't support iframes</iframe>"
+  return "<iframe onload=\"$('#closeIcon').addClass('black-text');$('#preloader').hide();\" src=\""+flink+"\" class=\"z-depth-4\" id=\"docIframe\" style=\"position:fixed; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden;\">Your browser doesn't support iframes</iframe>"
 }
 
 function getHTMLCategoryFileListElement(item){
@@ -74,9 +74,8 @@ function getHTMLCategoryFileListElement(item){
 }
 
 function getHTMLCategoryUp(){
-  strBegin = " <li class=\"collection-item deep-purple-text\" onclick=\"window.history.go(-1);\"><div>Go Up...<div class=\"secondary-content center\"  style=\"transform: scaleX(-1)\"><i class=\"material-icons\">"
-  icon = "directions"
+  strBegin = " <li class=\"collection-item deep-purple-text\" onclick=\"window.history.go(-1);\"><div>Go Up...<div class=\"secondary-content center\" >"
   strEnd = "</i></div></li>"
-  p = strBegin+icon+strEnd
+  p = strBegin+strEnd
   return p
 }
