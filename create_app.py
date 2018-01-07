@@ -22,7 +22,7 @@ with open("Aanganwadi/config.xml","r+") as f:
     versionArr = currentVersion.split('.')
     versionArr[-2] = str(int(versionArr[-2])+1)
     newVersion = '.'.join(versionArr)
-    print(currentVersion,newVersion)
+    print(currentVersion+"-->"+newVersion)
     updated = old.replace(currentVersion,newVersion)
     f.write(updated)
 print('Version updated to v'+newVersion)

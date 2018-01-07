@@ -16,7 +16,8 @@ pic=getHTMLDatePicker(field);$('#form').append(pic);}
 function createTimePicker(field){createLabel(field)
 pic=getHTMLTimePicker(field);$('#form').append(pic);}
 function createFormField(field){if(field.kind=='text'){createTxtField(field)}else if(field.kind=='radio'){createRadio(field)}else if(field.kind=='checkbox'){createCB(field)}else if(field.kind=='select'){createSelect(field)}else if(field.kind=='range'){createRange(field)}else if(field.kind=='datepicker'){createDatePicker(field)}else if(field.kind=='timepicker'){createTimePicker(field)}}
-function create_form(fields_returned){if(typeof fields_returned!=='undefined'){$("#form_list").hide();h=getHTMLFormTitle(fields_returned);$('#form').append(h);for(var i=0;i<fields_returned.fields.length;i++){createFormField(fields_returned.fields[i]);}
+function create_form(fields_returned){Cookies.set('fields_returned',fields_returned)
+if(typeof fields_returned!=='undefined'){$("#form_list").hide();h=getHTMLFormTitle(fields_returned);$('#form').append(h);for(var i=0;i<fields_returned.fields.length;i++){createFormField(fields_returned.fields[i]);}
 but=getHTMLFormSubmitButton()
 $('#form').append(but);$('.timepicker').pickatime({default:'now',fromnow:0,twelvehour:false,donetext:'OK',cleartext:'Clear',canceltext:'Cancel',autoclose:false,ampmclickable:true,aftershow:function(){}});$('.datepicker').pickadate({selectMonths:true,selectYears:15,today:'Today',clear:'Clear',close:'Ok',closeOnSelect:false});$('select').material_select();}}
 function getFormValues(fields_returned){data=[]

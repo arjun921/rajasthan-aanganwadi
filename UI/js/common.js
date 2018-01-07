@@ -22,7 +22,14 @@ function resetApp() {
   data = Cookies.getJSON();
   for (var key in data) {
     Cookies.remove(key);
+    console.log(key);
   }
+  for(var i=0, len=sessionStorage.length; i<len; i++) {
+    var key = sessionStorage.key(i);
+    var value = sessionStorage[key];
+    sessionStorage.removeItem(key);
+    console.log(key + " => " + value);
+}
   window.location.href = "index.html";
 }
 
