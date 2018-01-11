@@ -107,10 +107,11 @@ def resource(tmpdir, admin):
     p = tmpdir.mkdir("sub").join("hello.txt")
     p.write("content")
     files = {'upload': p.open('rb')}
-    values = {'token': admin['token'], "title": "test", "desc": "testd"}
+    values = {'token': admin['token'], "title": "test", "desc": "testd",
+              "parent": "_ROOT_"}
     r = requests.post(point('/content/create'), files=files, data=values)
     assert r.status_code == 200, r.text
-    yield r.text, p.open('rb'), admin['token']
+    yield r.text, p.open('rb'), admin['token'], values
     # TODO: remove resource
     data = {'token': admin['token'], 'fname': r.text}
     r = requests.post(point('/content/delete'), json=data)
@@ -130,6 +131,17 @@ def category(admin):
 
 
 # TESTS---------------------------------------------------------------
+def test_content_delete_works(admin, resource):
+    fname, f, tok, values = resource
+    data = {"token": admin['token'], "fname": fname}
+    parent = values['parent']
+    r = requests.post(point('/category'), json={'catid': parent})
+    assert r.status_code == 200, r.status_code
+    assert fname in [i['id'] for i in r.json()['contains']], r.json()
+    r = requests.post(point('/content/delete'), json=data)
+    assert r.status_code == 200, r.status_code
+
+
 def test_submission_download_as_csv_works_for_form(form, loggeduser, admin):
     data = {'token': loggeduser['token']}
     # verify it's listed
@@ -251,7 +263,7 @@ def test_category_list_has_entire_tree_walkable():
 
 
 def test_resource_retreival_fails_for_unlogged_user(resource):
-    fname, f, tok = resource
+    fname, f, tok, values = resource
     tok = tok[1:] + 'a'
     data = {'token': tok, 'fname': fname}
     r = requests.post(point('/content'), json=data)
@@ -259,7 +271,7 @@ def test_resource_retreival_fails_for_unlogged_user(resource):
 
 
 def test_resource_retreival_works(resource, loggeduser):
-    fname, f, tok = resource
+    fname, f, tok, values = resource
     tok = loggeduser['token']
     data = {'token': tok, 'fname': fname}
     r = requests.post(point('/content'), json=data)
@@ -270,7 +282,7 @@ def test_resource_retreival_works(resource, loggeduser):
 
 
 def test_resource_list_lists_resources_when_present(resource, loggeduser):
-    fname, f, tok = resource
+    fname, f, tok, values = resource
     data = {'token': loggeduser['token']}
     r = requests.post(point('/content/list'), json=data)
     assert r.status_code == 200, r.text
@@ -282,21 +294,21 @@ def test_resource_list_lists_resources_when_present(resource, loggeduser):
 
 
 def test_resource_delete_fails_for_non_admin(resource, loggeduser):
-    fname, f, tok = resource
+    fname, f, tok, values = resource
     data = {'token': loggeduser['token'], 'fname': fname}
     r = requests.post(point('/content/delete'), json=data)
     assert r.status_code == 403, r.text
 
 
 def test_resource_delete_works(resource):
-    fname, f, tok = resource
+    fname, f, tok, values = resource
     data = {'token': tok, 'fname': fname}
     r = requests.post(point('/content/delete'), json=data)
     assert r.status_code == 200, r.text
 
 
 def test_resource_create_fails_for_invalid_token(resource):
-    fname, f, tok = resource
+    fname, f, tok, values = resource
     files = {'upload': f}
     values = {'token': tok[1:]+'a'}
     r = requests.post(point('/content/create'), files=files, data=values)
@@ -307,7 +319,7 @@ def test_resource_create_fails_for_invalid_token(resource):
 
 
 def test_resource_create_fails_for_non_admin(resource, loggeduser):
-    fname, f, tok = resource
+    fname, f, tok, values = resource
     tok = loggeduser['token']
     files = {'upload': f}
     values = {'token': tok}

@@ -306,10 +306,10 @@ def content_create():
     # add meta
     title = bottle.request.forms.get('title')
     desc = bottle.request.forms.get('description')
-    db.content_meta_create(fname, title, desc)
     # -----------update category to contain this content
     parent = bottle.request.forms.get('parent')
     if parent is not None:
+        db.content_meta_create(fname, title, desc, parent)
         data = db.category_data(parent)
         data['contains'].append(fname)
         db.category_delete(parent)
@@ -349,6 +349,7 @@ def content_delete():
     """
     fname = bottle.request.json['fname']
     # TODO: should clean this path
+    meta = db.content_meta_data(fname)
     utils.del_uploaded(fname)
     meta = db.content_meta_data(fname)
     if meta is not None and 'parent' in meta:
