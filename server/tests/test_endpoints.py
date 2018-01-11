@@ -107,10 +107,11 @@ def resource(tmpdir, admin):
     p = tmpdir.mkdir("sub").join("hello.txt")
     p.write("content")
     files = {'upload': p.open('rb')}
-    values = {'token': admin['token'], "title": "test", "desc": "testd"}
+    values = {'token': admin['token'], "title": "test", "desc": "testd",
+              "parent": "_ROOT_"}
     r = requests.post(point('/content/create'), files=files, data=values)
     assert r.status_code == 200, r.text
-    yield r.text, p.open('rb'), admin['token']
+    yield r.text, p.open('rb'), admin['token'], values
     # TODO: remove resource
     data = {'token': admin['token'], 'fname': r.text}
     r = requests.post(point('/content/delete'), json=data)
@@ -130,6 +131,35 @@ def category(admin):
 
 
 # TESTS---------------------------------------------------------------
+def test_admin_form_submit_does_not_block_his_view_of_form(admin, form):
+    r = requests.post(point('/form/list'), json={"token": admin['token']})
+    assert r.status_code == 200, r.status_code
+    assert r.json()['forms'], r.json()
+    data = {'token': admin['token'],
+            'formid': form['formid'],
+            'data': [
+                {'id': '1', 'value': 'a'},
+                {'id': '2', 'value': 'a'}
+                ]
+            }
+    resp = requests.post(point('/form/submit'), json=data)
+    assert resp.status_code == 200, resp.text
+    r = requests.post(point('/form/list'), json={"token": admin['token']})
+    assert r.status_code == 200, r.status_code
+    assert r.json()['forms'], r.json()
+
+
+def test_content_delete_works(admin, resource):
+    fname, f, tok, values = resource
+    data = {"token": admin['token'], "fname": fname}
+    parent = values['parent']
+    r = requests.post(point('/category'), json={'catid': parent})
+    assert r.status_code == 200, r.status_code
+    assert fname in [i['id'] for i in r.json()['contains']], r.json()
+    r = requests.post(point('/content/delete'), json=data)
+    assert r.status_code == 200, r.status_code
+
+
 def test_submission_download_as_csv_works_for_form(form, loggeduser, admin):
     data = {'token': loggeduser['token']}
     # verify it's listed
@@ -251,7 +281,7 @@ def test_category_list_has_entire_tree_walkable():
 
 
 def test_resource_retreival_fails_for_unlogged_user(resource):
-    fname, f, tok = resource
+    fname, f, tok, values = resource
     tok = tok[1:] + 'a'
     data = {'token': tok, 'fname': fname}
     r = requests.post(point('/content'), json=data)
@@ -259,7 +289,7 @@ def test_resource_retreival_fails_for_unlogged_user(resource):
 
 
 def test_resource_retreival_works(resource, loggeduser):
-    fname, f, tok = resource
+    fname, f, tok, values = resource
     tok = loggeduser['token']
     data = {'token': tok, 'fname': fname}
     r = requests.post(point('/content'), json=data)
@@ -270,7 +300,7 @@ def test_resource_retreival_works(resource, loggeduser):
 
 
 def test_resource_list_lists_resources_when_present(resource, loggeduser):
-    fname, f, tok = resource
+    fname, f, tok, values = resource
     data = {'token': loggeduser['token']}
     r = requests.post(point('/content/list'), json=data)
     assert r.status_code == 200, r.text
@@ -282,21 +312,21 @@ def test_resource_list_lists_resources_when_present(resource, loggeduser):
 
 
 def test_resource_delete_fails_for_non_admin(resource, loggeduser):
-    fname, f, tok = resource
+    fname, f, tok, values = resource
     data = {'token': loggeduser['token'], 'fname': fname}
     r = requests.post(point('/content/delete'), json=data)
     assert r.status_code == 403, r.text
 
 
 def test_resource_delete_works(resource):
-    fname, f, tok = resource
+    fname, f, tok, values = resource
     data = {'token': tok, 'fname': fname}
     r = requests.post(point('/content/delete'), json=data)
     assert r.status_code == 200, r.text
 
 
 def test_resource_create_fails_for_invalid_token(resource):
-    fname, f, tok = resource
+    fname, f, tok, values = resource
     files = {'upload': f}
     values = {'token': tok[1:]+'a'}
     r = requests.post(point('/content/create'), files=files, data=values)
@@ -307,7 +337,7 @@ def test_resource_create_fails_for_invalid_token(resource):
 
 
 def test_resource_create_fails_for_non_admin(resource, loggeduser):
-    fname, f, tok = resource
+    fname, f, tok, values = resource
     tok = loggeduser['token']
     files = {'upload': f}
     values = {'token': tok}
@@ -518,43 +548,35 @@ def test_non_json_failure_on_active_url_list():
         assert resp.status_code == 422, resp.text
 
 
-def test_dummy_file_retreival(loggeduser):
-    token = loggeduser['token']
-    r = requests.post(point('/content/list'),
-                      json={'token': token})
+def test_dummy_file_retreival(resource):
+    fname, f, tok, values = resource
+    r = requests.post(point("/content"), json={"fname": fname,
+                                               "token": tok})
     assert r.status_code == 200, r.text
-    for data in r.json()['contents']:
-        fname = data['fname']
-        json = {'token': token, 'fname': fname}
-        r = requests.post(point('/content'), json=json)
-        r = requests.get(point(r.json()['url']))
+    r = requests.get(point(r.json()['url']))
+    with open(fname, 'wb') as handle:
+        for block in r.iter_content(1024):
+            handle.write(block)
+    if os.path.exists('TEMP/'+fname):
+        assert filecmp.cmp(fname, 'TEMP/'+fname)
+    os.remove(fname)
+
+
+def test_dummy_file_retreival_fails_for_multiple_use_of_link(resource):
+    fname, f, tok, values = resource
+    json = {'token': tok, 'fname': fname}
+    r1 = requests.post(point('/content'), json=json)
+    assert r1.status_code == 200, r1.status_code
+    for part in range(N_USES_FOR_CONTENT_LINK):
+        r = requests.get(point(r1.json()['url']))
         with open(fname, 'wb') as handle:
             for block in r.iter_content(1024):
                 handle.write(block)
         if os.path.exists('TEMP/'+fname):
-            assert filecmp.cmp(fname, 'TEMP/'+fname)
-        os.remove(fname)
-
-
-def test_dummy_file_retreival_fails_for_multiple_use_of_link(loggeduser):
-    token = loggeduser['token']
-    r = requests.post(point('/content/list'),
-                      json={'token': token})
-    assert r.status_code == 200, r.text
-    for data in r.json()['contents']:
-        fname = data['fname']
-        json = {'token': token, 'fname': fname}
-        r1 = requests.post(point('/content'), json=json)
-        for part in range(N_USES_FOR_CONTENT_LINK):
-            r = requests.get(point(r1.json()['url']))
-            with open(fname, 'wb') as handle:
-                for block in r.iter_content(1024):
-                    handle.write(block)
-            if os.path.exists('TEMP/'+fname):
-                assert filecmp.cmp(fname, 'TEMP/'+fname), part
-        r = requests.get(point(r1.json()['url']))
-        assert r.status_code == 404
-        os.remove(fname)
+            assert filecmp.cmp(fname, 'TEMP/'+fname), part
+    r = requests.get(point(r1.json()['url']))
+    assert r.status_code == 404
+    os.remove(fname)
 
 
 def test_cors_on_active_urls():

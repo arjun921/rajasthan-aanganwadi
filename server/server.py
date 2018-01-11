@@ -306,10 +306,10 @@ def content_create():
     # add meta
     title = bottle.request.forms.get('title')
     desc = bottle.request.forms.get('description')
-    db.content_meta_create(fname, title, desc)
     # -----------update category to contain this content
     parent = bottle.request.forms.get('parent')
     if parent is not None:
+        db.content_meta_create(fname, title, desc, parent)
         data = db.category_data(parent)
         data['contains'].append(fname)
         db.category_delete(parent)
@@ -349,6 +349,7 @@ def content_delete():
     """
     fname = bottle.request.json['fname']
     # TODO: should clean this path
+    meta = db.content_meta_data(fname)
     utils.del_uploaded(fname)
     meta = db.content_meta_data(fname)
     if meta is not None and 'parent' in meta:
@@ -458,6 +459,9 @@ def content_retreive():
     fname = bottle.request.json['fname']
     # TODO: clean filename
     # TODO: Permissions
+    meta = db.content_meta_data(fname)
+    if meta is None:
+        raise raisehttp(404, 'Content not found')
     link = db.generate_content_url(fname)
     return {'url': '/static/'+link}
 
@@ -492,7 +496,10 @@ def form_list():
         }
     """
     email = db.token_data(bottle.request.json['token'])['email']
-    forms_done = [f['formid'] for f in db.response_user_list(email)]
+    if not db.is_admin(email):
+        forms_done = [f['formid'] for f in db.response_user_list(email)]
+    else:
+        forms_done = []
     x = [i for i in db.form_list()
          if i['formid'] not in forms_done]
     return {'forms': x}

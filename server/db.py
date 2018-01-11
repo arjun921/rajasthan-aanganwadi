@@ -331,11 +331,12 @@ class DB:
         if u:
             return u[0]
 
-    def content_meta_create(self, fname, title, desc):
+    def content_meta_create(self, fname, title, desc, parent):
         "Add meta about the content"
         data = {'fname': fname,
                 'title': title,
-                'desc': desc}
+                'desc': desc,
+                'parent': parent}
         if not self.dev:  # NOTE: remove this
             self.client.aang['content_meta'].insert_one(data)
         else:
