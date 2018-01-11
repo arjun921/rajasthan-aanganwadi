@@ -530,43 +530,35 @@ def test_non_json_failure_on_active_url_list():
         assert resp.status_code == 422, resp.text
 
 
-def test_dummy_file_retreival(loggeduser):
-    token = loggeduser['token']
-    r = requests.post(point('/content/list'),
-                      json={'token': token})
+def test_dummy_file_retreival(resource):
+    fname, f, tok, values = resource
+    r = requests.post(point("/content"), json={"fname": fname,
+                                               "token": tok})
     assert r.status_code == 200, r.text
-    for data in r.json()['contents']:
-        fname = data['fname']
-        json = {'token': token, 'fname': fname}
-        r = requests.post(point('/content'), json=json)
-        r = requests.get(point(r.json()['url']))
+    r = requests.get(point(r.json()['url']))
+    with open(fname, 'wb') as handle:
+        for block in r.iter_content(1024):
+            handle.write(block)
+    if os.path.exists('TEMP/'+fname):
+        assert filecmp.cmp(fname, 'TEMP/'+fname)
+    os.remove(fname)
+
+
+def test_dummy_file_retreival_fails_for_multiple_use_of_link(resource):
+    fname, f, tok, values = resource
+    json = {'token': tok, 'fname': fname}
+    r1 = requests.post(point('/content'), json=json)
+    assert r1.status_code == 200, r1.status_code
+    for part in range(N_USES_FOR_CONTENT_LINK):
+        r = requests.get(point(r1.json()['url']))
         with open(fname, 'wb') as handle:
             for block in r.iter_content(1024):
                 handle.write(block)
         if os.path.exists('TEMP/'+fname):
-            assert filecmp.cmp(fname, 'TEMP/'+fname)
-        os.remove(fname)
-
-
-def test_dummy_file_retreival_fails_for_multiple_use_of_link(loggeduser):
-    token = loggeduser['token']
-    r = requests.post(point('/content/list'),
-                      json={'token': token})
-    assert r.status_code == 200, r.text
-    for data in r.json()['contents']:
-        fname = data['fname']
-        json = {'token': token, 'fname': fname}
-        r1 = requests.post(point('/content'), json=json)
-        for part in range(N_USES_FOR_CONTENT_LINK):
-            r = requests.get(point(r1.json()['url']))
-            with open(fname, 'wb') as handle:
-                for block in r.iter_content(1024):
-                    handle.write(block)
-            if os.path.exists('TEMP/'+fname):
-                assert filecmp.cmp(fname, 'TEMP/'+fname), part
-        r = requests.get(point(r1.json()['url']))
-        assert r.status_code == 404
-        os.remove(fname)
+            assert filecmp.cmp(fname, 'TEMP/'+fname), part
+    r = requests.get(point(r1.json()['url']))
+    assert r.status_code == 404
+    os.remove(fname)
 
 
 def test_cors_on_active_urls():

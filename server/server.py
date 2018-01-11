@@ -459,6 +459,9 @@ def content_retreive():
     fname = bottle.request.json['fname']
     # TODO: clean filename
     # TODO: Permissions
+    meta = db.content_meta_data(fname)
+    if meta is None:
+        raise raisehttp(404, 'Content not found')
     link = db.generate_content_url(fname)
     return {'url': '/static/'+link}
 
