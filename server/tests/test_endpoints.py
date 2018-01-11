@@ -131,6 +131,24 @@ def category(admin):
 
 
 # TESTS---------------------------------------------------------------
+def test_admin_form_submit_does_not_block_his_view_of_form(admin, form):
+    r = requests.post(point('/form/list'), json={"token": admin['token']})
+    assert r.status_code == 200, r.status_code
+    assert r.json()['forms'], r.json()
+    data = {'token': admin['token'],
+            'formid': form['formid'],
+            'data': [
+                {'id': '1', 'value': 'a'},
+                {'id': '2', 'value': 'a'}
+                ]
+            }
+    resp = requests.post(point('/form/submit'), json=data)
+    assert resp.status_code == 200, resp.text
+    r = requests.post(point('/form/list'), json={"token": admin['token']})
+    assert r.status_code == 200, r.status_code
+    assert r.json()['forms'], r.json()
+
+
 def test_content_delete_works(admin, resource):
     fname, f, tok, values = resource
     data = {"token": admin['token'], "fname": fname}

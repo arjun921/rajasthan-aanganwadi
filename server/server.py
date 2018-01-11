@@ -496,7 +496,10 @@ def form_list():
         }
     """
     email = db.token_data(bottle.request.json['token'])['email']
-    forms_done = [f['formid'] for f in db.response_user_list(email)]
+    if not db.is_admin(email):
+        forms_done = [f['formid'] for f in db.response_user_list(email)]
+    else:
+        forms_done = []
     x = [i for i in db.form_list()
          if i['formid'] not in forms_done]
     return {'forms': x}
