@@ -13,7 +13,7 @@ function load_content(contentID) {
     console.log(data.url);
     $('#content').show();
     $('#content').html('');
-    setTitle(contentID);
+    setTitle(data.meta.title);
     loadFileByType(data);
   };
   apierror = function(returnval) {
@@ -28,7 +28,9 @@ function load_content(contentID) {
   hitApi('/content', sendData, apisuccess, apierror);
 } //load_content ends -------->
 
-function createNavSuccess(listing, id) {
+function createNavSuccess(data, id) {
+  setTitle(data.title)
+  listing = data.contains;
   searchInput.oninput = searchCategories;
   var updateBookCount = function(numCategories) {
     bookCountBadge.innerText = numCategories + ' items';
@@ -54,24 +56,28 @@ function createNav(id) {
   }
   apisuccess = function(data, st, xhr) {
     console.log("create Nav success being called");
-    setTitle(data.title)
-    listing = data.contains;
     console.log(data.id);
-    // Cookies.set(id, listing);
-    sessionStorage.setItem(id, JSON.stringify(listing));
-    // console.log(id);
-    // console.log(listing);
+    sessionStorage.setItem(id, JSON.stringify(data));
     Cookies.set('CurrPage', data.id);
-    createNavSuccess(listing, data.id)
+    createNavSuccess(data, data.id)
   }
+  apierror = function(returnval) {
+    if (returnval.status == 404) {
+      serverDown()
+    } else if (returnval.status == 403) {
+      contentNoLogin()
+    } else {
+      contentUnkError()
+    }
+  };
   if (sessionStorage.getItem(id)) {
     console.log("If Called");
-    listing = (JSON.parse(sessionStorage.getItem(id)));
-    createNavSuccess(listing, id)
+    data = (JSON.parse(sessionStorage.getItem(id)));
+    createNavSuccess(data, id)
     }
     else {
       console.log("Else called");
-      hitApi('/category', sendData, apisuccess, function() {});
+      hitApi('/category', sendData, apisuccess, apierror);
     }
   } //create Nav ends --------------------------------------------------->
 
@@ -155,7 +161,7 @@ function createNav(id) {
       start += paginateSplit
       end = start + (totalCategories - start);
     }
-    updateCategoriesTable(listing);
+    updateCategoriesTable(data);
     window.scrollTo(0, 100000);
   }
 
@@ -169,7 +175,7 @@ function createNav(id) {
       start -= paginateSplit
       end = start + (totalCategories - start);
     }
-    updateCategoriesTable(listing);
+    updateCategoriesTable(data);
     window.scrollTo(0, 100000);
   }
 
@@ -242,6 +248,17 @@ function createNav(id) {
     href = 'javascript:history.back()'
     action = function() {
       window.history.back();
+    }
+    toastWithAction(msg, href, action)
+  }
+
+  function serverDown() {
+    msg = 'Category unavailable'
+    href = 'javascript:history.back();clearInterval(spinid);$("#spinner").hide();'
+    action = function() {
+      window.history.back();
+      clearInterval(spinid);
+      $("#spinner").hide();
     }
     toastWithAction(msg, href, action)
   }
