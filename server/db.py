@@ -251,7 +251,8 @@ class DB:
     def content_meta_data(self, fname):
         "Returns meta about a file"
         if not self.dev:  # NOTE: remove this
-            f = list(self.client.aang['content_meta'].find({'fname': fname}))
+            f = list(self.client.aang['content_meta'].find({'fname': fname},
+                                                           projection={"_id": False}))
         else:
             f = [i for i in self.content_meta if i['fname'] == fname]
         if len(f) > 0:
