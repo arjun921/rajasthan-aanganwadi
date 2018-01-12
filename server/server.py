@@ -463,7 +463,8 @@ def content_retreive():
     if meta is None:
         raise raisehttp(404, 'Content not found')
     link = db.generate_content_url(fname)
-    return {'url': '/static/'+link}
+    return {'url': '/static/'+link,
+            'meta': meta}
 
 
 # FORM ROUTES #########################################
