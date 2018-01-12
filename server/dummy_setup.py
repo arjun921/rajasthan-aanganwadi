@@ -2,6 +2,7 @@ import requests
 from tqdm import tqdm
 
 
+# root = 'https://rajasthan-aanganwadi.herokuapp.com'
 root = 'http://localhost:8000'
 
 
