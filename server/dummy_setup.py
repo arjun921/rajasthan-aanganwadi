@@ -1,4 +1,5 @@
 import requests
+from tqdm import tqdm
 
 
 root = 'http://localhost:8000'
@@ -10,9 +11,11 @@ def hit(api, json):
     return resp
 
 
+print('Logging in admin')
 admin = {'email': 'arjoonn.94@gmail.com',
          'pwd': '2328904461', 'token': '1'*100}
 assert hit('/user/login', json=admin).status_code == 200
+print('Done')
 
 
 # ###############################FORMS #######################
@@ -62,9 +65,11 @@ data = {'formid': 'Dummy Form',
                               'max': 10}]},
                     ],
         }
+print('Creating dummy form')
 data['token'] = admin['token']
 r = hit('/form/create', data)
 assert r.status_code == 200
+print('Done')
 # ###############################CATEGORIES #######################
 
 first_level = ['Supplementary Nutrition', 'Early Childhood Education',
@@ -81,9 +86,9 @@ def makecat(id, title, contains):
 
 
 root_contains = []
-for i, one in enumerate(first_level):
+for i, one in enumerate(tqdm(first_level)):
     f_contains = []
-    for j, two in enumerate(second_level):
+    for j, two in enumerate(tqdm(second_level)):
         id = '_' + str(i) + '_' + str(j)
         makecat(id, two, [])
         if j == 0:
@@ -102,5 +107,7 @@ for i, one in enumerate(first_level):
     makecat(id, one, f_contains)
     root_contains.append(id)
 
+print('Logging out')
 makecat("_ROOT_", "Home", root_contains)
 assert hit('/user/logout', json=admin).status_code == 200
+print('Done')
