@@ -6,7 +6,7 @@ import requests
 
 
 # CONFIG ------------------
-N_USES_FOR_CONTENT_LINK = 6
+N_USES_FOR_CONTENT_LINK = 200
 
 if os.environ.get('TEST_HEROKU'):
     root = 'https://rajasthan-aanganwadi.herokuapp.com'
