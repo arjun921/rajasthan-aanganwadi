@@ -261,7 +261,7 @@ class DB:
         if len(f) > 0:
             return f[0]
 
-    def generate_content_url(self, fname, count=5):
+    def generate_content_url(self, fname, count=100):
         "Generate a one time download link for the file"
         newlink = randstring(50) + '.' + fname.split('.')[-1]
         data = {'fname': fname, 'newlink': newlink, 'count': count}
