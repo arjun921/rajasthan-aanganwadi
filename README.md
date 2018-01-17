@@ -12,6 +12,7 @@ App and server code for Aanganwadi. Relevand documents like sprint reports can b
 Working API
 ----------
 
+- `/user`
 - `/user/login`
 - `/user/logout`
 - `/user/create`
