@@ -21,7 +21,7 @@ function sign_up() {
     var pwdval = document.getElementById("password_confirm").value;
     var addrval = document.getElementById("addr").value;
     var phval = document.getElementById("ph").value;
-    pwd_hash = murmurhash3_32_gc(phval, 124);
+    pwd_hash = murmurhash3_32_gc(pwdval, 24);
     var tokval = genToken();
     url='/user/create';
     sendData = {
@@ -35,7 +35,13 @@ function sign_up() {
     console.log(sendData);
     apisuccess = function (data, st, xhr) {
         if (xhr.status == 200) {
-            Materialize.toast("Sign-Up Success", 4000);
+            // Materialize.toast("Sign-Up Success", 4000);
+            msg = 'Sign-Up Success'
+            href = '../UI/login.html'
+            function action() {
+              openLoginPage()
+            }
+            toastWithAction(msg,href,action)
         }
         // else {
         //     // Materialize.toast(xhr.status, 4000);

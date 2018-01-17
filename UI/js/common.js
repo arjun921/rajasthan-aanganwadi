@@ -1,5 +1,5 @@
 var server = 'https://rajasthan-aanganwadi.herokuapp.com';
-var server = 'http://192.168.225.168.168/'
+// var server = 'https://fe2cc24a.ngrok.io'
 // spinid = setInterval(nextSpinner, 60);
 // $("#spinner").show();
 $('.tooltipped').tooltip({delay: 50});
