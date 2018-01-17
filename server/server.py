@@ -20,7 +20,7 @@ import pandas as pd
 from functools import wraps
 from datetime import datetime
 from jsonschema import validate
-__version__ = (0, 0, 17)
+__version__ = (0, 0, 18)
 
 
 app = bottle.Bottle()
