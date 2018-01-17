@@ -193,9 +193,6 @@ function createNav(id) {
       return "picture_as_pdf"
     } else if (fileType == "MP4") {
       return "video_library"
-    } else if (fileType == "UP") {
-      console.log("history");
-      return "history"
     } else {
       return ""
     }
