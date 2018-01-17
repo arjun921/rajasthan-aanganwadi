@@ -168,6 +168,40 @@ def user_login():
         raise raisehttp(401, body='wrong credentials')
 
 
+@app.post("/user")
+@json_validate
+@login_required
+def user_details():
+    """
+    /user returns user details if you are admin or the user in question
+    ----------
+
+        {
+            "type"      : "object",
+            "properties":   {
+                                "email" : {"type": "string",
+                                            "format": "email"},
+                                "token" : { "type": "string",
+                                            "minLength": 100,
+                                            "maxLength": 100
+                                          }
+                            },
+            "required": ["token", "email"]
+        }
+    ----------
+    return {"email": <>, "name": <>, "address": <>, "mobile": <>}
+    """
+    json = bottle.request.json
+    token, req_email = json['token'], json['email']
+    email = db.token_data(token)['email']
+    data = db.user_info(req_email)
+    data.pop('pwd')
+    if db.is_admin(email) or req_email == email:
+        return data
+    else:
+        raise raisehttp(403, body='Only Admin or self can access')
+
+
 @app.post('/user/delete')
 @json_validate
 @login_required
