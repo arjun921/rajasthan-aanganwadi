@@ -510,16 +510,15 @@ def test_user_create_works(admin):
     resp = requests.post(point('/user/delete'), json=data)
 
 
-def test_user_create_fails_for_non_admin(admin, loggeduser):
+def test_user_create_does_not_fail_for_non_admin(admin, loggeduser):
     # create a user
-    data = {'email': 'a@g.c2',
+    data = {'email': 'a2@g.c2',
             'address': 'a',
             'name': 'a',
             'mobile': '1234567890',
-            'pwd': '2328904461',
-            'token': loggeduser['token']}
+            'pwd': '2328904461'}
     resp = requests.post(point('/user/create'), json=data)
-    assert resp.status_code == 403, resp.text
+    assert resp.status_code == 200, resp.text
 
 
 def test_user_logout_works(loggeduser):

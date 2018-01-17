@@ -266,8 +266,6 @@ def user_logout():
 
 @app.post('/user/create')
 @json_validate
-@login_required
-@admin_only
 def user_create():
     """
     POST /user/create
@@ -277,9 +275,6 @@ def user_create():
         {
             "type"      :   "object",
             "properties":   {
-                                "token"     : {"type": "string",
-                                               "minLength": 100,
-                                               "maxLength": 100},
                                 "email"     :   {
                                                     "type": "string",
                                                     "format": "email"
@@ -290,7 +285,7 @@ def user_create():
                                 "pwd"       : {"type": "string"}
                             },
             "required"  : ["email", "address", "name",
-                           "mobile", "pwd", "token"]
+                           "mobile", "pwd"]
         }
 
     ----------
@@ -301,7 +296,6 @@ def user_create():
     if db.user_present(json['email']):
         raise raisehttp(422, body='user exists')
     data = dict(json)
-    data.pop('token')
     db.user_insert(data)
     return 'OK'
 
