@@ -28,7 +28,7 @@ updateCategoriesTable(data);window.scrollTo(0,100000);}
 function getFileType(item){fileType=item.id.split(".")[1];if(fileType){return fileType.toUpperCase();}}
 function getIcon(fileType){if(fileType=="MP3"){return["audiotrack",]}else if(fileType=="PDF"){return"picture_as_pdf"}else if(fileType=="MP4"){return"video_library"}else if(fileType=="UP"){console.log("history");return"history"}else{return""}}
 function setTitle(stri){$('#crumbtitle').html(stri);$('#crumbtitle2').html(stri);}
-function createListingElements(initiation,condition,Categories){for(var i=initiation;i<condition;i++){item=Categories[i];p=getHTMLCategoryFileListElement(item);$('#navi').append(p);}}
+function createListingElements(initiation,condition,Categories){for(var i=initiation;i<condition;i++){item=Categories[i];console.log(item);p=getHTMLCategoryFileListElement(item);$('#navi').append(p);}}
 function loadFileByType(data){ftype=(data.url.split('.').pop());if(ftype=="mp4"){loadmp4(data)}else if(ftype=="mp3"){loadmp3(data)}else if(ftype=="pdf"){loadpdf(data)}}
 function hideSearch(){$('#searchFab').hide();}
 function showSearch(){$('#searchFab').show();}

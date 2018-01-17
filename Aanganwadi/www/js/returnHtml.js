@@ -18,7 +18,8 @@ function getHTMLCategoryFileListElement(item){fileType=getFileType(item);strBegi
 icon=getIcon(fileType);strEnd="</i></div></li>"
 p=strBegin+icon+strEnd
 return p}
-function getHTMLCategoryUp(){strBegin=" <li class=\"collection-item deep-purple-text\" onclick=\"window.history.go(-1);\"><div>Go Up...<div class=\"secondary-content center\" >"
+function getHTMLCategoryUp(){console.log("Up called");strBegin=" <li class=\"collection-item deep-purple-text\" onclick=\"window.history.go(-1);\"><div>Go Up...<div class=\"secondary-content center\" >"
+icon="<i class=\"material-icons\">chevron_left"
 strEnd="</i></div></li>"
-p=strBegin+strEnd
+p=strBegin+icon+strEnd
 return p}

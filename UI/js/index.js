@@ -209,6 +209,7 @@ function createNav(id) {
   function createListingElements(initiation, condition, Categories) {
     for (var i = initiation; i < condition; i++) {
       item = Categories[i];
+      console.log(item);
       p = getHTMLCategoryFileListElement(item);
       $('#navi').append(p);
     }
