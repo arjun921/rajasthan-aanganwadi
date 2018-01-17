@@ -1,6 +1,4 @@
-var link = 'https://rajasthan-aanganwadi.herokuapp.com';
 var server = 'https://rajasthan-aanganwadi.herokuapp.com';
-// var link = 'http://192.168.0.2:8000';
 // spinid = setInterval(nextSpinner, 60);
 // $("#spinner").show();
 $('.tooltipped').tooltip({delay: 50});

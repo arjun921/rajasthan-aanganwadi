@@ -1,4 +1,3 @@
-var link = 'https://rajasthan-aanganwadi.herokuapp.com';
 var currenttoken = '';
 //runs functions to be executed at page load
 $(document).ready(function() {

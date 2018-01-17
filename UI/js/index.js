@@ -139,7 +139,7 @@ function createNav(id) {
 
 
   function loadpdf(data) {
-    flink = 'https://docs.google.com/viewer?url=' + link + data.url + "&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
+    flink = 'https://docs.google.com/viewer?url=' + server + data.url + "&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
     p = getHTMLPDFViewer(flink);
     $('#content').append(p);
   }
