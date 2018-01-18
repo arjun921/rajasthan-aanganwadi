@@ -17,6 +17,7 @@ class DB:
     between using mongo and a RAM db
     """
     def __init__(self):
+        # NOTE: Production will be using Mongo so no need for this
         data = dict(email='arjoonn.94@gmail.com',
                     pwd='2328904461',
                     name='arjoonn',

@@ -485,8 +485,6 @@ def content_retreive():
     returns the relevant file if permissions allow
     """
     fname = bottle.request.json['fname']
-    # TODO: clean filename
-    # TODO: Permissions
     meta = db.content_meta_data(fname)
     if meta is None:
         raise raisehttp(404, 'Content not found')
@@ -529,6 +527,7 @@ def form_list():
         forms_done = [f['formid'] for f in db.response_user_list(email)]
     else:
         forms_done = []
+    # NOTE: This filtering might be better performed in DB
     x = [i for i in db.form_list()
          if i['formid'] not in forms_done]
     return {'forms': x}
@@ -570,7 +569,6 @@ def form_formid():
                             ]
         }
     """
-    # TODO: user authorization
     formid = bottle.request.json['formid']
     if db.form_present(formid):
         x = db.form_data(formid)

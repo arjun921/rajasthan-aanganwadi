@@ -59,3 +59,9 @@ NOTES
 
 - To avoid `https strip` attacks, all endpoints never send sensitive data to the client.
 - The server must be set up with `https`
+
+
+DEFAULTS
+--------
+
+Default DB entries need to be inserted with `python dummy_setup.py`.
