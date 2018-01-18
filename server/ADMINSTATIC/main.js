@@ -580,10 +580,5 @@ $( document ).ready(function() {
     // ========================================= CALLS
     cleanSlate();
     $("#logout_button").hide();
-    // TODO: remove this
-    //$("#login_pwd").val("hash");
-    //$("#login_email").val("arjoonn.94@gmail.com");
-    //$("#login_button").click();
-    //$("#contenttab").click();
-
+    $("#contenttab").click();
 }); // DOCUMENT READY
