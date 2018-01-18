@@ -1,5 +1,5 @@
 import os
-import random
+import secrets
 from pymongo import MongoClient
 
 
@@ -8,7 +8,7 @@ def randstring(n):
     Random string of length n
     """
     alpha = 'abcdefghijklmnopqrstuvwxyz1234567890'
-    return ''.join(random.choice(alpha) for _ in range(n))
+    return ''.join(secrets.choice(alpha) for _ in range(n))
 
 
 class DB:
