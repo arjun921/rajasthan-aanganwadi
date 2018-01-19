@@ -31,7 +31,7 @@
       <!-- <span class="breadcrumb">Activity Bank</span> -->
       <!-- <a class="brand-logo left-align">Logo</a> -->
       <a href="#" data-activates="mobile-demo" id="hamburgerMenu"><i class="material-icons">menu</i></a>
-      <a id="closeMenu" onclick='window.history.go(-1);'><i id="closeIcon" class="material-icons" style="transform: rotate(45deg); font-size: 200%;" >add_circle</i></a>
+      <a style="z-index: 10;" id="closeMenu" onclick='window.history.go(-1);'><i id="closeIcon" class="material-icons" style="transform: rotate(45deg); font-size: 200%;" >add_circle</i></a>
       <ul class="right hide-on-med-and-down">
 
       </ul>
@@ -96,7 +96,7 @@
     </div>
 
     <div class="" id="content">
-      <div id="preloader">
+      <div id="preloader" class="z-depth-0">
         <div class="row">
           <div class="col s5">
           </div>
@@ -193,7 +193,7 @@
     <!-- <a id="backFab" onclick="window.history.go(-1);"  onclick="window.history.go(-1);" class="btn-floating btn-large red z-depth-5">
       <i class="large material-icons">arrow_back</i>
     </a> -->
-    <a id="searchFab" onclick="$('#searchForm').toggle();document.getElementById('searchInput').focus();" class="btn-floating btn-large red z-depth-5">
+    <a id="searchFab" onclick="searchClickedFunction()" class="btn-floating btn-large red z-depth-5">
       <i class="large material-icons">search</i>
     </a>
   </div>

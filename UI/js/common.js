@@ -178,3 +178,15 @@ function disableHamburgerMenu() {
   $('#hamburgerMenu').removeClass('button-collapse');
   $('#hamburgerMenu').addClass('hidden');
 }
+
+
+function searchClickedFunction() {
+  $('#searchForm').toggle();
+  document.getElementById('searchInput').focus();
+  // if (Cookies.get('CurrPage') != "_ROOT_" && !$('#searchForm').is(':visible')) {
+  //     s = getHTMLCategoryUp();
+  //     $('#navi').append(s);
+  // }
+  updateBookCount(listing.length);
+  updateCategoriesTable(listing,Cookies.get('CurrPage'));
+}
