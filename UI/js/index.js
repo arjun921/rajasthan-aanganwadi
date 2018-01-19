@@ -281,7 +281,7 @@ function createNav(id) {
   }
 
 
-function categoryListing(Categories,parID) {
+function categoryListing(Categories,parID) {//this function is called in searchScript.js
   var tokens = search.tokenizer.tokenize(searchInput.value);
   var pages =  Math.floor(totalCategories/paginateSplit);
   var remainder = (totalCategories/paginateSplit)-pages;
