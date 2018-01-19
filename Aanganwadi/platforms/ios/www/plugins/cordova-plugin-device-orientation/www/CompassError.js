@@ -1,4 +1,6 @@
+cordova.define("cordova-plugin-device-orientation.CompassError", function(require, exports, module) {
 /*
+ *
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -16,24 +18,20 @@
  * specific language governing permissions and limitations
  * under the License.
  *
+*/
+
+/**
+ *  CompassError.
+ *  An error code assigned by an implementation when an error has occurred
+ * @constructor
  */
-
-function notSupported() {
-    console.log('StatusBar is not supported');
-    return false;
-}
-
-module.exports = {
-    isVisible: false,
-    styleBlackTranslucent:notSupported,
-    styleDefault:notSupported,
-    styleLightContent:notSupported,
-    styleBlackOpaque:notSupported,
-    overlaysWebView:notSupported,
-    styleLightContect: notSupported,
-    backgroundColorByName: notSupported,
-    backgroundColorByHexString: notSupported,
-    hide: notSupported,
-    show: notSupported
+var CompassError = function(err) {
+    this.code = (err !== undefined ? err : null);
 };
 
+CompassError.COMPASS_INTERNAL_ERR = 0;
+CompassError.COMPASS_NOT_SUPPORTED = 20;
+
+module.exports = CompassError;
+
+});

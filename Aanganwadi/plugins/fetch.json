@@ -146,7 +146,7 @@
     "cordova-plugin-statusbar": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-statusbar@~2.1.2"
+            "id": "https://github.com/apache/cordova-plugin-statusbar.git"
         },
         "is_top_level": true,
         "variables": {}

@@ -1,3 +1,7 @@
+---
+title: Statusbar
+description: Control the device status bar.
+---
 <!---
 # license: Licensed to the Apache Software Foundation (ASF) under one
 #         or more contributor license agreements.  See the NOTICE file
@@ -17,7 +21,9 @@
 #         under the License.
 -->
 
-[![Build Status](https://travis-ci.org/apache/cordova-plugin-statusbar.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-statusbar)
+|AppVeyor|Travis CI|
+|:-:|:-:|
+|[![Build status](https://ci.appveyor.com/api/projects/status/github/apache/cordova-plugin-statusbar?branch=master)](https://ci.appveyor.com/project/ApacheSoftwareFoundation/cordova-plugin-statusbar)|[![Build Status](https://travis-ci.org/apache/cordova-plugin-statusbar.svg?branch=master)](https://travis-ci.org/apache/cordova-plugin-statusbar)|
 
 # cordova-plugin-statusbar
 
@@ -26,7 +32,7 @@ StatusBar
 
 > The `StatusBar` object provides some functions to customize the iOS and Android StatusBar.
 
-:warning: Report issues on the [Apache Cordova issue tracker](https://issues.apache.org/jira/issues/?jql=project%20%3D%20CB%20AND%20status%20in%20%28Open%2C%20%22In%20Progress%22%2C%20Reopened%29%20AND%20resolution%20%3D%20Unresolved%20AND%20component%20%3D%20%22Plugin%20Statusbar%22%20ORDER%20BY%20priority%20DESC%2C%20summary%20ASC%2C%20updatedDate%20DESC)
+:warning: Report issues on the [Apache Cordova issue tracker](https://issues.apache.org/jira/issues/?jql=project%20%3D%20CB%20AND%20status%20in%20(Open%2C%20%22In%20Progress%22%2C%20Reopened)%20AND%20resolution%20%3D%20Unresolved%20AND%20component%20%3D%20%22cordova-plugin-statusbar%22%20ORDER%20BY%20priority%20DESC%2C%20summary%20ASC%2C%20updatedDate%20DESC)
 
 
 ## Installation
@@ -58,6 +64,10 @@ Preferences
 - __StatusBarStyle__ (status bar style, defaults to lightcontent). On iOS 7, set the status bar style. Available options default, lightcontent, blacktranslucent, blackopaque.
 
         <preference name="StatusBarStyle" value="lightcontent" />
+
+- __StatusBarDefaultScrollToTop__ (boolean, defaults to false). On iOS 7, allows the Cordova WebView to use default scroll-to-top behavior. Defaults to false so you can listen to the "statusTap" event (described below) and customize the behavior instead.
+
+        <preference name="StatusBarDefaultScrollToTop" value="false" />
 
 ### Android Quirks
 The Android 5+ guidelines specify using a different color for the statusbar than your main app color (unlike the uniform statusbar color of many iOS 7+ apps), so you may want to set the statusbar color at runtime instead via `StatusBar.backgroundColorByHexString` or `StatusBar.backgroundColorByName`. One way to do that would be:
@@ -107,14 +117,10 @@ Properties
 
 - StatusBar.isVisible
 
-Permissions
------------
+Events
+------
 
-#### config.xml
-
-            <feature name="StatusBar">
-                <param name="ios-package" value="CDVStatusBar" onload="true" />
-            </feature>
+- statusTap
 
 StatusBar.overlaysWebView
 =================
@@ -152,6 +158,7 @@ Supported Platforms
 -------------------
 
 - iOS
+- Android 6+ 
 - Windows Phone 7
 - Windows Phone 8
 - Windows Phone 8.1
@@ -168,6 +175,7 @@ Supported Platforms
 -------------------
 
 - iOS
+- Android 6+ 
 - Windows Phone 7
 - Windows Phone 8
 - Windows Phone 8.1
@@ -184,6 +192,7 @@ Supported Platforms
 -------------------
 
 - iOS
+- Android 6+ 
 - Windows Phone 7
 - Windows Phone 8
 - Windows Phone 8.1
@@ -200,6 +209,7 @@ Supported Platforms
 -------------------
 
 - iOS
+- Android 6+ 
 - Windows Phone 7
 - Windows Phone 8
 - Windows Phone 8.1
@@ -304,3 +314,19 @@ Supported Platforms
 - Windows Phone 7
 - Windows Phone 8
 - Windows Phone 8.1
+
+
+statusTap
+=========
+
+Listen for this event to know if the statusbar was tapped.
+
+    window.addEventListener('statusTap', function() {
+        // scroll-up with document.body.scrollTop = 0; or do whatever you want
+    });
+
+
+Supported Platforms
+-------------------
+
+- iOS
