@@ -559,6 +559,7 @@ $( document ).ready(function() {
                                             "action": "/content/create",
                                             "method": "post",
                                             "enctype": "multipart/form-data",
+                                            "id": "contentUploadForm"
                                            });
             item.append(form);
             // ----------------
@@ -568,10 +569,34 @@ $( document ).ready(function() {
             var button = makeTag("button", "Upload", {"class": "btn btn-primary", "type": "submit"});
             var tok = makeTag("input", "", {"type": "hidden", "name": "token", "value": getCurrentToken() });
             var par = makeTag("input", "", {"type": "hidden", "name": "parent", "value":catid });
+
+
             form.append(makeTag("b", "New Content"));
             form.append(title); form.append(desc);
             form.append(tok); form.append(par);
             form.append(upload); form.append(button);
+
+
+            button.click(function uploadForm(event){
+                event.preventDefault();
+                var data = new FormData(form[0]);
+                button.prop("disabled", true);
+                $.ajax({
+                        type: "POST",
+                        enctype: 'multipart/form-data',
+                        url: "/content/create",
+                        data: data,
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        timeout: 600000,
+                        success: function (d){
+                            console.log(d);
+                            $("#contenttab").click();
+                        }
+                });
+            });
+
 
             $("#categories_list").append(item);
         });
@@ -580,5 +605,4 @@ $( document ).ready(function() {
     // ========================================= CALLS
     cleanSlate();
     $("#logout_button").hide();
-    $("#contenttab").click();
 }); // DOCUMENT READY
