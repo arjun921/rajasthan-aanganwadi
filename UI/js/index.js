@@ -5,8 +5,6 @@ var count = 0;
 // ############### API CALLs Begin #########################---------------------------->
 function load_content(contentID) {
   onContentLoad();
-  $('#CloseTablet').removeClass('tabletClosePdf');
-  $('#CloseTablet').addClass('tabletClose');
   sendData = {
     "token": Cookies.get('currenttoken'),
     'fname': contentID

@@ -105,7 +105,6 @@ function logout() {
 }
 
 function checkLogin() {
-  $('#closeMenu').addClass('hidden');
   if (Cookies.get('currenttoken')) {
     $("#loginStatus").removeClass('deep-orange-text text-accent-3');
     $("#loginStatus").addClass('green-text text-accent-3');
@@ -181,6 +180,8 @@ function disableHamburgerMenu() {
   $('#closeMenu').addClass('button-collapse');
   $('#closeMenu').removeClass('hidden');
   $('#CloseTablet').removeClass('hidden');
+  $('#CloseTablet').addClass('tabletClose');
+  $('#CloseTablet').removeClass('tabletClosePdf');
   $('#hamburgerMenu').removeClass('button-collapse');
   $('#hamburgerMenu').addClass('hidden');
 }
