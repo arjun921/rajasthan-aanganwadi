@@ -326,26 +326,28 @@ def content_create():
     if not db.is_admin(email):
         raise raisehttp(403, body='not admin')
     # --------------alel ok
-    file = bottle.request.files.get('upload')
-    hasher = hashlib.md5()
-    hasher.update(file.file.read())
-    name = hasher.hexdigest()
-    fname = name + '.' + file.filename.split('.')[-1]
-    # add meta
-    title = bottle.request.forms.get('title')
-    desc = bottle.request.forms.get('description')
-    # -----------update category to contain this content
-    parent = bottle.request.forms.get('parent')
-    if parent is not None:
-        db.content_meta_create(fname, title, desc, parent)
-        data = db.category_data(parent)
-        data['contains'].append(fname)
-        db.category_delete(parent)
-        db.category_insert(data)
-    # save
-    savepath = utils.get_savepath(fname)
-    file.file.seek(0)
-    file.save(savepath, overwrite=True)
+    files = bottle.request.files.getall('upload')
+    for file in files:
+        hasher = hashlib.md5()
+        hasher.update(file.file.read())
+        name = hasher.hexdigest()
+        fname = name + '.' + file.filename.split('.')[-1]
+        # add meta
+        title = bottle.request.forms.get('title')
+        title = title if title.strip() else file.filename
+        desc = bottle.request.forms.get('description')
+        # -----------update category to contain this content
+        parent = bottle.request.forms.get('parent')
+        if parent is not None:
+            db.content_meta_create(fname, title, desc, parent)
+            data = db.category_data(parent)
+            data['contains'].append(fname)
+            db.category_delete(parent)
+            db.category_insert(data)
+        # save
+        savepath = utils.get_savepath(fname)
+        file.file.seek(0)
+        file.save(savepath, overwrite=True)
     return fname
 
 

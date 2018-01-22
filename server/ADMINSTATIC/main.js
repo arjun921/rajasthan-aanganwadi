@@ -34,8 +34,8 @@ $( document ).ready(function() {
                 success: success_fn});
     } // hit API
 
-    function makeTag(name, contains="", config={}){
-        var tag = $("<" + name + ">"+contains+"</" + name+">");
+    function makeTag(name, contains="", config={}, tags=''){
+        var tag = $("<" + name + " " + tags +">"+contains+"</" + name+">");
         for (var property in config) {
             if (config.hasOwnProperty(property)) {
                 tag.attr(property, config[property]);
@@ -565,7 +565,7 @@ $( document ).ready(function() {
             // ----------------
             var title = makeTag("input", "", {"class": "form-control", "placeholder": "Content Title", "name": "title"});
             var desc = makeTag("input", "", {"class": "form-control", "placeholder": "Description", "name": "description"});
-            var upload = makeTag("input", "", {"class": "form-control", "type": "file", "name": "upload"});
+            var upload = makeTag("input", "", {"class": "form-control", "type": "file", "name": "upload", "multiple": "multiple"});
             var button = makeTag("button", "Upload", {"class": "btn btn-primary", "type": "submit"});
             var tok = makeTag("input", "", {"type": "hidden", "name": "token", "value": getCurrentToken() });
             var par = makeTag("input", "", {"type": "hidden", "name": "parent", "value":catid });
@@ -579,6 +579,7 @@ $( document ).ready(function() {
 
             button.click(function uploadForm(event){
                 event.preventDefault();
+                console.log(form.length);
                 var data = new FormData(form[0]);
                 button.prop("disabled", true);
                 $.ajax({
