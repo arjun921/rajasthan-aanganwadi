@@ -61,7 +61,7 @@ function getHTMLAudioPlayer(data) {
 }
 
 function getHTMLPDFViewer(flink) {
-  return "<iframe onload=\"$('#closeIcon').addClass('black-text');$('#preloader').hide();\" src=\""+flink+"\" class=\"z-depth-4\" id=\"docIframe\" style=\"position:absolute; top:0px; left:0px; bottom:0px; z-index: 2; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden;\">Your browser doesn't support iframes</iframe>"
+  return "<iframe onload=\"$('#closeIcon').addClass('black-text');$('#CloseTablet').removeClass('tabletClose');$('#CloseTablet').addClass('tabletClosePdf');$('#preloader').hide();\" src=\""+flink+"\" class=\"z-depth-4\" id=\"docIframe\" style=\"position:absolute; top:0px; left:0px; bottom:0px; z-index: 2; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden;\">Your browser doesn't support iframes</iframe>"
 }
 
 function getHTMLCategoryFileListElement(item){

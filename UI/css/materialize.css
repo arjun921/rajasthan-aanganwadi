@@ -18,6 +18,24 @@
                                   supported by Chrome and Opera */
 }
 
+.tabletClose{
+  z-index: 10;
+  float: left;
+  position: relative;
+  height: 56px;
+  margin: 65px 18px;
+}
+
+.tabletClosePdf{
+  z-index: 10;
+  float: left;
+  position: relative;
+  height: 56px;
+  margin: 0px 18px;
+}
+
+
+
 .fixed-action-btn-mod{
   position: fixed;
   right: 23px;

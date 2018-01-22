@@ -105,6 +105,7 @@ function logout() {
 }
 
 function checkLogin() {
+  $('#closeMenu').addClass('hidden');
   if (Cookies.get('currenttoken')) {
     $("#loginStatus").removeClass('deep-orange-text text-accent-3');
     $("#loginStatus").addClass('green-text text-accent-3');
@@ -170,6 +171,7 @@ function enableHamburgerMenu() {
   $('#hamburgerMenu').removeClass('hidden');
   $('#closeMenu').removeClass('button-collapse');
   $('#closeMenu').addClass('hidden');
+  $('#CloseTablet').addClass('hidden');
   $('#closeIcon').removeClass('black-text');
   $(".button-collapse").sideNav();
 }
@@ -178,6 +180,7 @@ function disableHamburgerMenu() {
   $('#navi').hide();
   $('#closeMenu').addClass('button-collapse');
   $('#closeMenu').removeClass('hidden');
+  $('#CloseTablet').removeClass('hidden');
   $('#hamburgerMenu').removeClass('button-collapse');
   $('#hamburgerMenu').addClass('hidden');
 }
