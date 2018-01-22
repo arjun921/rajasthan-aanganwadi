@@ -115,6 +115,7 @@ function checkLogin() {
     $("#profile_pic").show();
     $("#profile_pic").attr('src', "images/turban22.png");
     $("#login_menu_but").hide();
+    $("#login_Mainmenu_but").hide();
     return true;
   } else {
     out_changes();
@@ -146,7 +147,9 @@ function out_changes() {
   $("#profile_pic").show();
   $("#profile_pic").attr('src', "images/empty-profile.gif");
   $("#logout_menu_but").hide();
+  $("#logout_Mainmenu_but").hide();
   $("#login_menu_but").show();
+  $("#login_Mainmenu_but").show();
   document.getElementById("formLink").href = "login.html"
   Cookies.remove('currenttoken');
   Cookies.remove('email');

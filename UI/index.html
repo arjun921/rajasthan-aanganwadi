@@ -32,8 +32,11 @@
       <a href="#" data-activates="mobile-demo" id="hamburgerMenu"><i class="material-icons">menu</i></a>
       <a style="z-index: 10;" id="closeMenu" onclick='window.history.go(-1);'><i id="closeIcon" class="material-icons" style="transform: rotate(45deg); font-size: 200%;" >add_circle</i></a>
       <ul class="right hide-on-med-and-down">
-
-
+        <li><a href="index.html"><i class="material-icons left">home</i>Home</a></li>
+        <li><a id="formLink" href="all_forms.html"><i class="material-icons left">format_align_left</i>Forms to Fill</a></li>
+        <li><a onclick="$('.button-collapse').sideNav('hide');$('#help').modal('open');"><i class="material-icons left">help</i>Help</a></li>
+        <li><a onclick="logout()" id="logout_Mainmenu_but"><i class="material-icons left">exit_to_app</i>Logout</a></li>
+        <li><a href="login.html" id="login_Mainmenu_but"><i class="material-icons left">exit_to_app</i>Login/Sign-up</a></li>
       </ul>
       <ul class="side-nav" id="mobile-demo">
         <li>
