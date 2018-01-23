@@ -149,6 +149,7 @@ function createNav(id) {
   function navClick(id) {
     url = window.location.href.split('#')[0] + "#" + id;
     window.location.href = url;
+    window.scrollTo(0, 0);
   }
 
   function loadNextList50() {
