@@ -66,7 +66,7 @@ function getHTMLPDFViewer(flink) {
 
 function getHTMLCategoryFileListElement(item){
   fileType = getFileType(item);
-  strBegin = " <li class=\"collection-item deep-purple-text\" id=\""+item.id+"\" onclick=\"navClick(this.id)\"><div>"+item.title+"<div class=\"secondary-content\"><i class=\"material-icons\">"
+  strBegin = " <li class=\"collection-item\" id=\""+item.id+"\" onclick=\"navClick(this.id)\"><div>"+item.title+"<div class=\"secondary-content \"><i class=\"material-icons\">"
   icon = getIcon(fileType);
   strEnd = "</i></div></li>"
   p = strBegin+icon+strEnd
@@ -74,8 +74,8 @@ function getHTMLCategoryFileListElement(item){
 }
 
 function getHTMLCategoryUp(){
-  strBegin = " <li class=\"collection-item deep-purple-text\" onclick=\"window.history.go(-1);\"><div>Go Up...<div class=\"secondary-content center\" >"
-  icon = "<i class=\"material-icons\">chevron_left"
+  strBegin = " <li class=\"collection-item  \" onclick=\"window.history.go(-1);\"><div>Go Up...<div class=\"secondary-content center\" >"
+  icon = "<i class=\"material-icons \">chevron_left"
   strEnd = "</i></div></li>"
   p = strBegin+icon+strEnd
   return p
