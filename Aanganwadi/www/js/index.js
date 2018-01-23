@@ -14,7 +14,7 @@ function loadmp3(data){p=getHTMLAudioPlayer(data)
 $('#preloader').hide();$('#content').append(p);}
 function loadpdf(data){flink='https://docs.google.com/viewer?url='+server+data.url+"&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
 p=getHTMLPDFViewer(flink);$('#content').append(p);}
-function navClick(id){url=window.location.href.split('#')[0]+"#"+id;window.location.href=url;}
+function navClick(id){url=window.location.href.split('#')[0]+"#"+id;window.location.href=url;window.scrollTo(0,0);}
 function loadNextList50(){count+=1
 var numTimesPaginate=Math.floor(totalCategories/paginateSplit);if(count<numTimesPaginate){start+=paginateSplit
 end=start+paginateSplit}else{start+=paginateSplit
@@ -28,7 +28,7 @@ updateCategoriesTable(data);window.scrollTo(0,100000);}
 function getFileType(item){fileType=item.id.split(".")[1];if(fileType){return fileType.toUpperCase();}}
 function getIcon(fileType){if(fileType=="MP3"){return["audiotrack",]}else if(fileType=="PDF"){return"picture_as_pdf"}else if(fileType=="MP4"){return"video_library"}else{return""}}
 function setTitle(stri){$('#crumbtitle').html(stri);$('#crumbtitle2').html(stri);}
-function createListingElements(initiation,condition,Categories){for(var i=initiation;i<condition;i++){item=Categories[i];console.log(item);p=getHTMLCategoryFileListElement(item);$('#navi').append(p);}}
+function createListingElements(initiation,condition,Categories){for(var i=initiation;i<condition;i++){item=Categories[i];console.log(item);p=getHTMLcategoryFileCardElement(item);$('#navi').append(p);}}
 function loadFileByType(data){ftype=(data.url.split('.').pop());if(ftype=="mp4"){loadmp4(data)}else if(ftype=="mp3"){loadmp3(data)}else if(ftype=="pdf"){loadpdf(data)}}
 function hideSearch(){$('#searchFab').hide();}
 function showSearch(){$('#searchFab').show();}

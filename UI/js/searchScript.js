@@ -8,7 +8,7 @@ var rebuildAndRerunSearch = function() {
 
 var rebuildSearchIndex = function() {
   search = new JsSearch.Search('isbn');
-  search.tokenizer = new JsSearch.StemmingTokenizer(stemmer, search.tokenizer);
+  // search.tokenizer = new JsSearch.StemmingTokenizer(stemmer, search.tokenizer);
   search.indexStrategy =  eval('new ' + "JsSearch.AllSubstringsIndexStrategy" + '()');
   search.sanitizer =  eval('new ' + "JsSearch.LowerCaseSanitizer" + '()');;
   search.searchIndex = new JsSearch.TfIdfSearchIndex('isbn');

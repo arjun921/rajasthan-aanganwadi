@@ -36,10 +36,6 @@ function getHTMLTimePicker(field) {
   return "<input type=\"text\" class=\"timepicker\" id=" + field.id + " placeholder=\"Select Time\">"
 }
 
-function getHTMLFormsListElement(item) {
-  return "<a class=\"collection-item\" onclick=\"load_form(this.id)\" id=\""+item.formid+"\">"+item.title+"</a>";
-}
-
 function getHTMLNoFormsToFill() {
   return "<a class=\"collection-item\" href=\"index.html\">No Forms to fill at the moment</a>"
 }
@@ -64,19 +60,30 @@ function getHTMLPDFViewer(flink) {
   return "<iframe onload=\"$('#closeIcon').addClass('black-text');$('#CloseTablet').removeClass('tabletClose');$('#CloseTablet').addClass('tabletClosePdf');$('#preloader').hide();\" src=\""+flink+"\" class=\"z-depth-4\" id=\"docIframe\" style=\"position:absolute; top:0px; left:0px; bottom:0px; z-index: 2; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden;\">Your browser doesn't support iframes</iframe>"
 }
 
-function getHTMLCategoryFileListElement(item){
+function getHTMLFormsListElement(item) {
+  strBegin = "<div id=\""+item.formid+"\"  onclick=\"load_form(this.id)\" class=\"col s12 m6 l6\"><div style=\"width: 100%\" class=\"waves-effect waves-yellow card-panel \"><div style=\"margin: 0px; padding: 0px;\" class=\"row\"><h5><i class=\"right material-icons\">"
+  strEnd = "</i></h5><h5 class=\"left-align\">"+item.title+"</h5></div></div></div>"
+  p = strBegin+strEnd
+  // return "<a class=\"collection-item\" onclick=\"load_form(this.id)\" id=\""+item.formid+"\">"+item.title+"</a>";
+  return p
+}
+
+function getHTMLcategoryFileCardElement(item){
   fileType = getFileType(item);
-  strBegin = " <li class=\"collection-item deep-purple-text\" id=\""+item.id+"\" onclick=\"navClick(this.id)\"><div>"+item.title+"<div class=\"secondary-content\"><i class=\"material-icons\">"
+  strBegin = "<div id=\""+item.id+"\"  onclick=\"navClick(this.id)\" class=\"col s12 m6 l6\"><div style=\"width: 100%\" class=\"waves-effect waves-yellow card-panel \"><div style=\"margin: 0px; padding: 0px;\" class=\"row\"><h5><i class=\"right material-icons\">"
   icon = getIcon(fileType);
-  strEnd = "</i></div></li>"
+  strEnd = "</i></h5><h5 class=\"left-align\">"+item.title+"</h5></div></div></div>"
   p = strBegin+icon+strEnd
   return p
 }
 
 function getHTMLCategoryUp(){
-  strBegin = " <li class=\"collection-item deep-purple-text\" onclick=\"window.history.go(-1);\"><div>Go Up...<div class=\"secondary-content center\" >"
-  icon = "<i class=\"material-icons\">chevron_left"
-  strEnd = "</i></div></li>"
+  // strBegin = " <li class=\"collection-item deep-purple-text\" onclick=\"window.history.go(-1);\"><div>Go Up...<div class=\"secondary-content center\" >"
+  // icon = "<i class=\"material-icons\">chevron_left"
+  // strEnd = "</i></div></li>"
+  strBegin = "<div  onclick=\"window.history.go(-1);\" class=\" col s12 m12 l12\"><div style=\"width: 100%\" class=\"waves-effect waves-yellow card-panel \"><div style=\"margin: 0px; padding: 0px;\"  class=\"row\"><h5><i class=\"right material-icons\">"
+  icon = "chevron_left"
+  strEnd = "</i></h5><h5 class=\"left-align\">Go Up...</h5></div></div></div>"
   p = strBegin+icon+strEnd
   return p
 }

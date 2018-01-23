@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-          <meta charset="UTF-8">
+  <meta charset="UTF-8">
   <!--Import Google Icon Font-->
   <link href="css/fonts.css" rel="stylesheet">
   <!--Import materialize.css-->
@@ -18,27 +19,32 @@
     }
   </style>
 </head>
-<body>
-  <nav>
-    <div class="nav-wrapper z-depth-3">
 
+<body>
+  <nav class="blue-grey darken-1">
+    <div class="nav-wrapper z-depth-3">
       <span class="breadcrumb hide-on-med-and-up" id="crumbtitle"></span>
       <b><span class="right tooltipped" data-position="left" data-delay="50" data-tooltip="Shows login status" style="padding-right: 25px;" id="loginStatus">●</span></b>
       <b><span class="breadcrumb right" style="padding-right: 10px;" id="spinner"></span></b>
+
       <!-- <span id="spinner"></span> -->
       <a class="brand-logo show-on-medium-and-up hide-on-small-only" style="padding-left: 10px;" id="crumbtitle2">Activity</a>
       <!-- <span class="breadcrumb">Activity Bank</span> -->
       <!-- <a class="brand-logo left-align">Logo</a> -->
       <a href="#" data-activates="mobile-demo" id="hamburgerMenu"><i class="material-icons">menu</i></a>
       <a style="z-index: 10;" id="closeMenu" onclick='window.history.go(-1);'><i id="closeIcon" class="material-icons" style="transform: rotate(45deg); font-size: 200%;" >add_circle</i></a>
+      <a class="hide-on-small-only tabletClose hidden" id="CloseTablet" onclick="window.history.go(-1);" class=""><i id="" class="material-icons black-text" style="transform: rotate(45deg); font-size: 200%;">add_circle</i></a>
       <ul class="right hide-on-med-and-down">
-
-
+        <li><a href="index.html">Home</a></li>
+        <li><a id="formLink" href="all_forms.html">Forms to Fill</a></li>
+        <li><a onclick="$('.button-collapse').sideNav('hide');$('#help').modal('open');">Help</a></li>
+        <li><a onclick="logout()" id="logout_Mainmenu_but">Logout</a></li>
+        <li><a href="login.html" id="login_Mainmenu_but">Login/Sign-up</a></li>
       </ul>
       <ul class="side-nav" id="mobile-demo">
         <li>
           <div class="user-view">
-            <div class="background deep-purple">
+            <div class="background blue-grey darken-1">
               <!-- <img src="images/bg.jpg" style="min-width: 100%; max-width: 100%;"> -->
               <img style="min-width: 100%; max-width: 100%">
             </div>
@@ -64,33 +70,34 @@
 
   <div class="container" id="container" style="padding-top: 10px;">
     <form id="searchForm" style="padding-top: 10px;">
-        <div class="form-group">
-          <label for="searchInput">
+      <div class="form-group">
+        <label for="searchInput">
             Filter text
             <span id="bookCountBadge" class="badge"></span>
           </label>
-          <input class="form-control" type="search" id="searchInput" placeholder="Search..">
-        </div>
-      </form>
-      <table id="indexedCategoriesTable" class="table">
+        <input class="form-control" type="search" id="searchInput" placeholder="Search..">
+      </div>
+    </form>
+    <table id="indexedCategoriesTable" class="table">
 
       <tbody>
 
       </tbody>
-      </table>
+    </table>
     <div class="" id="content">
 
     </div>
 
-    <ul class="collection" id="navi" >
+    <div class="row" id="navi">
 
-    </ul>
+    </div>
+
     <div class="row">
       <div class="col s12">
-        <ul class="pagination center"  id="pagination">
-        <!-- <li class="hidden" onclick="loadPreviousList50()"><a><i class="material-icons">chevron_left</i></a></li> -->
-        <!-- <li class="center"><a id="pageNo">Page: 1</a></li> -->
-        <!-- <li class="waves-effect" onclick="loadNextList50()"><a><i class="material-icons">chevron_right</i></a></li> -->
+        <ul class="pagination center" id="pagination">
+          <!-- <li class="hidden" onclick="loadPreviousList50()"><a><i class="material-icons">chevron_left</i></a></li> -->
+          <!-- <li class="center"><a id="pageNo">Page: 1</a></li> -->
+          <!-- <li class="waves-effect" onclick="loadNextList50()"><a><i class="material-icons">chevron_right</i></a></li> -->
         </ul>
       </div>
     </div>
@@ -102,46 +109,54 @@
           </div>
           <div class="col s2">
             <div class="preloader-wrapper small active">
-                 <div class="spinner-layer spinner-blue">
-                   <div class="circle-clipper left">
-                     <div class="circle"></div>
-                   </div><div class="gap-patch">
-                     <div class="circle"></div>
-                   </div><div class="circle-clipper right">
-                     <div class="circle"></div>
-                   </div>
-                 </div>
+              <div class="spinner-layer spinner-blue">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
 
-                 <div class="spinner-layer spinner-red">
-                   <div class="circle-clipper left">
-                     <div class="circle"></div>
-                   </div><div class="gap-patch">
-                     <div class="circle"></div>
-                   </div><div class="circle-clipper right">
-                     <div class="circle"></div>
-                   </div>
-                 </div>
+              <div class="spinner-layer spinner-red">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
 
-                 <div class="spinner-layer spinner-yellow">
-                   <div class="circle-clipper left">
-                     <div class="circle"></div>
-                   </div><div class="gap-patch">
-                     <div class="circle"></div>
-                   </div><div class="circle-clipper right">
-                     <div class="circle"></div>
-                   </div>
-                 </div>
+              <div class="spinner-layer spinner-yellow">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
 
-                 <div class="spinner-layer spinner-green">
-                   <div class="circle-clipper left">
-                     <div class="circle"></div>
-                   </div><div class="gap-patch">
-                     <div class="circle"></div>
-                   </div><div class="circle-clipper right">
-                     <div class="circle"></div>
-                   </div>
-                 </div>
-               </div>
+              <div class="spinner-layer spinner-green">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div>
+                <div class="gap-patch">
+                  <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="col s5">
           </div>
@@ -152,19 +167,15 @@
 
   </div>
   <div id="help" class="modal modal-fixed-footer">
-  <div class="modal-content">
-    <h5>Help</h5>
-    <br>
-    <b>Home</b>
-    <p>The home page shows Activity Bank.
-      On opening an activity, the categories of the Activity are shown.
-      On going further, the content associated with the activity is shown.
-      Content can be viewed only after login.
-     </p>
-     <b>Forms to Fill</b>
-     <p>
-       The forms that are available to fill will be listed here.
-       Forms can be viewed only after login.
+    <div class="modal-content">
+      <h5>Help</h5>
+      <br>
+      <b>Home</b>
+      <p>The home page shows Activity Bank. On opening an activity, the categories of the Activity are shown. On going further, the content associated with the activity is shown. Content can be viewed only after login.
+      </p>
+      <b>Forms to Fill</b>
+      <p>
+        The forms that are available to fill will be listed here. Forms can be viewed only after login.
       </p>
       <b>Status Icons</b>
       <p class="valign-wrapper"><img src="images/help/loader.png" style="max-height: 3em;padding-right: 15px;" alt="Loader Image"> Indicates page loading.</p>
@@ -184,12 +195,12 @@
         </p>
       </div>
 
+    </div>
+    <div class="modal-footer">
+      <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+    </div>
   </div>
-  <div class="modal-footer">
-    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
-  </div>
-  </div>
-  <div class="fixed-action-btn noselect moveFabUp" >
+  <div class="fixed-action-btn noselect moveFabUp">
     <!-- <a id="backFab" onclick="window.history.go(-1);"  onclick="window.history.go(-1);" class="btn-floating btn-large red z-depth-5">
       <i class="large material-icons">arrow_back</i>
     </a> -->

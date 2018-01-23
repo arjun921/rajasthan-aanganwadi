@@ -208,7 +208,7 @@ function createNav(id) {
     for (var i = initiation; i < condition; i++) {
       item = Categories[i];
       console.log(item);
-      p = getHTMLCategoryFileListElement(item);
+      p = getHTMLcategoryFileCardElement(item);
       $('#navi').append(p);
     }
   }
