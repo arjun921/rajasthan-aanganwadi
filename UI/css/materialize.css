@@ -6,30 +6,30 @@
 
 
 
-.collection li:nth-child(5n+1), .collection li:nth-child(5n+1) div div {
-    background: #f39d36;
-    color: #FFF;
+.collection li:nth-child(4n+1), .collection li:nth-child(4n+1) div div {
+    background: #F1BF79;
+    color: #000;
 }
 
-.collection li:nth-child(5n+2), .collection li:nth-child(5n+2) div div {
-    background: #14a797;
-    color: #FFF;
+.collection li:nth-child(4n+2), .collection li:nth-child(4n+2) div div {
+    background: #32A799;
+    color: #000;
 }
 
-.collection li:nth-child(5n+3), .collection li:nth-child(5n+3) div div {
-    background: #f16d45;
-    color: #FFF;
+.collection li:nth-child(4n+3), .collection li:nth-child(4n+3) div div {
+    background: #F18260;
+    color: #000;
 }
 
-.collection li:nth-child(5n+4), .collection li:nth-child(5n+4) div div {
-    background: #5fa1c0;
-    color: #FFF;
+.collection li:nth-child(4n+4), .collection li:nth-child(4n+4) div div {
+    background: #75A8C0;
+    color: #000;
 }
 
-.collection li:nth-child(5n+5), .collection li:nth-child(5n+5) div div {
-    background: #fe4c42;
-    color: #FFF;
-}
+/* .collection li:nth-child(5n+5), .collection li:nth-child(5n+5) div div {
+    background: #FE6F68;
+    color: #000;
+} */
 
 
  .hidden {
