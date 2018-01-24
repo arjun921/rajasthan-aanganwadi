@@ -519,6 +519,8 @@ def test_user_create_does_not_fail_for_non_admin(admin, loggeduser):
             'pwd': '2328904461'}
     resp = requests.post(point('/user/create'), json=data)
     assert resp.status_code == 200, resp.text
+    data = {"email": data['email'], 'token': admin['token']}
+    resp = requests.post(point('/user/delete'), json=data)
 
 
 def test_user_logout_works(loggeduser):
