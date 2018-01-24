@@ -1,11 +1,16 @@
 import os
 import random
-import datetime
+from datetime import datetime
 from pymongo import MongoClient
 
 
 def now():
     return datetime.utcnow()
+
+
+def hashable(x):
+    ordered = sorted(x.items(), key=lambda i: i[0])
+    return tuple([i[1] for i in ordered])
 
 
 def randstring(n):
@@ -66,6 +71,16 @@ class DB:
     def record_db_usage(self, data):
         if not self.dev:
             self.database.usage.insert_one({"data": data, "time": now()})
+
+    def get_report(self):
+        if not self.dev:
+            d = self.database.usage.distinct("data")
+            report = [(i['item'],
+                       i['kind'],
+                       self.database.usage.find({"data": i}).count())
+                      for i in d]
+            return report
+        return {}
 
     def response_submit(self, data):
         "submit a form response"

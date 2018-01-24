@@ -818,6 +818,37 @@ def category_create():
         return 'OK'
 
 
+@app.post("/report")
+@json_validate
+@login_required
+@admin_only
+def report():
+    """
+    POST /report
+    ----------
+     {
+        "type"          : "object",
+        "properties"    : {
+                            "token" :   {"type" : "string",
+                                         "minLength": 100,
+                                         "maxLength": 100}
+                          },
+        "required"      : ["token"]
+    }
+    ----------
+
+    Returns JSON
+    {
+        "report": [
+                    "item": <frequency>,
+                    "item": <frequency>,
+                    "item": <frequency>,
+                    ]
+    }
+    """
+    return {"report": db.get_report()}
+
+
 @app.post('/category')
 @json_validate
 def category_list():

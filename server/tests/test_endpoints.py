@@ -131,6 +131,11 @@ def category(admin):
 
 
 # TESTS---------------------------------------------------------------
+def test_report_url_returns_data(admin):
+    r = requests.post(point("/report"), json={"token": admin['token']})
+    assert r.status_code == 200, r.text
+
+
 def test_admin_form_submit_does_not_block_his_view_of_form(admin, form):
     r = requests.post(point('/form/list'), json={"token": admin['token']})
     assert r.status_code == 200, r.status_code
