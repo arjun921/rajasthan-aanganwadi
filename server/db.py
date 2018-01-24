@@ -1,6 +1,11 @@
 import os
 import random
+import datetime
 from pymongo import MongoClient
+
+
+def now():
+    return datetime.utcnow()
 
 
 def randstring(n):
@@ -57,6 +62,10 @@ class DB:
                 self.user_insert(data)
                 self.add_admin(data['email'])
             # categories
+
+    def record_db_usage(self, data):
+        if not self.dev:
+            self.database.usage.insert_one({"data": data, "time": now()})
 
     def response_submit(self, data):
         "submit a form response"
