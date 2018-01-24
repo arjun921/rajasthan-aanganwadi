@@ -75,11 +75,16 @@ class DB:
     def get_report(self):
         if not self.dev:
             d = self.database.usage.distinct("data")
-            report = [(i['item'],
-                       i['kind'],
+            report = [(i['kind'],
                        self.database.usage.find({"data": i}).count())
                       for i in d]
-            return report
+            groups = {}
+            for kind, count in report:
+                if kind in groups:
+                    groups[kind] = tuple(list(groups[kind]) + [count])
+                else:
+                    groups[kind] = tuple([count])
+            return list(groups.items())
         return {}
 
     def response_submit(self, data):

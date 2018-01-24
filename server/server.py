@@ -160,7 +160,7 @@ def user_login():
     pwd, token, email = json['pwd'], json['token'], json['email']
     if db.user_pwd_present(email, pwd):
         if not db.token_present(token):
-            db.record_db_usage({"item": email, "kind": "login"})
+            db.record_db_usage({"item": email, "kind": "user_login"})
             db.token_insert(token, email)
             return {'name': db.user_info(email)['name']}
         else:
@@ -492,7 +492,7 @@ def content_retreive():
     if meta is None:
         raise raisehttp(404, 'Content not found')
     link = db.generate_content_url(fname)
-    db.record_db_usage({"item": fname, "kind": "request"})
+    db.record_db_usage({"item": fname, "kind": "content_request"})
     return {'url': '/static/'+link,
             'meta': meta}
 
@@ -576,7 +576,7 @@ def form_formid():
     formid = bottle.request.json['formid']
     if db.form_present(formid):
         x = db.form_data(formid)
-        db.record_db_usage({"item": formid, "kind": "request"})
+        db.record_db_usage({"item": formid, "kind": "form_request"})
         return x
     else:
         raise raisehttp(404, 'form not found')
@@ -691,7 +691,7 @@ def form_submit():
     data['email'] = email
     data['timestamp'] = str(datetime.now())
     db.response_submit(data)
-    db.record_db_usage({"item": data['formid'], "kind": "submit"})
+    db.record_db_usage({"item": data['formid'], "kind": "form_submit"})
     return 'OK'
 
 
@@ -846,7 +846,9 @@ def report():
                     ]
     }
     """
-    return {"report": db.get_report()}
+    data = {"report": db.get_report()}
+    print(data)
+    return data
 
 
 @app.post('/category')

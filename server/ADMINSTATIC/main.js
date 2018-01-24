@@ -5,6 +5,7 @@ var token_length = 100;
 var murmur_seed_value = 24;
 var form_data = {};
 var category_trail = [];
+var report_bins = 10;
 
 
 $( document ).ready(function() {
@@ -12,6 +13,23 @@ $( document ).ready(function() {
     // function definitions for everything
     function cleanSlate(){ $("#mainContainer").html('');};
     function getCurrentToken(){return user_token;};
+
+	function showReports(data, selector, title){
+        var row = makeTag('tr');
+        var total = 0;
+        for(var i = 0; i<data.length; i++) total += data[i];
+        var mean = total / data.length;
+        var variance = [];
+        for(var i=0; i<data.length; i++) variance.push(Math.pow(data[i] - mean, 2));
+        var total_var = 0;
+        for(var i = 0; i<data.length; i++) total_var += variance[i];
+        var std = Math.sqrt(total_var / data.length);
+        // ------------
+        row.append(makeTag("td", title));
+        row.append(makeTag("td", mean));
+        row.append(makeTag("td", std));
+        $("#"+selector).append(row);
+    }
 
 
     function genToken() {
@@ -447,6 +465,28 @@ $( document ).ready(function() {
 
     // ========================================= BINDINGS
     $("#formtab").click(getFormList); // form tab
+
+    $("#reportstab").click(function (){
+        cleanSlate();
+        hitApi("/report", {}, function (d, s, x){
+            var reports = d['report'];
+            console.log(reports);
+            var table = makeTag("table", '', {"class": "table table-striped table-bordered table-hover"});
+            var thead = makeTag("thead");
+            var row = makeTag("tr");
+            var titles = makeTag("th", "Measurement");
+            var mean = makeTag("th", "Mean Frequencies");
+            var std = makeTag("th", "Std Deviation of Frequencies");
+            row.append(titles);row.append(mean);row.append(std);
+            thead.append(row);
+            table.append(thead);
+            table.append(makeTag("tbody", "", {"id": "reportTable"}));
+            $("#mainContainer").append(table);
+            for(var i=0; i<reports.length; ++i){
+                showReports(reports[i][1], "reportTable", reports[i][0]);
+            } // reports log
+        });
+    });
 
     $("#contenttab").click(function (){
         showCategory('_ROOT_');
