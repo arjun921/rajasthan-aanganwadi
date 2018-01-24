@@ -17,30 +17,44 @@
     </style>
 </head>
 
-<body>
-    <center>
-        <div class="title">
-            LOGIN
-        </div>
-        <div class="container" id="Main_Body">
-            <div class="row">
-                <div class="input-field col s12">
-                    <input id="emailinput" type="email" class="validate">
-                    <label for="email">Username/Email</label>
-                </div>
-                <div class="input-field col s12">
-                  <input id="pwdinput" type="password" class="validate">
-                    <!-- <input id="pwdinput" type="password" class="validate" pattern="^(?:[0-9]+[a-zA-Z]|[a-zA-Z]+[0-9])[a-zA-Z0-9]*$"> -->
-                    <label for="password">Password</label>
-                </div>
-            </div>
-            <div class="row">
-                <a class="waves-effect waves-light btn deep-purple col s8 offset-s2" onclick="dologin()">Login</a>
-            </div>
-            <a href="register.html">Sign Up</a>
+<body class="container">
+  <div class="title">
 
-            <p><a href="index.html">Home</a></p>
+  </div>
+      <div class="row" id="Main_Body">
+        <div class="col s12 m6">
+          <div class="card  darken-1">
+            <div class="card-content z-depth-3 white-text">
+              <span class="card-title black-text">LOGIN</span>
+              <div class="row">
+                  <div class="input-field black-text col s12">
+                      <input id="emailinput" type="email" class="validate">
+                      <label for="email">Username/Email</label>
+                  </div>
+                  <div class="input-field black-text col s12">
+                    <input id="pwdinput" type="password" class="validate">
+                      <!-- <input id="pwdinput" type="password" class="validate" pattern="^(?:[0-9]+[a-zA-Z]|[a-zA-Z]+[0-9])[a-zA-Z0-9]*$"> -->
+                      <label for="password">Password</label>
+                  </div>
+              </div>
+              <div class="row">
+                  <a class="waves-effect right waves-light btn red col s5" onclick="dologin()">Login</a>
+              </div>
+              <div class="row">
+                  <a class="waves-effect right waves-light btn green col s5" href="register.html" >Sign Up</a>
+              </div>
+              <div class="row">
+                  <a class="waves-effect right waves-light btn blue col s5" href="index.html" >Home</a>
+              </div>
+            </div>
+            <!-- <div class="card-action">
+              <a href="register.html">Sign Up</a>
+              <a href="#">Home</a>
+            </div> -->
+          </div>
         </div>
+      </div>
+<center>
 
         <div class="col s12 m5" id="preloader" style="top: 50px;">
     <div class="card-panel z-depth-0">

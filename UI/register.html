@@ -17,48 +17,55 @@
     </style>
 </head>
 
-<body>
-    <center>
-        <div class="title">
-            REGISTER
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="input-field col s12">
-                    <input id="name" type="text" class="validate" pattern="[A-Za-z ]{3,50}">
-                    <label for="name">Full Name</label>
-                </div>
-                <div class="input-field col s12">
-                    <input id="email" type="email" class="validate">
-                    <label for="email">Email</label>
-                </div>
-                <div class="input-field col s12">
-                    <input id="ph" type="tel" class="validate" pattern="[0-9]{10}">
-                    <label for="ph" data-error="Enter 10 Digit Phone Number" data-success="Valid Number">Phone</label>
-                </div>
-                <form class="col s12">
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <textarea id="addr" type="Address" class="materialize-textarea"></textarea>
-                            <label for="addr">Address</label>
-                        </div>
-                    </div>
-                </form>
-                <div class="input-field col s12">
-                    <input name="password" id="password" type="password" class="validate" >
-                    <label for="password"  data-success="Password Valid">Password</label>
-                </div>
-                <div class="input-field col s12">
-                    <input id="password_confirm" type="password" class="validate" name="password_confirm" oninput="check_password(this);" >
-                    <label for="password_confirm" data-error="Both Passwords should match" data-success="Passwords Match">Re-Enter Password</label>
-                </div>
+<body class="container">
+      <div class="row" id="Main_Body">
+        <div class="col s12 m6">
+          <div class="card  darken-1">
+            <div class="card-content z-depth-3 white-text">
+              <span class="card-title black-text">Sign Up</span>
+              <div class="row">
+                  <div class="input-field black-text col s12">
+                      <input id="name" type="text" class="validate" pattern="[A-Za-z ]{3,50}">
+                      <label for="name">Full Name</label>
+                  </div>
+                  <div class="input-field black-text col s12">
+                      <input id="email" type="email" class="validate">
+                      <label for="email">Email</label>
+                  </div>
+                  <div class="input-field black-text col s12">
+                      <input id="ph" type="tel" class="validate" pattern="[0-9]{10}">
+                      <label for="ph" data-error="Enter 10 Digit Phone Number" data-success="Valid Number">Phone</label>
+                  </div>
+                  <form class="col s12">
+                      <div class="row">
+                          <div class="input-field black-text col s12">
+                              <textarea id="addr" type="Address" class="materialize-textarea"></textarea>
+                              <label for="addr">Address</label>
+                          </div>
+                      </div>
+                  </form>
+                  <div class="input-field black-text col s12">
+                      <input name="password" id="password" type="password" class="validate" >
+                      <label for="password"  data-success="Password Valid">Password</label>
+                  </div>
+                  <div class="input-field black-text col s12">
+                      <input id="password_confirm" type="password" class="validate" name="password_confirm" oninput="check_password(this);" >
+                      <label for="password_confirm" data-error="Both Passwords should match" data-success="Passwords Match">Re-Enter Password</label>
+                  </div>
+              </div>
+              <div class="row">
+                  <a id="submit" class="waves-effect right waves-light btn red col s5" onclick="sign_up()">Sign Up</a>
+              </div>
+              <div class="row">
+                  <a class="waves-effect right waves-light btn green col s5"  href="login.html">Login</a>
+              </div>
+              <div class="row">
+                  <a class="waves-effect right waves-light btn blue col s5" href="index.html" >Home</a>
+              </div>
             </div>
-            <div class="row">
-                <a id="submit" class="waves-effect waves-light btn deep-purple col s8 offset-s2" onclick="sign_up()">Sign up</a>
-            </div>
-            <a href="login.html">Login</a>
-            <p><a href="index.html">Home</a></p>
+          </div>
         </div>
+      </div>
         <!--Import jQuery before materialize.js-->
         <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
         <script type="text/javascript" src="js/materialize.min.js"></script>
@@ -66,7 +73,6 @@
         <script type="text/javascript" src="js/hash.js"></script>
         <script type="text/javascript" src="js/common.js"></script>
         <script type="text/javascript" src="js/register.js"></script>
-    </center>
 </body>
 
 </html>

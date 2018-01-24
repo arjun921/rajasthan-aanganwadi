@@ -106,7 +106,7 @@ function logout() {
 
 function checkLogin() {
   if (Cookies.get('currenttoken')) {
-    $("#loginStatus").removeClass('deep-orange-text text-accent-3');
+    $("#loginStatus").removeClass('red-text text-darken-4');
     $("#loginStatus").addClass('green-text text-accent-3');
     $("#loginStatus").attr("data-tooltip","Logged in");
     $("#email_menu").text(Cookies.get('email'));
@@ -139,7 +139,7 @@ function loadSideMenu() {
 }
 
 function out_changes() {
-  $("#loginStatus").addClass('deep-orange-text');
+  $("#loginStatus").addClass('red-text text-darken-4');
   $("#loginStatus").removeClass('green-text');
   $("#loginStatus").attr("data-tooltip","Not Logged in");
   $("#email_menu").text("User not Logged In");

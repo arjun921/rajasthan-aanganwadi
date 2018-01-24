@@ -70,9 +70,9 @@ function getHTMLFormsListElement(item) {
 
 function getHTMLcategoryFileCardElement(item){
   fileType = getFileType(item);
-  strBegin = "<div id=\""+item.id+"\"  onclick=\"navClick(this.id)\" class=\"col s12 m6 l6\"><div style=\"width: 100%\" class=\"waves-effect waves-yellow card-panel \"><div style=\"margin: 0px; padding: 0px;\" class=\"row\"><h5><i class=\"right material-icons\">"
+  strBegin = "<div id=\""+item.id+"\"  onclick=\"navClick(this.id)\" class=\"col s6 m6 l6\"><div style=\"width: 100%\" class=\"waves-effect waves-yellow card-panel \"><div style=\"margin: 0px; padding: 0px;\" class=\"row\"><p><i class=\"right material-icons\">"
   icon = getIcon(fileType);
-  strEnd = "</i></h5><h5 class=\"left-align\">"+item.title+"</h5></div></div></div>"
+  strEnd = "</i></p><p class=\"left-align\">"+item.title+"</p></div></div></div>"
   p = strBegin+icon+strEnd
   return p
 }
@@ -81,9 +81,9 @@ function getHTMLCategoryUp(){
   // strBegin = " <li class=\"collection-item deep-purple-text\" onclick=\"window.history.go(-1);\"><div>Go Up...<div class=\"secondary-content center\" >"
   // icon = "<i class=\"material-icons\">chevron_left"
   // strEnd = "</i></div></li>"
-  strBegin = "<div  onclick=\"window.history.go(-1);\" class=\" col s12 m12 l12\"><div style=\"width: 100%\" class=\"waves-effect waves-yellow card-panel \"><div style=\"margin: 0px; padding: 0px;\"  class=\"row\"><h5><i class=\"right material-icons\">"
+  strBegin = "<div  onclick=\"window.history.go(-1);\" class=\" col s12 m12 l12\"><div style=\"width: 100%\" class=\"waves-effect waves-yellow card-panel \"><div style=\"margin: 0px; padding: 0px;\"  class=\"row\"><p><i class=\"right material-icons\">"
   icon = "chevron_left"
-  strEnd = "</i></h5><h5 class=\"left-align\">Go Up...</h5></div></div></div>"
+  strEnd = "</i></p><p class=\"left-align\">Go Up...</p></div></div></div>"
   p = strBegin+icon+strEnd
   return p
 }
