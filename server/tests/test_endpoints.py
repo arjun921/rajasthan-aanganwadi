@@ -136,6 +136,11 @@ def test_report_url_returns_data(admin):
     assert r.status_code == 200, r.text
 
 
+def test_report_url_fails_for_normal_user(loggeduser):
+    r = requests.post(point("/report"), json={"token": loggeduser['token']})
+    assert r.status_code == 403, r.status_code
+
+
 def test_admin_form_submit_does_not_block_his_view_of_form(admin, form):
     r = requests.post(point('/form/list'), json={"token": admin['token']})
     assert r.status_code == 200, r.status_code
