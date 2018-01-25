@@ -4,6 +4,17 @@
  * MIT License (https://raw.githubusercontent.com/Dogfalo/materialize/master/LICENSE)
  */
 
+ :root {
+   --theme-color: #263238;
+ }
+
+ .my-theme {
+   background-color: var(--theme-color) !important;
+ }
+
+ .my-theme-text {
+   color: var(--theme-color) !important;
+ }
 
  #navi div:nth-child(4n+1) div{
    background-color: #4885ed;
@@ -6173,9 +6184,9 @@ input[type=tel]:not(.browser-default):focus:not([readonly]),
 input[type=number]:not(.browser-default):focus:not([readonly]),
 input[type=search]:not(.browser-default):focus:not([readonly]),
 textarea.materialize-textarea:focus:not([readonly]) {
-  border-bottom: 1px solid #2196F3;
-  -webkit-box-shadow: 0 1px 0 0 #2196F3;
-          box-shadow: 0 1px 0 0 #2196F3;
+  border-bottom: 1px solid var(--theme-color);
+  -webkit-box-shadow: 0 1px 0 0 var(--theme-color);
+          box-shadow: 0 1px 0 0 var(--theme-color);
 }
 
 input:not([type]):focus:not([readonly]) + label,
@@ -6479,7 +6490,7 @@ textarea.materialize-textarea + label:after, .select-wrapper + label:after {
 }
 
 .input-field .prefix.active {
-  color: #2196F3;
+  color: var(--theme-color);
 }
 
 .input-field .prefix ~ input,
