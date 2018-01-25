@@ -5,7 +5,54 @@
  */
 
  :root {
-   --theme-color: #263238;
+   --theme-color: #324D5C;
+   --color-1: #46B29D;
+   --color-2: #F0CA4D;
+   --color-3: #E37B40;
+   --color-4: #F53855;
+   --font-color: #000;
+ }
+
+ #navi div:nth-child(4n+1) div{
+   background-color: var(--color-1);
+   color: var(--font-color);
+ }
+
+ #navi div:nth-child(4n+2) div{
+   background-color: var(--color-2);
+   color: var(--font-color);
+
+ }
+
+ #navi div:nth-child(4n+3) div{
+   background-color: var(--color-3);
+   color: var(--font-color);
+ }
+
+ #navi div:nth-child(4n+4) div{
+   background-color: var(--color-4);
+   color: var(--font-color);
+ }
+
+ #form_list div:nth-child(4n+1) div{
+   background-color: var(--color-1);
+   color: var(--font-color);
+ }
+
+ #form_list div:nth-child(4n+2) div{
+   background-color: var(--color-2);
+   color: var(--font-color);
+
+ }
+
+ #form_list div:nth-child(4n+3) div{
+   background-color: var(--color-3);
+   color: var(--font-color);
+ }
+
+ #form_list div:nth-child(4n+4) div{
+   background-color: var(--color-4);
+   color: var(--font-color);
  }
 
  .my-theme {
@@ -14,48 +61,6 @@
 
  .my-theme-text {
    color: var(--theme-color) !important;
- }
-
- #navi div:nth-child(4n+1) div{
-   background-color: #4885ed;
-   color: #FFF;
- }
-
- #navi div:nth-child(4n+2) div{
-   background-color: #db3236;
-   color: #FFF;
-
- }
-
- #navi div:nth-child(4n+3) div{
-   background-color: #f4c20d;
-   color: #FFF;
- }
-
- #navi div:nth-child(4n+4) div{
-   background-color: #3cba54;
-   color: #FFF;
- }
-
- #form_list div:nth-child(4n+1) div{
-   background-color: #4885ed;
-   color: #FFF;
- }
-
- #form_list div:nth-child(4n+2) div{
-   background-color: #db3236;
-   color: #FFF;
-
- }
-
- #form_list div:nth-child(4n+3) div{
-   background-color: #f4c20d;
-   color: #FFF;
- }
-
- #form_list div:nth-child(4n+4) div{
-   background-color: #3cba54;
-   color: #FFF;
  }
 
  .hidden {
