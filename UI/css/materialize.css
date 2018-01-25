@@ -18,53 +18,57 @@
 
  :root {
    --theme-color: #CC0000;
-   --color-1: #0099CC;
-   --color-2: #E41E5C;
-   --color-3: #83B33D;
-   --color-4: #FF9900;
+   --color-1: #fff;
+   --font-color-1: #0099CC;
+   --color-2: #fff;
+   --font-color-2: #E41E5C;
+   --color-3: #fff;
+   --font-color-3: #83B33D;
+   --color-4: #fff;
+   --font-color-4: #FF9900;
    --font-color: #FFF;
    --header-font-color: #FFF;
  }
 
  .collection li:nth-child(4n+1), .collection li:nth-child(4n+1) div div {
    background-color: var(--color-1);
-   color: var(--font-color);
+   color: var(--font-color-1)
  }
 
  .collection li:nth-child(4n+2), .collection li:nth-child(4n+2) div div {
    background-color: var(--color-2);
-   color: var(--font-color);
+   color: var(--font-color-2)
  }
 
  .collection li:nth-child(4n+3), .collection li:nth-child(4n+3) div div {
    background-color: var(--color-3);
-   color: var(--font-color);
+   color: var(--font-color-3)
  }
 
  .collection li:nth-child(4n+4), .collection li:nth-child(4n+4) div div {
    background-color: var(--color-4);
-   color: var(--font-color);
+   color: var(--font-color-4)
  }
 
  #form_list div:nth-child(4n+1) div{
    background-color: var(--color-1);
-   color: var(--font-color);
+   color: var(--font-color-1)
  }
 
  #form_list div:nth-child(4n+2) div{
    background-color: var(--color-2);
-   color: var(--font-color);
+   color: var(--font-color-2)
 
  }
 
  #form_list div:nth-child(4n+3) div{
    background-color: var(--color-3);
-   color: var(--font-color);
+   color: var(--font-color-3)
  }
 
  #form_list div:nth-child(4n+4) div{
    background-color: var(--color-4);
-   color: var(--font-color);
+   color: var(--font-color-4)
  }
 
  .my-theme {
