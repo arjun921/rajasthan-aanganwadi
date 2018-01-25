@@ -1,4 +1,5 @@
-var server = 'https://rajasthan-aanganwadi.herokuapp.com';
+// var server = 'https://rajasthan-aanganwadi.herokuapp.com';
+var server = 'http://localhost:8000';
 // var server = 'https://fe2cc24a.ngrok.io'
 // spinid = setInterval(nextSpinner, 60);
 // $("#spinner").show();
