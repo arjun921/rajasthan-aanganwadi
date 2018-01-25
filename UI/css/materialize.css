@@ -6,37 +6,45 @@
 
 
  #navi div:nth-child(4n+1) div{
-   color: #4885ed;
+   background-color: #4885ed;
+   color: #FFF;
  }
 
  #navi div:nth-child(4n+2) div{
-   color: #db3236;
+   background-color: #db3236;
+   color: #FFF;
 
  }
 
  #navi div:nth-child(4n+3) div{
-   color: #f4c20d;
+   background-color: #f4c20d;
+   color: #FFF;
  }
 
  #navi div:nth-child(4n+4) div{
-   color: #3cba54;
+   background-color: #3cba54;
+   color: #FFF;
  }
 
  #form_list div:nth-child(4n+1) div{
-   color: #4885ed;
+   background-color: #4885ed;
+   color: #FFF;
  }
 
  #form_list div:nth-child(4n+2) div{
-   color: #db3236;
+   background-color: #db3236;
+   color: #FFF;
 
  }
 
  #form_list div:nth-child(4n+3) div{
-   color: #f4c20d;
+   background-color: #f4c20d;
+   color: #FFF;
  }
 
  #form_list div:nth-child(4n+4) div{
-   color: #3cba54;
+   background-color: #3cba54;
+   color: #FFF;
  }
 
  .hidden {
