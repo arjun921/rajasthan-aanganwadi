@@ -4,46 +4,58 @@
  * MIT License (https://raw.githubusercontent.com/Dogfalo/materialize/master/LICENSE)
  */
 
+ :root {
+   --theme-color: #263238;
+   --color-1: #4885ed;
+   --color-2: #db3236;
+   --color-3: #f4c20d;
+   --color-4: #3cba54;
+   --font-color: #000;
+ }
+
+ .background{
+   background-color: var(--theme-color);
+ }
 
  #navi div:nth-child(4n+1) div{
-   background-color: #4885ed;
+   background-color: var(--color-1);
    color: #FFF;
  }
 
  #navi div:nth-child(4n+2) div{
-   background-color: #db3236;
+   background-color: var(--color-2);
    color: #FFF;
 
  }
 
  #navi div:nth-child(4n+3) div{
-   background-color: #f4c20d;
+   background-color: var(--color-3);
    color: #FFF;
  }
 
  #navi div:nth-child(4n+4) div{
-   background-color: #3cba54;
+   background-color: var(--color-4);
    color: #FFF;
  }
 
  #form_list div:nth-child(4n+1) div{
-   background-color: #4885ed;
+   background-color: var(--color-1);
    color: #FFF;
  }
 
  #form_list div:nth-child(4n+2) div{
-   background-color: #db3236;
+   background-color: var(--color-2);
    color: #FFF;
 
  }
 
  #form_list div:nth-child(4n+3) div{
-   background-color: #f4c20d;
+   background-color: var(--color-3);
    color: #FFF;
  }
 
  #form_list div:nth-child(4n+4) div{
-   background-color: #3cba54;
+   background-color: var(--color-4);
    color: #FFF;
  }
 
@@ -4293,8 +4305,8 @@ nav ul a span.badge {
 }
 
 nav {
-  color: #fff;
-  background-color: #2196F3;
+  color: var(--font-color);
+  background-color: var(--theme-color);
   width: 100%;
   height: 56px;
   line-height: 56px;
