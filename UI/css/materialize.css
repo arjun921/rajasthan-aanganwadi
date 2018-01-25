@@ -10,33 +10,33 @@
  }
 
  #navi div:nth-child(4n+2) div{
-   /* color: #db3236; */
+   color: #db3236;
 
  }
 
  #navi div:nth-child(4n+3) div{
-   /* color: #f4c20d; */
+   color: #f4c20d;
  }
 
  #navi div:nth-child(4n+4) div{
-   /* color: #3cba54; */
+   color: #3cba54;
  }
 
  #form_list div:nth-child(4n+1) div{
-   /* color: #4885ed; */
+   color: #4885ed;
  }
 
  #form_list div:nth-child(4n+2) div{
-   /* color: #db3236; */
+   color: #db3236;
 
  }
 
  #form_list div:nth-child(4n+3) div{
-   /* color: #f4c20d; */
+   color: #f4c20d;
  }
 
  #form_list div:nth-child(4n+4) div{
-   /* color: #3cba54; */
+   color: #3cba54;
  }
 
  .hidden {
