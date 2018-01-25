@@ -7,29 +7,25 @@
 
 
 .collection li:nth-child(4n+1), .collection li:nth-child(4n+1) div div {
-    background: #F1BF79;
-    color: #000;
+  background-color: #4885ed;
+  color: #FFF;
 }
 
 .collection li:nth-child(4n+2), .collection li:nth-child(4n+2) div div {
-    background: #32A799;
-    color: #000;
+  background-color: #db3236;
+  color: #FFF;
 }
 
 .collection li:nth-child(4n+3), .collection li:nth-child(4n+3) div div {
-    background: #F18260;
-    color: #000;
+  background-color: #f4c20d;
+  color: #FFF;
 }
 
 .collection li:nth-child(4n+4), .collection li:nth-child(4n+4) div div {
-    background: #75A8C0;
-    color: #000;
+  background-color: #3cba54;
+  color: #FFF;
 }
 
-/* .collection li:nth-child(5n+5), .collection li:nth-child(5n+5) div div {
-    background: #FE6F68;
-    color: #000;
-} */
 
 
  .hidden {
