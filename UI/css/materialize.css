@@ -3,15 +3,27 @@
  * Copyright 2014-2017 Materialize
  * MIT License (https://raw.githubusercontent.com/Dogfalo/materialize/master/LICENSE)
  */
-
+ html {
+   font-family: sans-serif;
+   /* 1 */
+   -ms-text-size-adjust: 100%;
+   /* 2 */
+   -webkit-text-size-adjust: 100%;
+   /* 2 */
+   background: url(../images/baby-background-9.jpg) repeat center center fixed;
+ /* -webkit-background-size: cover;
+ -moz-background-size: cover;
+ -o-background-size: cover; */
+ }
 
  :root {
    --theme-color: #CC0000;
-   --color-1: #0099CC;
-   --color-2: #E41E5C;
-   --color-3: #83B33D;
-   --color-4: #FF9900;
-   --font-color: #FFF;
+   --color-1: #FFF;
+   --color-2: #FFF;
+   --color-3: #FFF;
+   --color-4: #FFF;
+   --font-color: #000;
+   --header-font-color: #FFF;
  }
 
  .collection li:nth-child(4n+1), .collection li:nth-child(4n+1) div div {
@@ -2247,18 +2259,7 @@
  * 2. Prevent iOS and IE text size adjust after device orientation change,
  *    without disabling user zoom.
  */
- html {
-   font-family: sans-serif;
-   /* 1 */
-   -ms-text-size-adjust: 100%;
-   /* 2 */
-   -webkit-text-size-adjust: 100%;
-   /* 2 */
-   background: url(../images/body-bg.png) repeat center center fixed;
- /* -webkit-background-size: cover;
- -moz-background-size: cover;
- -o-background-size: cover; */
- }
+
 
 /**
  * Remove default margin.
@@ -2833,7 +2834,7 @@ video.responsive-video {
 
 .breadcrumb {
   font-size: 18px;
-  color: var(--font-color);
+  color: var(--header-font-color);
 }
 
 .breadcrumb i,
@@ -4313,7 +4314,7 @@ nav ul a span.badge {
 }
 
 nav {
-  color: var(--font-color);
+  color: var(--header-font-color);
   background-color: var(--theme-color);
   width: 100%;
   height: 56px;
@@ -4335,7 +4336,7 @@ nav.nav-extended .nav-content {
 }
 
 nav a {
-  color: var(--font-color)  ;
+  color: var(--header-font-color)  ;
 }
 
 nav i,
