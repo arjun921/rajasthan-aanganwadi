@@ -10,7 +10,7 @@
    /* 2 */
    -webkit-text-size-adjust: 100%;
    /* 2 */
-   background: url(../images/baby-background-9.jpg) repeat center center fixed;
+   background: url(../images/patternstudio_kids006.jpg) repeat center center fixed;
  /* -webkit-background-size: cover;
  -moz-background-size: cover;
  -o-background-size: cover; */
@@ -18,11 +18,11 @@
 
  :root {
    --theme-color: #CC0000;
-   --color-1: #FFF;
-   --color-2: #FFF;
-   --color-3: #FFF;
-   --color-4: #FFF;
-   --font-color: #000;
+   --color-1: #0099CC;
+   --color-2: #E41E5C;
+   --color-3: #83B33D;
+   --color-4: #FF9900;
+   --font-color: #FFF;
    --header-font-color: #FFF;
  }
 
