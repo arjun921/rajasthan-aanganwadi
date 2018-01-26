@@ -20,7 +20,7 @@
    --theme-color: #CC0000;
    --theme-text-color: #CC0000;
    --progress-bg: #FFF;
-   --indeterminate-bg: #00B233;
+   --progress-value-bg: #00B233;
    --color-1: #fff;
    --font-color-1: #0099CC;
    --color-2: #fff;
@@ -3252,13 +3252,13 @@ td, th {
   top: 0;
   left: 0;
   bottom: 0;
-  background-color: var(--theme-color);
+  background-color: var(--progress-value-bg);
   -webkit-transition: width .3s linear;
   transition: width .3s linear;
 }
 
 .progress .indeterminate {
-  background-color: var(--indeterminate-bg);
+  background-color: var(--progress-value-bg);
 }
 
 .progress .indeterminate:before {

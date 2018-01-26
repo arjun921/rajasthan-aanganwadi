@@ -183,6 +183,7 @@ function fetchForms() {
   sendData = { "token": Cookies.get('currenttoken')}
   apisuccess = function(data, st, xhr) {
     //if forms available, make list
+    $('#preloader').hide();
     if (data.forms.length > 0) {
       makeList(data)
     }
