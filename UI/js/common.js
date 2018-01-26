@@ -34,6 +34,14 @@ function resetApp() {
   window.location.href = "index.html";
 }
 
+function setTitle(stri) {
+  if(stri.length>25){
+    stri = stri.substring(0,25)+'...'
+  }
+  $('#crumbtitle').html(stri);
+  $('#crumbtitle2').html(stri);
+}
+
 function nextSpinner(){
     var spinners="⣷⣯⣟⡿⢿⣻⣽⣾";
     var index = spinners.indexOf(document.getElementById("spinner").textContent);
