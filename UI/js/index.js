@@ -199,6 +199,9 @@ function createNav(id) {
   }
 
   function setTitle(stri) {
+    if(stri.length>25){
+      stri = stri.substring(0,25)+'...'
+    }
     $('#crumbtitle').html(stri);
     $('#crumbtitle2').html(stri);
   }

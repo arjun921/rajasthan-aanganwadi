@@ -45,6 +45,7 @@ function nextSpinner(){
 $(document).ajaxStart(function() {
   spinid = setInterval(nextSpinner, 60);
   $("#spinner").show();
+  setTitle('Loading...');
 });
 
 $(document).ajaxSuccess(function() {
