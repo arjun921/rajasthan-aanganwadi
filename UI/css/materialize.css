@@ -19,6 +19,8 @@
  :root {
    --theme-color: #CC0000;
    --theme-text-color: #CC0000;
+   --progress-bg: #FFF;
+   --indeterminate-bg: #00B233;
    --color-1: #fff;
    --font-color-1: #0099CC;
    --color-2: #fff;
@@ -29,6 +31,11 @@
    --font-color-4: #FF9900;
    --font-color: #FFF;
    --header-font-color: #FFF;
+ }
+
+ .collection {
+   -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+           box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
  }
 
  .collection li:nth-child(4n+1), .collection li:nth-child(4n+1) div div, .collection a:nth-child(4n+1) {
@@ -3113,9 +3120,9 @@ td, th {
 }
 
 .collection {
-  margin: 0.5rem 0 1rem 0;
-  border: 1px solid #e0e0e0;
-  border-radius: 2px;
+  /* margin: 0.5rem 0 1rem 0; */
+  /* border: 1px solid #000; */
+  /* border-radius: 2px; */
   overflow: hidden;
   position: relative;
 }
@@ -3234,7 +3241,7 @@ td, th {
   height: 4px;
   display: block;
   width: 100%;
-  background-color: #acece6;
+  background-color: var(--progress-bg);
   border-radius: 2px;
   margin: 0.5rem 0 1rem 0;
   overflow: hidden;
@@ -3251,7 +3258,7 @@ td, th {
 }
 
 .progress .indeterminate {
-  background-color: var(--theme-color);
+  background-color: var(--indeterminate-bg);
 }
 
 .progress .indeterminate:before {
