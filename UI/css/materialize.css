@@ -31,43 +31,22 @@
    --header-font-color: #FFF;
  }
 
- .collection li:nth-child(4n+1), .collection li:nth-child(4n+1) div div {
+ .collection li:nth-child(4n+1), .collection li:nth-child(4n+1) div div, .collection a:nth-child(4n+1) {
    background-color: var(--color-1);
    color: var(--font-color-1)
  }
 
- .collection li:nth-child(4n+2), .collection li:nth-child(4n+2) div div {
+ .collection li:nth-child(4n+2), .collection li:nth-child(4n+2) div div, .collection a:nth-child(4n+2) {
    background-color: var(--color-2);
    color: var(--font-color-2)
  }
 
- .collection li:nth-child(4n+3), .collection li:nth-child(4n+3) div div {
+ .collection li:nth-child(4n+3), .collection li:nth-child(4n+3) div div, .collection a:nth-child(4n+3) {
    background-color: var(--color-3);
    color: var(--font-color-3)
  }
 
- .collection li:nth-child(4n+4), .collection li:nth-child(4n+4) div div {
-   background-color: var(--color-4);
-   color: var(--font-color-4)
- }
-
- #form_list div:nth-child(4n+1) div{
-   background-color: var(--color-1);
-   color: var(--font-color-1)
- }
-
- #form_list div:nth-child(4n+2) div{
-   background-color: var(--color-2);
-   color: var(--font-color-2)
-
- }
-
- #form_list div:nth-child(4n+3) div{
-   background-color: var(--color-3);
-   color: var(--font-color-3)
- }
-
- #form_list div:nth-child(4n+4) div{
+ .collection li:nth-child(4n+4), .collection li:nth-child(4n+4) div div, .collection a:nth-child(4n+4) {
    background-color: var(--color-4);
    color: var(--font-color-4)
  }
