@@ -200,7 +200,13 @@ function fetchForms() {
       toastWithAction(msg, href, action)
     }
   }
-  hitApi('/form/list', sendData, apisuccess, apierror);
+  if (Cookies.get('currenttoken')) {
+    hitApi('/form/list', sendData, apisuccess, apierror);
+  }
+  else {
+    window.open("../UI/login.html", "_self")
+  }
+
 }
 
 function load_form(formID) {

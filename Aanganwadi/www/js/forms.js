@@ -35,7 +35,8 @@ apierror=function(returnval){if(returnval.status!=200){out_changes();msg='Please
 href='login.html'
 action=function(){window.open("login.html","_self")}
 toastWithAction(msg,href,action)}}
-hitApi('/form/list',sendData,apisuccess,apierror);}
+if(Cookies.get('currenttoken')){hitApi('/form/list',sendData,apisuccess,apierror);}
+else{window.open("login.html","_self")}}
 function load_form(formID){sendData={"token":Cookies.get('currenttoken'),'formid':formID}
 apisuccess=function(data,st,xhr){create_form(data);}
 hitApi('/form',sendData,apisuccess,function(){});}
