@@ -1,6 +1,7 @@
 var fields_returned;
 
 $(document).ready(function() {
+  $('#form').hide();
   fetchForms();
   enableHamburgerMenu();
 });
@@ -104,6 +105,7 @@ function createFormField(field) {
 
 function create_form(fields_returned) {
   //checks if variable is defined
+  $('#form').show();
   Cookies.set('fields_returned',fields_returned)
   if (typeof fields_returned !== 'undefined') {
     $("#form_list").hide();
