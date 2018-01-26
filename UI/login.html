@@ -23,32 +23,37 @@
 
     <div class="card-panel container" style="min-height: 500px">
 
-        <div class="title">
-          <!-- <p class="">LOGIN</p> -->
-        </div>
-        <div class="" >
+      <div class="title">
+        <!-- <p class="">LOGIN</p> -->
+      </div>
+      <div class="">
         <h5 class="">LOGIN</h5>
         <div class="row" id="Main_Body">
-          <div class="col s12 l6 m6 offset-l3 offset-m3">
-            <div class="container" style="padding: 10px;">
-              <div class="row">
-                <div class="input-field col s12">
-                  <input id="emailinput" type="email" class="validate">
-                  <label for="email">Email</label>
+          <form name="loginForm" id="loginForm" class="loginForm">
+            <div class="col s12 l6 m6 offset-l3 offset-m3">
+              <div class="container" style="padding: 10px;">
+                <div class="row">
+                  <div class="input-field col s12">
+                    <input id="emailinput" type="email" class="validate">
+                    <label for="email">Email</label>
+                  </div>
+                  <div class="input-field col s12">
+                    <input id="pwdinput" type="password" class="validate">
+                    <!-- <input id="pwdinput" type="password" class="validate" pattern="^(?:[0-9]+[a-zA-Z]|[a-zA-Z]+[0-9])[a-zA-Z0-9]*$"> -->
+                    <label for="password">Password</label>
+                  </div>
                 </div>
-                <div class="input-field col s12">
-                  <input id="pwdinput" type="password" class="validate">
-                  <!-- <input id="pwdinput" type="password" class="validate" pattern="^(?:[0-9]+[a-zA-Z]|[a-zA-Z]+[0-9])[a-zA-Z0-9]*$"> -->
-                  <label for="password">Password</label>
+                <div class="row">
+                  <a class="waves-effect waves-light btn my-theme col s12 l6 m6 offset-l3 offset-m3" onclick="dologin()">Login</a>
                 </div>
+                <a href="register.html">Sign Up</a>
+                <br>
+                <p></p>
+                <a href="index.html">Home</a>
               </div>
-              <div class="row">
-                <a class="waves-effect waves-light btn my-theme col s8 offset-s2" onclick="dologin()">Login</a>
-              </div>
-              <a href="register.html">Sign Up</a>
-              <p><a href="index.html">Home</a></p>
+              <input type="submit" style="position: absolute; left: -9999px" />
             </div>
-          </div>
+          </form>
         </div>
         <div class="col s12 m5 " id="preloader" style="padding-top: 4em">
           <div class=" z-depth-0">

@@ -1,6 +1,10 @@
 var currenttoken = '';
 //runs functions to be executed at page load
 $(document).ready(function() {
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault(); //to prevent form submission
+    dologin();
+});
     $(".button-collapse").sideNav();
           $("#preloader").hide();
           if (Cookies.get('currenttoken')) {
