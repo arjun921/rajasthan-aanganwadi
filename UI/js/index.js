@@ -1,7 +1,6 @@
 var start, end, totalCategories;
 var paginateSplit = 20;
 var count = 0;
-
 // ############### API CALLs Begin #########################---------------------------->
 function load_content(contentID) {
   onContentLoad();
@@ -27,28 +26,6 @@ function load_content(contentID) {
   };
   hitApi('/content', sendData, apisuccess, apierror);
 } //load_content ends -------->
-
-function createNavSuccess(data, id) {
-  setTitle(data.title)
-  listing = data.contains;
-  searchInput.oninput = searchCategories;
-  var updateBookCount = function(numCategories) {
-    bookCountBadge.innerText = numCategories + ' items';
-  };
-  updateBookCount(listing.length);
-  totalCategories = listing.length;
-  if (totalCategories > paginateSplit) {
-    $('#pagination').show();
-    start = 0;
-    end = paginateSplit;
-  } else {
-    start = 0;
-    end = totalCategories;
-  }
-  showElement(indexedCategoriesTable);
-  rebuildSearchIndex();
-  updateCategoriesTable(listing, id);
-}
 
 function createNav(id) {
   sendData = {
@@ -161,7 +138,7 @@ function createNav(id) {
       start += paginateSplit
       end = start + (totalCategories - start);
     }
-    updateCategoriesTable(data);
+    categoryListing(listing);
     window.scrollTo(0, 100000);
   }
 
@@ -175,7 +152,7 @@ function createNav(id) {
       start -= paginateSplit
       end = start + (totalCategories - start);
     }
-    updateCategoriesTable(data);
+    categoryListing(listing);
     window.scrollTo(0, 100000);
   }
 
@@ -197,12 +174,11 @@ function createNav(id) {
       return ""
     }
   }
-  
+
 
   function createListingElements(initiation, condition, Categories) {
     for (var i = initiation; i < condition; i++) {
       item = Categories[i];
-      console.log(item);
       p = getHTMLCategoryFileListElement(item);
       $('#navi').append(p);
     }
@@ -278,7 +254,6 @@ function createNav(id) {
 
 
 function categoryListing(Categories,parID) {//this function is called in searchScript.js
-  var tokens = search.tokenizer.tokenize(searchInput.value);
   var pages =  Math.floor(totalCategories/paginateSplit);
   var remainder = (totalCategories/paginateSplit)-pages;
   if (remainder==0) {
@@ -329,4 +304,24 @@ function categoryListing(Categories,parID) {//this function is called in searchS
     }
   }
 
+}
+function createNavSuccess(data, id) {
+  setTitle(data.title)
+  listing = data.contains;
+  // searchInput.oninput = searchCategories;
+  // var updateBookCount = function(numCategories) {
+  //   bookCountBadge.innerText = numCategories + ' items';
+  // };
+  // updateBookCount(listing.length);
+  totalCategories = listing.length;
+  if (totalCategories > paginateSplit) {
+    $('#pagination').show();
+    start = 0;
+    end = paginateSplit;
+  } else {
+    start = 0;
+    end = totalCategories;
+  }
+  // updateCategoriesTable(listing, id);
+  categoryListing(listing, id);
 }

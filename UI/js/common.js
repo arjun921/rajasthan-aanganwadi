@@ -1,6 +1,6 @@
-var server = 'https://rajasthan-aanganwadi.herokuapp.com';
+// var server = 'https://rajasthan-aanganwadi.herokuapp.com';
 // var server = 'https://fe2cc24a.ngrok.io'
-// var server = 'http://localhost:8000'
+var server = 'http://localhost:8000'
 // spinid = setInterval(nextSpinner, 60);
 // $("#spinner").show();
 $('.tooltipped').tooltip({delay: 50});
@@ -200,7 +200,7 @@ function disableHamburgerMenu() {
 
 function searchClickedFunction() {
   $('#searchForm').toggle();
-  document.getElementById('searchInput').focus();
+  document.getElementById('newSearchInput').focus();
   // if (Cookies.get('CurrPage') != "_ROOT_" && !$('#searchForm').is(':visible')) {
   //     s = getHTMLCategoryUp();
   //     $('#navi').append(s);
