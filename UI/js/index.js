@@ -263,6 +263,7 @@ function categoryListing(Categories,parID) {//this function is called in searchS
     totalPages = pages+1;
   }
   document.getElementById('navi').innerHTML = '';
+  $('#pagination').removeClass('card-panel');
   document.getElementById('pagination').innerHTML = '';
   if (parID!="_ROOT_" && !$('#searchForm').is(':visible') && location.hash!="") {
     s = getHTMLCategoryUp();
@@ -275,17 +276,22 @@ function categoryListing(Categories,parID) {//this function is called in searchS
     var c = count+1;
     first = true;
     if (totalCategories>paginateSplit && start>=paginateSplit) {
+      $('#pagination').removeClass('card-panel');
       document.getElementById('pagination').innerHTML = '';
+      $('#pagination').addClass('card-panel');
       p = "<li class=\"waves-effect\" onclick=\"loadPreviousList50()\"><a><i class=\"material-icons\">chevron_left</i></a></li>";
       $('#pagination').append(p);
+      $('#pagination').addClass('card-panel');
       if (first) {
         p="<li class=\"center\"><a id=\"pageNo\">Page: "+c+"/"+totalPages+"</a></li>"
         $('#pagination').append(p);
+        $('#pagination').addClass('card-panel');
         first = false;
       }
     }
     createListingElements(start,end,Categories);
     if (Categories.length>end) {
+      $('#pagination').addClass('card-panel');
       //conditionally show next button
       if (first) {
         p = "<li class=\"disabled\"><a><i class=\"material-icons\">chevron_left</i></a></li>";
@@ -299,6 +305,7 @@ function categoryListing(Categories,parID) {//this function is called in searchS
 
     }
     else if (Categories.length==end) {
+      $('#pagination').addClass('card-panel');
       p = "<li class=\"disabled\" ><a><i class=\"material-icons\">chevron_right</i></a></li>";
       $('#pagination').append(p);
     }
