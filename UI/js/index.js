@@ -9,7 +9,6 @@ function load_content(contentID) {
     'fname': contentID
   }
   apisuccess = function(data, st, xhr) {
-    console.log(data.url);
     $('#content').show();
     $('#content').html('');
     setTitle(data.meta.title);
@@ -32,8 +31,6 @@ function createNav(id) {
     'catid': id
   }
   apisuccess = function(data, st, xhr) {
-    console.log("create Nav success being called");
-    console.log(data.id);
     sessionStorage.setItem(id, JSON.stringify(data));
     Cookies.set('CurrPage', data.id);
     createNavSuccess(data, data.id)
@@ -48,12 +45,10 @@ function createNav(id) {
     }
   };
   if (sessionStorage.getItem(id)) {
-    console.log("If Called");
     data = (JSON.parse(sessionStorage.getItem(id)));
     createNavSuccess(data, id)
     }
     else {
-      console.log("Else called");
       hitApi('/category', sendData, apisuccess, apierror);
     }
   } //create Nav ends --------------------------------------------------->
