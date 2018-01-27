@@ -1,9 +1,9 @@
 var start,end,totalCategories;var paginateSplit=20;var count=0;function load_content(contentID){onContentLoad();sendData={"token":Cookies.get('currenttoken'),'fname':contentID}
-apisuccess=function(data,st,xhr){console.log(data.url);$('#content').show();$('#content').html('');setTitle(data.meta.title);loadFileByType(data);};apierror=function(returnval){if(returnval.status==404){contentNotFound()}else if(returnval.status==403){contentNoLogin()}else{contentUnkError()}};hitApi('/content',sendData,apisuccess,apierror);}
+apisuccess=function(data,st,xhr){$('#content').show();$('#content').html('');setTitle(data.meta.title);loadFileByType(data);};apierror=function(returnval){if(returnval.status==404){contentNotFound()}else if(returnval.status==403){contentNoLogin()}else{contentUnkError()}};hitApi('/content',sendData,apisuccess,apierror);}
 function createNav(id){sendData={'catid':id}
-apisuccess=function(data,st,xhr){console.log("create Nav success being called");console.log(data.id);sessionStorage.setItem(id,JSON.stringify(data));Cookies.set('CurrPage',data.id);createNavSuccess(data,data.id)}
-apierror=function(returnval){if(returnval.status==404){serverDown()}else if(returnval.status==403){contentNoLogin()}else{contentUnkError()}};if(sessionStorage.getItem(id)){console.log("If Called");data=(JSON.parse(sessionStorage.getItem(id)));createNavSuccess(data,id)}
-else{console.log("Else called");hitApi('/category',sendData,apisuccess,apierror);}}
+apisuccess=function(data,st,xhr){sessionStorage.setItem(id,JSON.stringify(data));Cookies.set('CurrPage',data.id);createNavSuccess(data,data.id)}
+apierror=function(returnval){if(returnval.status==404){serverDown()}else if(returnval.status==403){contentNoLogin()}else{contentUnkError()}};if(sessionStorage.getItem(id)){data=(JSON.parse(sessionStorage.getItem(id)));createNavSuccess(data,id)}
+else{hitApi('/category',sendData,apisuccess,apierror);}}
 window.onhashchange=change;window.onpageshow=function(event){reINT();setTitle("Activity");};function change(){$('#content').html('');$('#content').hide();reINT();}
 function reINT(){count=0;showSearch();enableHamburgerMenu();$('#preloader').hide();$('#searchForm').hide();$('#pagination').hide();if(window.location.href.split('#').length==1){createNav('_ROOT_');}else{if(window.location.href.split('#')[1]=="help"){}else if(location.hash.split(".").length<2){createNav(window.location.href.split('#')[1]);}else{if(Cookies.get('currenttoken')){load_content(window.location.href.split('#')[1]);}else{window.location.href="login.html";}}}}
 function loadmp4(data){p=getHTMLVideoPlayer(data);$('#preloader').hide();$('#content').append(p);}
