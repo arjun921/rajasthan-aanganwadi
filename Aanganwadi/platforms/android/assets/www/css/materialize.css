@@ -19,6 +19,7 @@
  :root {
    --theme-color: #CC0000;
    --theme-text-color: #CC0000;
+   --theme-color-darken: #A30000;
    --progress-bg: #FFF;
    --progress-value-bg: #00B233;
    --color-1: #fff;
@@ -5316,7 +5317,7 @@ small {
 }
 
 .btn:hover, .btn-large:hover {
-  background-color: #4f22ff;
+  background-color: var(--theme-color-darken);
 }
 
 .btn-floating {
