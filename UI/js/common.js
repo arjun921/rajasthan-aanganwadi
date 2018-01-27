@@ -201,10 +201,6 @@ function disableHamburgerMenu() {
 function searchClickedFunction() {
   $('#searchForm').toggle();
   document.getElementById('newSearchInput').focus();
-  // if (Cookies.get('CurrPage') != "_ROOT_" && !$('#searchForm').is(':visible')) {
-  //     s = getHTMLCategoryUp();
-  //     $('#navi').append(s);
-  // }
   updateBookCount(listing.length);
-  updateCategoriesTable(listing,Cookies.get('CurrPage'));
+  categoryListing(listing,Cookies.get('CurrPage'));
 }
