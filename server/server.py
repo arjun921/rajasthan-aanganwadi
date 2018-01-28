@@ -860,7 +860,9 @@ def report_login():
                 "columns": ["User", "Activity", "TimeStamp"]}
     elif kind == 'contentusage':
         data = {"report": db.get_content_report(end, interval),
-                "columns": ["FileName", "Title", "Timestamp"]}
+                "columns": ["FileName", "File Kind", "Title",
+                            "Parent Category Id",
+                            "Parent Category Title", "Timestamp"]}
     else:
         return raisehttp(404, "Report Kind not found")
     return data

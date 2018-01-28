@@ -92,9 +92,11 @@ class DB:
             report = []
             for i in d:
                 fname = i['fname']
+                kind = fname.split('.')[-1]
                 meta = self.content_meta_data(fname)
-                row = [fname, meta['title'], str(i['stamp'])]
-                # TODO: meta has to be added as per template
+                parent_cat = self.category_data(meta['parent'])['title']
+                row = [fname, kind, meta['title'], meta['parent'],
+                       parent_cat, str(i['stamp'])]
                 report.append(row)
             return report
         return []
