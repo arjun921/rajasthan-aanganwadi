@@ -137,4 +137,4 @@ def del_uploaded(fname):
 
 
 if __name__ == '__main__':
-    doitc_file_to_generalized_format('b.xlsx')
+    doitc_file_to_generalized_format('tree.xlsx')
