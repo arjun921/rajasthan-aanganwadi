@@ -1,8 +1,8 @@
 import os
 import random
 from hashlib import sha256
-from datetime import datetime
 from pymongo import MongoClient
+from datetime import datetime, timedelta
 
 
 def now():
@@ -69,9 +69,24 @@ class DB:
                 self.add_admin(data['email'])
             # categories
 
+    def record_login_activity(self, email, is_login):
+        if not self.dev:
+            self.database.login_usage.insert_one({"email": email,
+                                                  "is_login": is_login,
+                                                  "stamp": now()})
+
     def record_db_usage(self, data):
         if not self.dev:
             self.database.usage.insert_one({"data": data, "time": now()})
+
+    def get_login_report(self, end, interval):
+        start = end - timedelta(interval)
+        if not self.dev:
+            d = self.database.login_usage.find({"stamp": {"$gt": start,
+                                                          "$lt": end}})
+            return [(i['email'], i['is_login'], str(i['stamp']))
+                    for i in d]
+        return []
 
     def get_report(self):
         if not self.dev:

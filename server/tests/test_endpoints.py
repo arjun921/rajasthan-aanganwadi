@@ -131,13 +131,15 @@ def category(admin):
 
 
 # TESTS---------------------------------------------------------------
-def test_report_url_returns_data(admin):
-    r = requests.post(point("/report"), json={"token": admin['token']})
+def test_login_report_url_returns_data(admin):
+    r = requests.post(point("/report/login"),
+                      json={"token": admin['token']})
     assert r.status_code == 200, r.text
 
 
-def test_report_url_fails_for_normal_user(loggeduser):
-    r = requests.post(point("/report"), json={"token": loggeduser['token']})
+def test_login_report_url_fails_for_normal_user(loggeduser):
+    r = requests.post(point("/report/login"),
+                      json={"token": loggeduser['token']})
     assert r.status_code == 403, r.status_code
 
 

@@ -160,7 +160,7 @@ def user_login():
     pwd, token, email = json['pwd'], json['token'], json['email']
     if db.user_pwd_present(email, pwd):
         if not db.token_present(token):
-            db.record_db_usage({"item": email, "kind": "user_login"})
+            db.record_login_activity(email, True)
             db.token_insert(token, email)
             return {'name': db.user_info(email)['name']}
         else:
@@ -261,6 +261,8 @@ def user_logout():
     """
     if not db.token_present(bottle.request.json['token']):
         raise raisehttp(422, body='invalid token')
+    email = db.token_data(bottle.request.json['token'])['email']
+    db.record_login_activity(email, False)
     db.token_remove(bottle.request.json['token'])
     return 'OK'
 
@@ -818,7 +820,7 @@ def category_create():
         return 'OK'
 
 
-@app.post("/report")
+@app.post("/report/login")
 @json_validate
 @login_required
 @admin_only
@@ -831,7 +833,9 @@ def report():
         "properties"    : {
                             "token" :   {"type" : "string",
                                          "minLength": 100,
-                                         "maxLength": 100}
+                                         "maxLength": 100},
+                            "end":      {"type": "number"},
+                            "interval": {"type": "number"}
                           },
         "required"      : ["token"]
     }
@@ -846,8 +850,10 @@ def report():
                     ]
     }
     """
-    data = {"report": db.get_report()}
-    print(data)
+    end = bottle.request.json.get("end", datetime.utcnow().timestamp())
+    end = datetime.fromtimestamp(end)
+    interval = bottle.request.json.get("interval", 5)
+    data = {"report": db.get_login_report(end, interval)}
     return data
 
 
