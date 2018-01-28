@@ -1,5 +1,6 @@
 import os
 import random
+from hashlib import sha256
 from datetime import datetime
 from pymongo import MongoClient
 
@@ -207,7 +208,7 @@ class DB:
         "Insert user into logged in token base"
         if not self.dev:  # NOTE: remove this
             self.database.tokens.insert_one({'token': token,
-                                                'email': user_email})
+                                             'email': user_email})
         else:
             self.tokens[token] = user_email
 
@@ -239,11 +240,14 @@ class DB:
 
     def user_insert(self, user):
         "Insert a user into the database"
+        salt = randstring(50)
+        pwd = sha256((str(user['pwd']) + salt).encode()).hexdigest()
         data = dict(email=user['email'],
-                    pwd=user['pwd'],
+                    pwd=pwd,
                     name=user['name'],
                     aadhaar=user['address'],
-                    mobile=user['mobile'])
+                    mobile=user['mobile'],
+                    salt=salt)
         if not self.user_present(data['email']):
             if not self.dev:  # NOTE: remove this
                 self.database.users.insert_one(data)
@@ -284,8 +288,9 @@ class DB:
     def content_meta_data(self, fname):
         "Returns meta about a file"
         if not self.dev:  # NOTE: remove this
+            P = {"_id": False}
             f = list(self.database['content_meta'].find({'fname': fname},
-                                                           projection={"_id": False}))
+                                                        projection=P))
         else:
             f = [i for i in self.content_meta if i['fname'] == fname]
         if len(f) > 0:
@@ -327,13 +332,23 @@ class DB:
 
     def user_pwd_present(self, email, pwd):
         "Is this user pwd combo present?"
-        data = dict(email=email, pwd=pwd)
+        data = dict(email=email)
         if not self.dev:  # NOTE: remove this
-            count = self.database.users.find(data).count()
-            return count > 0
+            users = self.database.users.find(data)
+            count = users.count()
+            if count > 0:
+                users = list(users)
+            else:
+                return False
         else:
-            return len(list(1 for i in self.users
-                       if i['email'] == email and i['pwd'] == pwd)) > 0
+            users = [i for i in self.users
+                     if i['email'] == email]
+            if len(users) <= 0:
+                return False
+        user = users[0]
+        salt, exp = user['salt'], user['pwd']
+        pwd = sha256((str(pwd) + salt).encode()).hexdigest()
+        return pwd == exp
 
     def category_insert(self, category):
         "Insert a new category"
