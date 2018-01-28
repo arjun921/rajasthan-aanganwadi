@@ -495,6 +495,7 @@ def content_retreive():
         raise raisehttp(404, 'Content not found')
     link = db.generate_content_url(fname)
     db.record_content_usage(fname)
+    meta["creation_stamp"] = str(meta['creation_stamp'])
     return {'url': '/static/'+link,
             'meta': meta}
 
@@ -578,7 +579,6 @@ def form_formid():
     formid = bottle.request.json['formid']
     if db.form_present(formid):
         x = db.form_data(formid)
-        db.record_db_usage({"item": formid, "kind": "form_request"})
         return x
     else:
         raise raisehttp(404, 'form not found')
@@ -693,7 +693,6 @@ def form_submit():
     data['email'] = email
     data['timestamp'] = str(datetime.now())
     db.response_submit(data)
-    db.record_db_usage({"item": data['formid'], "kind": "form_submit"})
     return 'OK'
 
 
@@ -863,6 +862,10 @@ def report_login():
                 "columns": ["FileName", "File Kind", "Title",
                             "Parent Category Id",
                             "Parent Category Title", "Timestamp"]}
+    elif kind == 'contentstatus':
+        data = {"report": db.get_content_status_report(),
+                "columns": ["File Id", "Title", "Description",
+                            "Parent Category Id", "Creation Timestamp"]}
     else:
         return raisehttp(404, "Report Kind not found")
     return data

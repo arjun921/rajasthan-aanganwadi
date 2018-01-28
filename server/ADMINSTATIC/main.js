@@ -466,6 +466,7 @@ $( document ).ready(function() {
         var reportkind = makeTag("select", "", {"id": "reportKind"});
         reportkind.append(makeTag("option", "User Activity", {"value": "useractivity"}));
         reportkind.append(makeTag("option", "Content Usage", {"value": "contentusage"}));
+        reportkind.append(makeTag("option", "Content Status", {"value": "contentstatus"}));
         selector.append(getbutton); selector.append(span1);
         selector.append(dtsel); selector.append(span2);
         selector.append(interval); selector.append(span3);

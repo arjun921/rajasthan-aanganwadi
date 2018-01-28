@@ -75,14 +75,20 @@ class DB:
                                                   "is_login": is_login,
                                                   "stamp": now()})
 
+    def get_content_status_report(self):
+        if not self.dev:
+            return [(i['fname'],
+                     i['title'],
+                     i['desc'],
+                     i['parent'],
+                     str(i['creation_stamp']))
+                    for i in self.database.content_meta.find()]
+        return []
+
     def record_content_usage(self, fname):
         if not self.dev:
             self.database.content_usage.insert_one({"fname": fname,
                                                     "stamp": now()})
-
-    def record_db_usage(self, data):
-        if not self.dev:
-            self.database.usage.insert_one({"data": data, "time": now()})
 
     def get_content_report(self, end, interval):
         start = end - timedelta(interval)
@@ -111,21 +117,6 @@ class DB:
                      str(i['stamp']))
                     for i in d]
         return []
-
-    def get_report(self):
-        if not self.dev:
-            d = self.database.usage.distinct("data")
-            report = [(i['kind'],
-                       self.database.usage.find({"data": i}).count())
-                      for i in d]
-            groups = {}
-            for kind, count in report:
-                if kind in groups:
-                    groups[kind] = tuple(list(groups[kind]) + [count])
-                else:
-                    groups[kind] = tuple([count])
-            return list(groups.items())
-        return {}
 
     def response_submit(self, data):
         "submit a form response"
@@ -318,7 +309,8 @@ class DB:
         data = {'fname': fname,
                 'title': title,
                 'desc': desc,
-                'parent': parent}
+                'parent': parent,
+                'creation_stamp': now()}
         if not self.dev:  # NOTE: remove this
             self.database['content_meta'].insert_one(data)
         else:
