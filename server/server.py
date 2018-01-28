@@ -494,7 +494,7 @@ def content_retreive():
     if meta is None:
         raise raisehttp(404, 'Content not found')
     link = db.generate_content_url(fname)
-    db.record_db_usage({"item": fname, "kind": "content_request"})
+    db.record_content_usage(fname)
     return {'url': '/static/'+link,
             'meta': meta}
 
@@ -820,11 +820,11 @@ def category_create():
         return 'OK'
 
 
-@app.post("/report/login")
+@app.post("/report")
 @json_validate
 @login_required
 @admin_only
-def report():
+def report_login():
     """
     POST /report
     ----------
@@ -835,25 +835,34 @@ def report():
                                          "minLength": 100,
                                          "maxLength": 100},
                             "end":      {"type": "number"},
-                            "interval": {"type": "number"}
+                            "interval": {"type": "number"},
+                            "kind": {"type": "string"}
                           },
-        "required"      : ["token"]
+        "required"      : ["token", "kind"]
     }
     ----------
 
     Returns JSON
     {
         "report": [
-                    "item": <frequency>,
-                    "item": <frequency>,
-                    "item": <frequency>,
+                    <item tuple>,
+                    <item tuple>,
+                    <item tuple>,
                     ]
     }
     """
     end = bottle.request.json.get("end", datetime.utcnow().timestamp())
     end = datetime.fromtimestamp(end)
     interval = bottle.request.json.get("interval", 5)
-    data = {"report": db.get_login_report(end, interval)}
+    kind = bottle.request.json.get("kind", "useractivity")
+    if kind == 'useractivity':
+        data = {"report": db.get_login_report(end, interval),
+                "columns": ["User", "Activity", "TimeStamp"]}
+    elif kind == 'contentusage':
+        data = {"report": db.get_content_report(end, interval),
+                "columns": ["FileName", "Title", "Timestamp"]}
+    else:
+        return raisehttp(404, "Report Kind not found")
     return data
 
 

@@ -75,16 +75,38 @@ class DB:
                                                   "is_login": is_login,
                                                   "stamp": now()})
 
+    def record_content_usage(self, fname):
+        if not self.dev:
+            self.database.content_usage.insert_one({"fname": fname,
+                                                    "stamp": now()})
+
     def record_db_usage(self, data):
         if not self.dev:
             self.database.usage.insert_one({"data": data, "time": now()})
 
+    def get_content_report(self, end, interval):
+        start = end - timedelta(interval)
+        if not self.dev:
+            d = self.database.content_usage.find({"stamp": {"$gte": start,
+                                                            "$lte": end}})
+            report = []
+            for i in d:
+                fname = i['fname']
+                meta = self.content_meta_data(fname)
+                row = [fname, meta['title'], str(i['stamp'])]
+                # TODO: meta has to be added as per template
+                report.append(row)
+            return report
+        return []
+
     def get_login_report(self, end, interval):
         start = end - timedelta(interval)
         if not self.dev:
-            d = self.database.login_usage.find({"stamp": {"$gt": start,
-                                                          "$lt": end}})
-            return [(i['email'], i['is_login'], str(i['stamp']))
+            d = self.database.login_usage.find({"stamp": {"$gte": start,
+                                                          "$lte": end}})
+            return [(i['email'],
+                     'Log In' if i['is_login'] else 'Log Out',
+                     str(i['stamp']))
                     for i in d]
         return []
 

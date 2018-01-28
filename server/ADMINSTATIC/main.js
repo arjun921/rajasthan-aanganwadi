@@ -453,7 +453,7 @@ $( document ).ready(function() {
     // ========================================= BINDINGS
     $("#formtab").click(getFormList); // form tab
 
-    $("#loginreportstab").click(function (){
+    $("#reportstab").click(function (){
         cleanSlate();
         $("#mainContainer").removeClass("row").addClass("container");
         var selector = makeTag("div", "", {"id": "selector_for_user_activity"});
@@ -462,10 +462,14 @@ $( document ).ready(function() {
         var dtsel = makeTag("input", "", {"id": "end_selector", "type": "date"});
         var span2 = makeTag("span", " and starting ");
         var interval = makeTag("input", "", {"id": "interval_selector", "type": "number", "placeholder": 5});
-        var span3 = makeTag("span", " days back.");
+        var span3 = makeTag("span", " days back for ");
+        var reportkind = makeTag("select", "", {"id": "reportKind"});
+        reportkind.append(makeTag("option", "User Activity", {"value": "useractivity"}));
+        reportkind.append(makeTag("option", "Content Usage", {"value": "contentusage"}));
         selector.append(getbutton); selector.append(span1);
         selector.append(dtsel); selector.append(span2);
         selector.append(interval); selector.append(span3);
+        selector.append(reportkind);
         $("#mainContainer").append(selector);
         $("#mainContainer").append(makeTag("hr"));
         getbutton.click(function (){
@@ -479,32 +483,30 @@ $( document ).ready(function() {
             if(interval != ""){
                 data['interval'] = parseInt(interval);
             }
+            data['kind'] = $("#reportKind").val();
             console.log(data);
-            hitApi("/report/login", data, function (d, s, x){
+            hitApi("/report", data, function (d, s, x){
                     var reports = d['report'];
                     console.log(reports);
-                    var table = makeTag("table", '', {"class": "table table-striped table-bordered table-hover"});
+                    $("#reportTable").remove();
+                    var table = makeTag("table", '', {"class": "table table-striped table-bordered table-hover", "id": "reportTable"});
                     var thead = makeTag("thead");
                     var row = makeTag("tr");
-                    var titles = makeTag("th", "User");
-                    var mean = makeTag("th", "Activity");
-                    var std = makeTag("th", "UTC Stamp");
-                    row.append(titles);row.append(mean);row.append(std);
+                    for(var i=0; i<d['columns'].length; ++i){
+                        var th = makeTag("th", d['columns'][i]);
+                        row.append(th);
+                    }
                     thead.append(row);
                     table.append(thead);
-                    table.append(makeTag("tbody", "", {"id": "reportTable"}));
+                    table.append(makeTag("tbody", "", {"id": "reportBody"}));
                     $("#mainContainer").append(table);
                     for(var i=0; i<reports.length; ++i){
                         var row = makeTag('tr');
                         // ------------
-                        row.append(makeTag("td", reports[i][0]));
-                        var kind = 'Log Out';
-                        if(reports[i][1] === true){
-                            var kind = 'Log In';
+                        for(var j=0; j<reports[i].length; ++j){
+                            row.append(makeTag("td", reports[i][j]));
                         }
-                        row.append(makeTag("td", kind));
-                        row.append(makeTag("td", reports[i][2]));
-                        $("#reportTable").append(row);
+                        $("#reportBody").append(row);
                     } // reports log
                 })
         });
