@@ -342,7 +342,11 @@ def content_create():
         # -----------update category to contain this content
         parent = bottle.request.forms.get('parent')
         if parent is not None:
-            db.content_meta_create(fname, title, desc, parent)
+            meta = {'title': title,
+                    'desc': desc,
+                    'parent': parent,
+                    'original': file.filename}
+            db.content_meta_create(fname, meta)
             data = db.category_data(parent)
             data['contains'].append(fname)
             db.category_delete(parent)

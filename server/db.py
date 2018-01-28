@@ -304,26 +304,25 @@ class DB:
         if u:
             return u[0]
 
-    def content_meta_create(self, fname, title, desc, parent):
+    def content_meta_create(self, fname, meta):
         "Add meta about the content"
         data = {'fname': fname,
-                'title': title,
-                'desc': desc,
-                'parent': parent,
                 'creation_stamp': now()}
+        data.update(meta)
         if not self.dev:  # NOTE: remove this
             self.database['content_meta'].insert_one(data)
         else:
             self.content_meta.append(data)
 
-    def content_meta_data(self, fname):
+    def content_meta_data(self, fname, use_original=False):
         "Returns meta about a file"
+        key = 'fname' if not use_original else 'original'
         if not self.dev:  # NOTE: remove this
             P = {"_id": False}
-            f = list(self.database['content_meta'].find({'fname': fname},
+            f = list(self.database['content_meta'].find({key: fname},
                                                         projection=P))
         else:
-            f = [i for i in self.content_meta if i['fname'] == fname]
+            f = [i for i in self.content_meta if i[key] == fname]
         if len(f) > 0:
             return f[0]
 

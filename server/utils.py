@@ -13,6 +13,33 @@ if not os.path.exists(upath):
     os.mkdir(upath)
 
 
+class ContentNotAvailable(Exception):
+    pass
+
+
+def generate_tree_from_excel_file(path):
+    """
+    Reset the current tree and generate it from the provided
+    excel file path
+    """
+    df = pd.read_excel(path)
+    confirm_all_content_is_uploaded(df)
+
+
+def confirm_all_content_is_uploaded(df):
+    "Given a dataframe, confirm all content is uploaded and exists"
+    for _, row in df.iterrows():
+        if row['filehash'] is not None:
+            if db.content_meta_data(row['filehash']) is None:
+                raise ContentNotAvailable(row['filehash'])
+        elif row['Filename'] is not None:
+            if db.content_meta_data(row['filehash'],
+                                    use_original=True) is None:
+                raise ContentNotAvailable(row['Filename'])
+        else:
+            raise ContentNotAvailable("Both filehash and filename are empty")
+
+
 def doitc_file_to_generalized_format(path):
     """
     Turn a DoIT&C formatted excel file to a generalized
