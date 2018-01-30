@@ -10,7 +10,7 @@
    /* 2 */
    -webkit-text-size-adjust: 100%;
    /* 2 */
-   background: url(../images/patternstudio_kids006.jpg) repeat;
+   background: url(../images/hand_drawn_kid_pattern.jpg) repeat;
  /* -webkit-background-size: cover;
  -moz-background-size: cover;
  -o-background-size: cover; */
@@ -23,13 +23,13 @@
    --progress-bg: #FFF;
    --progress-value-bg: #00B233;
    --color-1: #fff;
-   --font-color-1: #0099CC;
+   --font-color-1: #000;
    --color-2: #fff;
-   --font-color-2: #E41E5C;
+   --font-color-2: #000;
    --color-3: #fff;
-   --font-color-3: #83B33D;
+   --font-color-3: #000;
    --color-4: #fff;
-   --font-color-4: #FF9900;
+   --font-color-4: #000;
    --font-color: #FFF;
    --header-font-color: #FFF;
  }
