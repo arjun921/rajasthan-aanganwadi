@@ -12,6 +12,7 @@ $( document ).ready(function() {
     // function definitions for everything
     function cleanSlate(){ $("#mainContainer").html('');
         $("#mainContainer").removeClass().addClass("row");
+        $("#help_container").hide();
     };
     function getCurrentToken(){return user_token;};
 
@@ -515,6 +516,7 @@ $( document ).ready(function() {
     });
 
     $("#contenttab").click(function (){
+        cleanSlate();
         showCategory('_ROOT_');
     }); // content tab
 
@@ -538,7 +540,10 @@ $( document ).ready(function() {
         });
     }); // logout click
 
-    $("#home_link").click(cleanSlate);
+    $("#home_link").click(function (){
+        cleanSlate();
+        $("#help_container").show();
+    });
     // ======================================== CONTENT
 
     function addCategoryItem(item){
@@ -711,6 +716,6 @@ $( document ).ready(function() {
     } // show category
 
     // ========================================= CALLS
-    cleanSlate();
+    $("#home_link").click();
     $("#logout_button").hide();
 }); // DOCUMENT READY
