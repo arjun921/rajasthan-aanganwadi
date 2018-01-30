@@ -1,4 +1,4 @@
-var fields_returned;$(document).ready(function(){fetchForms();enableHamburgerMenu();});function TokenPresent(){if(typeof Cookies.get('currenttoken')!=='undefined'){return true}else{return false}}
+var fields_returned;$(document).ready(function(){$('#form').hide();fetchForms();setTitle("Forms");enableHamburgerMenu();});function TokenPresent(){if(typeof Cookies.get('currenttoken')!=='undefined'){return true}else{return false}}
 function makeList(data){for(var i=0;i<data.forms.length;i++){item=data.forms[i];p=getHTMLFormsListElement(item)
 $('#form_list').append(p);}}
 function noFormsToast(){Materialize.toast('No forms to fill at the moment',4000,'',function(){window.open("index.html","_self")})}
@@ -16,7 +16,7 @@ pic=getHTMLDatePicker(field);$('#form').append(pic);}
 function createTimePicker(field){createLabel(field)
 pic=getHTMLTimePicker(field);$('#form').append(pic);}
 function createFormField(field){if(field.kind=='text'){createTxtField(field)}else if(field.kind=='radio'){createRadio(field)}else if(field.kind=='checkbox'){createCB(field)}else if(field.kind=='select'){createSelect(field)}else if(field.kind=='range'){createRange(field)}else if(field.kind=='datepicker'){createDatePicker(field)}else if(field.kind=='timepicker'){createTimePicker(field)}}
-function create_form(fields_returned){Cookies.set('fields_returned',fields_returned)
+function create_form(fields_returned){$('#form').show();setTitle("Forms");Cookies.set('fields_returned',fields_returned)
 if(typeof fields_returned!=='undefined'){$("#form_list").hide();h=getHTMLFormTitle(fields_returned);$('#form').append(h);for(var i=0;i<fields_returned.fields.length;i++){createFormField(fields_returned.fields[i]);}
 but=getHTMLFormSubmitButton()
 $('#form').append(but);$('.timepicker').pickatime({default:'now',fromnow:0,twelvehour:false,donetext:'OK',cleartext:'Clear',canceltext:'Cancel',autoclose:false,ampmclickable:true,aftershow:function(){}});$('.datepicker').pickadate({selectMonths:true,selectYears:15,today:'Today',clear:'Clear',close:'Ok',closeOnSelect:false});$('select').material_select();}}
@@ -29,13 +29,14 @@ val['id']=id;val['value']="";val['misc']=cbval;}
 data.push(val)}
 return data}
 function fetchForms(){sendData={"token":Cookies.get('currenttoken')}
-apisuccess=function(data,st,xhr){if(data.forms.length>0){makeList(data)}
+apisuccess=function(data,st,xhr){$('#preloader').hide();if(data.forms.length>0){makeList(data)}
 else{$('#form_list').append(getHTMLNoFormsToFill);noFormsToast();}}
 apierror=function(returnval){if(returnval.status!=200){out_changes();msg='Please Login to view.'
 href='login.html'
 action=function(){window.open("login.html","_self")}
 toastWithAction(msg,href,action)}}
-hitApi('/form/list',sendData,apisuccess,apierror);}
+if(Cookies.get('currenttoken')){hitApi('/form/list',sendData,apisuccess,apierror);}
+else{window.open("login.html","_self")}}
 function load_form(formID){sendData={"token":Cookies.get('currenttoken'),'formid':formID}
 apisuccess=function(data,st,xhr){create_form(data);}
 hitApi('/form',sendData,apisuccess,function(){});}
