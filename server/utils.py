@@ -40,6 +40,7 @@ def solidify_path(row, path_columns):
         current_id = id_path[-1]
         cat = db.category_data(current_id)
         contains = [db.category_data(c) for c in cat['contains']]
+        contains = [i for i in contains if i is not None]
         if row[col] in [i['title'] for i in contains]:
             ident = [i['id'] for i in contains if i['title'] == row[col]][0]
             id_path.append(ident)
