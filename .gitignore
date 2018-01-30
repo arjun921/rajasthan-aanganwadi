@@ -9,3 +9,4 @@ _templates/
 htmlcov/
 TEMP/
 *.csv
+FileTree.xlsx

@@ -12,6 +12,7 @@ $( document ).ready(function() {
     // function definitions for everything
     function cleanSlate(){ $("#mainContainer").html('');
         $("#mainContainer").removeClass().addClass("row");
+        $("#help_container").hide();
     };
     function getCurrentToken(){return user_token;};
 
@@ -515,6 +516,7 @@ $( document ).ready(function() {
     });
 
     $("#contenttab").click(function (){
+        cleanSlate();
         showCategory('_ROOT_');
     }); // content tab
 
@@ -538,7 +540,10 @@ $( document ).ready(function() {
         });
     }); // logout click
 
-    $("#home_link").click(cleanSlate);
+    $("#home_link").click(function (){
+        cleanSlate();
+        $("#help_container").show();
+    });
     // ======================================== CONTENT
 
     function addCategoryItem(item){
@@ -666,10 +671,51 @@ $( document ).ready(function() {
 
 
             $("#categories_list").append(item);
+            // ADD EXCEL BASED REORGANIZATION
+            var item = makeTag("li", "", {"class": "list-group-item input-group"});
+            var form = makeTag("form", "", {"class": "form-group",
+                                            "action": "/category/reorganize",
+                                            "method": "post",
+                                            "enctype": "multipart/form-data",
+                                            "id": "categoryReorganizeForm"
+                                           });
+            item.append(form);
+            var upload = makeTag("input", "", {"class": "form-control", "type": "file", "name": "upload", "multiple": "multiple"});
+            var button = makeTag("button", "Upload", {"class": "btn btn-primary", "type": "submit"});
+            var tok = makeTag("input", "", {"type": "hidden", "name": "token", "value": getCurrentToken() });
+
+
+            form.append(makeTag("b", "Reorganize Categories With Excel File"));
+            form.append(tok);
+            form.append(upload);
+            form.append(button);
+
+            button.click(function uploadForm(event){
+                event.preventDefault();
+                var data = new FormData(form[0]);
+                button.prop("disabled", true);
+                $.ajax({
+                        type: "POST",
+                        enctype: 'multipart/form-data',
+                        url: "/category/reorganize",
+                        data: data,
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        timeout: 600000,
+                        success: function (d){
+                            console.log(d);
+                            $("#contenttab").click();
+                        }
+                });
+            });
+
+
+            $("#categories_list").append(item);
         });
     } // show category
 
     // ========================================= CALLS
-    cleanSlate();
+    $("#home_link").click();
     $("#logout_button").hide();
 }); // DOCUMENT READY

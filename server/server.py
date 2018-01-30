@@ -20,7 +20,7 @@ import pandas as pd
 from functools import wraps
 from datetime import datetime
 from jsonschema import validate
-__version__ = (0, 0, 18)
+__version__ = (0, 0, 19)
 
 
 app = bottle.Bottle()
@@ -342,7 +342,11 @@ def content_create():
         # -----------update category to contain this content
         parent = bottle.request.forms.get('parent')
         if parent is not None:
-            db.content_meta_create(fname, title, desc, parent)
+            meta = {'title': title,
+                    'desc': desc,
+                    'parent': parent,
+                    'original': file.filename}
+            db.content_meta_create(fname, meta)
             data = db.category_data(parent)
             data['contains'].append(fname)
             db.category_delete(parent)
@@ -918,6 +922,34 @@ def category_list():
         return cat
     else:
         raisehttp(404, 'Category not found')
+
+
+@app.post('/category/reorganize')
+def category_reorganize():
+    """
+    Reorganize the category tree using the excel
+    file uploaded.
+    """
+    token = bottle.request.forms.get('token')
+    if token is None:
+        raise raisehttp(422, body='invalid token')
+    token = utils.clean_token(token)
+    if len(token) != 100:
+        raise raisehttp(422, body='invalid token')
+    if not db.token_present(token):
+        raise raisehttp(403, body='user not logged in')
+    email = db.token_data(token)['email']
+    if not db.is_admin(email):
+        raise raisehttp(403, body='not admin')
+    # TODO: Select DoIT&C format via query option
+    # --------------alel ok
+    file = bottle.request.files.get('upload')
+    ext = file.filename.split('.')[-1]
+    savepath = utils.get_savepath('FileTree.'+ext)
+    file.save(savepath, overwrite=True)
+    utils.doitc_file_to_generalized_format(savepath)
+    utils.generate_tree_from_excel_file(savepath)
+    return 'ok'
 
 
 if __name__ == '__main__':
