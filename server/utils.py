@@ -19,9 +19,12 @@ class ContentNotAvailable(Exception):
 
 
 def make_sure_root_is_there():
+    """
+    This function create the ROOT caregory if it does not Exist
+    """
     if db.category_data("_ROOT_") is None:
         db.category_insert({"id": "_ROOT_",
-                            "title": "Home",
+                            "title": "⌂",
                             "contains": []})
 
 
