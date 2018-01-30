@@ -1,4 +1,5 @@
 import os
+import math
 import pandas as pd
 from db import DB, randstring
 
@@ -17,6 +18,43 @@ class ContentNotAvailable(Exception):
     pass
 
 
+def make_sure_root_is_there():
+    if db.category_data("_ROOT_") is None:
+        db.category_insert({"id": "_ROOT_",
+                            "title": "Home",
+                            "contains": []})
+
+
+def solidify_path(row, path_columns):
+    """
+    If the path does not exist, create it to the end.
+    """
+    make_sure_root_is_there()
+    id_path = ['_ROOT_']
+    for col in path_columns:
+        if not isinstance(row[col], str):
+            break
+        current_id = id_path[-1]
+        cat = db.category_data(current_id)
+        contains = [db.category_data(c) for c in cat['contains']]
+        if row[col] in [i['title'] for i in contains]:
+            ident = [i['id'] for i in contains if i['title'] == row[col]][0]
+            id_path.append(ident)
+        else:
+            new_cat = {"title": row[col],
+                       "id": "_"+randstring(50),
+                       "contains": []}
+            db.category_insert(new_cat)
+            p = db.category_data(current_id)
+            if p is not None:
+                p['contains'].append(new_cat['id'])
+                # update
+                db.category_delete(current_id)
+                db.category_insert(p)
+            id_path.append(new_cat['id'])
+    return id_path
+
+
 def generate_tree_from_excel_file(path):
     """
     Reset the current tree and generate it from the provided
@@ -24,16 +62,34 @@ def generate_tree_from_excel_file(path):
     """
     df = pd.read_excel(path)
     confirm_all_content_is_uploaded(df)
+    tree_start = list(df.columns).index('TreeColumnsMarker') + 1
+    path_columns = list(df.columns)[tree_start:]
+    for _, row in df.iterrows():
+        if not math.isnan(row['filehash']):
+            meta = db.content_meta_data(row['filehash'])
+        elif row['Filename'].strip() != '':
+            meta = db.content_meta_data(row['Filename'],
+                                        use_original=True)
+        # Content has been identified.
+        solid_path = solidify_path(row, path_columns)
+        parent = solid_path[-1]
+        meta['parent'] = parent
+        db.content_meta_delete(meta['fname'])
+        db.content_meta_create(meta['fname'], meta)
+        data = db.category_data(parent)
+        data['contains'].append(meta['fname'])
+        db.category_delete(parent)
+        db.category_insert(data)
 
 
 def confirm_all_content_is_uploaded(df):
     "Given a dataframe, confirm all content is uploaded and exists"
     for _, row in df.iterrows():
-        if row['filehash'] is not None:
+        if not math.isnan(row['filehash']):
             if db.content_meta_data(row['filehash']) is None:
                 raise ContentNotAvailable(row['filehash'])
-        elif row['Filename'] is not None:
-            if db.content_meta_data(row['filehash'],
+        elif row['Filename'].strip() != '':
+            if db.content_meta_data(row['Filename'],
                                     use_original=True) is None:
                 raise ContentNotAvailable(row['Filename'])
         else:
@@ -138,3 +194,4 @@ def del_uploaded(fname):
 
 if __name__ == '__main__':
     doitc_file_to_generalized_format('tree.xlsx')
+    generate_tree_from_excel_file("tree.xlsx")

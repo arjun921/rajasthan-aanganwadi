@@ -314,6 +314,14 @@ class DB:
         else:
             self.content_meta.append(data)
 
+    def content_meta_delete(self, fname):
+        "Remove this content from listing. Don't delete file yet"
+        if not self.dev:
+            self.database['content_meta'].find_one_and_delete({"fname": fname})
+        else:
+            self.content_meta = [i for i in self.content_meta
+                                 if i['fname'] != fname]
+
     def content_meta_data(self, fname, use_original=False):
         "Returns meta about a file"
         key = 'fname' if not use_original else 'original'
