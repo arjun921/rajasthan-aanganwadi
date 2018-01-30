@@ -12,8 +12,9 @@
     <preference name="android-minSdkVersion" value="14" />
     <preference name="FadeSplashScreen" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="StatusBarOverlaysWebView" value="true" />
     <preference name="AutoHideSplashScreen" value="true" />
-    <preference name="StatusBarStyle" value="lightcontent" />
+    <preference name="StatusBarStyle" value="darkcontent" />
     <preference name="StatusBarBackgroundColor" value="#000000" />
     <preference name="SplashScreenDelay" value="3500" />
     <platform name="android">

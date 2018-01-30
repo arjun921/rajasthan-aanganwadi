@@ -86,7 +86,7 @@
 		</data>
 		<key>Assets.car</key>
 		<data>
-		RciADEZrYGWkPl1puT0nBr1uZa8=
+		5mKut9/NoBFvOvx0q1fGV1e2nz8=
 		</data>
 		<key>CDVCapture.bundle/controls_bg.png</key>
 		<data>
@@ -210,7 +210,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		PjVPrvGk/yGEZu8ieGyiG3LLbwI=
+		xvXZqKySqysjza8pc5Leh8fa59Q=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
 		<data>
@@ -218,7 +218,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib</key>
 		<data>
-		TG3WpjUhZhJoAfKTS2ziRcwohPo=
+		Iq82+DGsCL2pOpxqgeqw9LFWyi8=
 		</data>
 		<key>CDVNotification.bundle/beep.wav</key>
 		<data>
@@ -290,7 +290,7 @@
 		</data>
 		<key>MainViewController.nib</key>
 		<data>
-		nHhGONt8FzwRbQnh1tqjgtDpsPc=
+		ixW5aPX1SPMJP8IJ7gEVLawOADk=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -398,7 +398,7 @@
 		</data>
 		<key>config.xml</key>
 		<data>
-		GjXvptXYstH3767/teu4FcTZFX8=
+		5XNMoaukYa3byWR2aA+9HF4YRPo=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
@@ -1279,11 +1279,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			RciADEZrYGWkPl1puT0nBr1uZa8=
+			5mKut9/NoBFvOvx0q1fGV1e2nz8=
 			</data>
 			<key>hash2</key>
 			<data>
-			ZGAmZjYgFM+8H6Sz9YgEMFQ7Bte3xmAt2uRi8XHzEZM=
+			B7DkfljQlugX0VffarqjQJRwCIWlmCzxWmcfBAULt6w=
 			</data>
 		</dict>
 		<key>CDVCapture.bundle/controls_bg.png</key>
@@ -1573,11 +1573,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			PjVPrvGk/yGEZu8ieGyiG3LLbwI=
+			xvXZqKySqysjza8pc5Leh8fa59Q=
 			</data>
 			<key>hash2</key>
 			<data>
-			Om2pU4x9yY5UXAPuYolPsOepmkDwRDKL8Ftcca6yF0I=
+			1YnNOZk94h6KY6tkC91f5fiGipmEVg4Mog3Cr9LsBRY=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
@@ -1595,11 +1595,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			TG3WpjUhZhJoAfKTS2ziRcwohPo=
+			Iq82+DGsCL2pOpxqgeqw9LFWyi8=
 			</data>
 			<key>hash2</key>
 			<data>
-			NEhX4dTA0Ywh98uffTX3+pmAHyoDhniaJlvkm9lpWf4=
+			PHWhCxApi5NNlp4y7pvl2tZon9ITS8eNL+8P0F2aiJc=
 			</data>
 		</dict>
 		<key>CDVNotification.bundle/beep.wav</key>
@@ -1782,11 +1782,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			nHhGONt8FzwRbQnh1tqjgtDpsPc=
+			ixW5aPX1SPMJP8IJ7gEVLawOADk=
 			</data>
 			<key>hash2</key>
 			<data>
-			NxEOKfWIRywWi/0SBQkdKZfDCSpJp9Lz0q3UByFtLVw=
+			O6IodqTrFN221mNYYdZ8gQYYefjnzTId9uHTDBpebVk=
 			</data>
 		</dict>
 		<key>Reader-Button-H.png</key>
@@ -2068,11 +2068,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			GjXvptXYstH3767/teu4FcTZFX8=
+			5XNMoaukYa3byWR2aA+9HF4YRPo=
 			</data>
 			<key>hash2</key>
 			<data>
-			UiUdxCkhRTzBykE7SCyvNx23HZ0qPMSYp23trpz8MlI=
+			DlWsaO7EUvpW+knw7Tk614nrLKBqtWA1a67Qex9WdP4=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>
