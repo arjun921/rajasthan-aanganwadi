@@ -58,7 +58,17 @@
                 <p>Clicking on the cross will delete a content and clicking on the content itslef will open it.</p>
                 <p>A new category can be added using the form provided in the left panel. Simply type the name and click the greren + button. The category gets added into the current location you are viewing.</p>
                 <p>The actual files can be uploaded Via the content upload form. In case no title is provided, the content's filename is assumed to be the title. Multiple files can be selected for upload.</p>
-                <p>Content which has been uploaded can be reorganized by uploading an excel file. The file has to be in the proper format.</p>
+                <p>Content which has been uploaded can be reorganized by uploading an excel file. The file has to be in the proper format.
+                You can upload a file in DoIT&amp;C format or in the generic format.
+                The generic format is as follows:
+                <ul>
+                    <li>First column must be 'filehash'. This can be left empty</li>
+                    <li>Second column must be 'Filename'. This column must contain the filename of the uploaded file.</li>
+                    <li>Consequent columns are utilized as meta data about the file. They are available whenever content is requested.</li>
+                    <li>After meta data a column must be created with the name 'TreeColumnsMarker'. This can be an empty column. It demarcates the start of the tree path that this file must exist in.</li>
+                    <li>All columns subsequent to the 'TreeColumnsMarker' column are treated as a path in a tree. The content is placed at the end of the tree.</li>
+                </ul>
+                </p>
 
                 <h2>Reports</h2>
                 <p>Reports can be obtained by selecting an ending date and a lookback period. The kind of report can also be selected.</p>
