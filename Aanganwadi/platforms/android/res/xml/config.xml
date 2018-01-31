@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.arjoonn.aanganwadi" version="1.10.92" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="com.arjoonn.aanganwadi" version="1.10.100" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <feature name="Battery">
         <param name="android-package" value="org.apache.cordova.batterystatus.BatteryListener" />
     </feature>
@@ -98,8 +98,9 @@
     <preference name="android-minSdkVersion" value="14" />
     <preference name="FadeSplashScreen" value="false" />
     <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="StatusBarOverlaysWebView" value="true" />
     <preference name="AutoHideSplashScreen" value="true" />
-    <preference name="StatusBarStyle" value="lightcontent" />
+    <preference name="StatusBarStyle" value="darkcontent" />
     <preference name="StatusBarBackgroundColor" value="#000000" />
     <preference name="SplashScreenDelay" value="3500" />
 </widget>

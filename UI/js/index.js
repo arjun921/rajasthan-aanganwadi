@@ -239,10 +239,12 @@ function createNav(id) {
   }
 
   function contentUnkError() {
-    msg = 'Please Reset app from Help.'
+    msg = 'Unknown error'
     href = 'javascript:$(\'.button-collapse\').sideNav(\'show\');'
     action = function() {
-      $('.button-collapse').sideNav('show');
+      clearInterval(spinid);
+      $("#spinner").hide();
+      // $('.button-collapse').sideNav('show');
     }
     toastWithAction(msg, href, action)
   }

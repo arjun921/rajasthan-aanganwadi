@@ -41,9 +41,9 @@ function contentNoLogin(){out_changes();msg='Please Login to view.'
 href='login.html'
 action=function(){window.open("login.html","_self")}
 toastWithAction(msg,href,action)}
-function contentUnkError(){msg='Please Reset app from Help.'
+function contentUnkError(){msg='Unknown error'
 href='javascript:$(\'.button-collapse\').sideNav(\'show\');'
-action=function(){$('.button-collapse').sideNav('show');}
+action=function(){clearInterval(spinid);$("#spinner").hide();}
 toastWithAction(msg,href,action)}
 function categoryListing(Categories,parID){var pages=Math.floor(totalCategories/paginateSplit);var remainder=(totalCategories/paginateSplit)-pages;if(remainder==0){totalPages=pages;}
 else{totalPages=pages+1;}
