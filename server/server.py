@@ -500,6 +500,7 @@ def content_retreive():
     link = db.generate_content_url(fname)
     db.record_content_usage(fname)
     meta["creation_stamp"] = str(meta['creation_stamp'])
+    print(meta)
     return {'url': '/static/'+link,
             'meta': meta}
 

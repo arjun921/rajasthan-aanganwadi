@@ -59,6 +59,23 @@ def solidify_path(row, path_columns):
     return id_path
 
 
+def set_attrs(row, cols, meta):
+    """
+    Set attributes for this meta
+    """
+    new_meta = dict(meta)
+    for col in cols:
+        if col == 'fname':
+            continue
+        v = row[col]
+        v = None if isinstance(v, float) and math.isnan(v) else v
+        new_meta[col] = v
+    fname = meta['fname']
+    db.content_meta_delete(fname)
+    db.content_meta_create(fname, new_meta)
+    return new_meta
+
+
 def generate_tree_from_excel_file(path):
     """
     Reset the current tree and generate it from the provided
@@ -68,12 +85,15 @@ def generate_tree_from_excel_file(path):
     confirm_all_content_is_uploaded(df)
     tree_start = list(df.columns).index('TreeColumnsMarker') + 1
     path_columns = list(df.columns)[tree_start:]
+    attr_columns = list(df.columns)[2: tree_start-1]
     for _, row in df.iterrows():
         if not math.isnan(row['filehash']):
             meta = db.content_meta_data(row['filehash'])
         elif row['Filename'].strip() != '':
             meta = db.content_meta_data(row['Filename'],
                                         use_original=True)
+        # Set attributes
+        meta = set_attrs(row, attr_columns, meta)
         # Content has been identified.
         solid_path = solidify_path(row, path_columns)
         parent = solid_path[-1]
