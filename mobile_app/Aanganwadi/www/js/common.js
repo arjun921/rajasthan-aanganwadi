@@ -1,6 +1,6 @@
 // var server = 'https://rajasthan-aanganwadi.herokuapp.com';
-// var server = 'http://35.154.76.18/';
-var server = 'http://localhost:8000';
+var server = 'http://35.154.76.18/';
+// var server = 'http://localhost:8000';
 
 //Materialize workers. Implements materialze elements functionality
 $('.tooltipped').tooltip({delay: 50});
