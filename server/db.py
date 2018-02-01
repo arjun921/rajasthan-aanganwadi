@@ -22,6 +22,16 @@ def randstring(n):
     return ''.join(random.choice(alpha) for _ in range(n))
 
 
+def getadmin():
+    email = input("Enter admin email: default (arjoonn.94@gmail.com): ")
+    email = email if email.strip() else 'arjoonn.94@gmail.com'
+    pwd = input("Enter password (2328904461): ")
+    pwd = pwd if pwd.strip() else '2328904461'
+    data = dict(email=email, pwd=pwd, name=email,
+                address=None, mobile=None)
+    return data
+
+
 class DB:
     """
     The database class to quietly abstract away all differences
@@ -29,11 +39,6 @@ class DB:
     """
     def __init__(self):
         # NOTE: Production will be using Mongo so no need for this
-        data = dict(email='arjoonn.94@gmail.com',
-                    pwd='2328904461',
-                    name='arjoonn',
-                    address='india',
-                    mobile='123')
         if os.environ.get('USE_MONGO'):
             MONGO_URL = os.environ.get('MONGODB_URI')
             print('Using MONGO URL', MONGO_URL)
@@ -43,6 +48,7 @@ class DB:
             self.dev = False
             print('Using mongo')
             if self.database.admins.find().count() == 0:
+                data = getadmin()
                 self.user_insert(data)
                 self.add_admin(data['email'])
             for k in ['tokens', 'users', 'forms', 'responses',
@@ -65,6 +71,7 @@ class DB:
 
             # add initial admin
             if len(self.admins) == 0:
+                data = getadmin()
                 self.user_insert(data)
                 self.add_admin(data['email'])
             # categories

@@ -7,7 +7,7 @@ test_server_api:
         - venv/bin/pip install -r requirements.txt
         - venv/bin/python --version
     script:
-        - "venv/bin/coverage run -p server.py &"
+        - "printf '\n\n' | venv/bin/coverage run -p server.py &"
         - "sleep 10s && venv/bin/python dummy_setup.py"
         - "sleep 10s && venv/bin/pytest tests"
     stage: test
