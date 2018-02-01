@@ -1,0 +1,14 @@
+{
+  "name": "Rajasthan Aanganwadi server",
+  "description": "Rajasthan Aanganwadi server",
+  "image": "heroku/python",
+  "repository": "https://gitlab.com/theSage21/rajasthan",
+  "keywords": ["python", "bottle" ],
+  "environments": {
+    "test": {
+      "scripts": {
+        "test": "python server/server.py"
+      }
+    }
+  }
+}

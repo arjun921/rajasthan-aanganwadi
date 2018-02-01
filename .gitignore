@@ -2,3 +2,12 @@ venv/
 *.pyc
 *__pycache__/
 .ipynb_checkpoints
+.cache/
+.coverage
+_build/
+_static/
+_templates/
+htmlcov/
+TEMP/
+*.csv
+FileTree.xlsx

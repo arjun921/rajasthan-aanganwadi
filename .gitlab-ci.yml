@@ -1,0 +1,13 @@
+test_server_api:
+    image: "python:3.5"
+    before_script:
+        - cd server
+        - pip install virtualenv
+        - virtualenv venv
+        - venv/bin/pip install -r requirements.txt
+        - venv/bin/python --version
+    script:
+        - "printf '\n\n' | venv/bin/coverage run -p server.py &"
+        - "sleep 10s && venv/bin/python dummy_setup.py"
+        - "sleep 10s && venv/bin/pytest tests"
+    stage: test

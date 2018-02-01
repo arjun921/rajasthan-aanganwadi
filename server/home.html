@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<script src="/adminstatic/tether.min.js"></script>
+		<link rel="stylesheet" href="/adminstatic/bootstrap.min.css">
+		<script src="/adminstatic/jquery-3.2.1.min.js"></script>
+		<script src="/adminstatic/bootstrap.min.js"></script>
+        <title>Rajasthan Aanganwadi</title>
+        <style>
+            body { padding-top: 4.5rem; } 
+        </style>
+        <!-- Bootstrap -->
+    </head>
+    <body>
+		<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+		  <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		  </button>
+		  <a class="navbar-brand" href="#">Aanganwadi</a>
+		  <div class="collapse navbar-collapse" id="navbarCollapse">
+			<ul class="navbar-nav mr-auto">
+			  <li class="nav-item active">
+				<a class="nav-link" href="#" id="home_link">Home<span class="sr-only">(current)</span></a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="#" id='formtab'>Forms</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="#" id='contenttab'>Content</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="#" id='reportstab'>Reports</a>
+			  </li>
+			</ul>
+			<div class="form-inline mt-2 mt-md-0" id="login_div">
+			  <input class="form-control mr-sm-2" type="text" placeholder="email" id="login_email">
+			  <input class="form-control mr-sm-2" type="password" placeholder="password" id="login_pwd">
+			  <button class="btn btn-outline-success my-2 my-sm-0" id='login_button'>Login</button>
+			</div>
+			  <button class="btn btn-outline-success my-2 my-sm-0" id='logout_button'>Logout</button>
+		  </div>
+		</nav>
+        <div class='container'>
+            <div id='help_container'>
+                <h1>Administration Panel</h1>
+                <p>This is the administration panel for the Aanganwadi application. Consider the following document a brief tutorial. The main navigation menu has tabs which activate different parts of the panel. We will describe them next.</p>
+                <p>The administration panel requires you to login with an email - password combination which is the admin user-password combination created during database setup.</p>
+
+                <h2>Forms</h2>
+                <p>This tab contains all information about forms.</p>
+                <p>On the left side you have a list of forms that are available. You can click on a form to open it for editing.</p>
+                <p>The right panelcontains tools for editing the form along with a few form actions.</p>
+                
+                <h2>Content</h2>
+                <p>Content in the application can be controlled through the content panel. The left shows the hierarchy that the app contains.</p>
+                <p>Clicking on the cross will delete a content and clicking on the content itslef will open it.</p>
+                <p>A new category can be added using the form provided in the left panel. Simply type the name and click the greren + button. The category gets added into the current location you are viewing.</p>
+                <p>The actual files can be uploaded Via the content upload form. In case no title is provided, the content's filename is assumed to be the title. Multiple files can be selected for upload.</p>
+                <p>Content which has been uploaded can be reorganized by uploading an excel file. The file has to be in the proper format.
+                You can upload a file in DoIT&amp;C format or in the generic format.
+                The generic format is as follows:
+                <ul>
+                    <li>First column must be 'filehash'. This can be left empty</li>
+                    <li>Second column must be 'Filename'. This column must contain the filename of the uploaded file.</li>
+                    <li>Consequent columns are utilized as meta data about the file. They are available whenever content is requested.</li>
+                    <li>After meta data a column must be created with the name 'TreeColumnsMarker'. This can be an empty column. It demarcates the start of the tree path that this file must exist in.</li>
+                    <li>All columns subsequent to the 'TreeColumnsMarker' column are treated as a path in a tree. The content is placed at the end of the tree.</li>
+                </ul>
+                </p>
+
+                <h2>Reports</h2>
+                <p>Reports can be obtained by selecting an ending date and a lookback period. The kind of report can also be selected.</p>
+                <p>Clicking the "Get Reports" button obtains the reports and puts them in a table.</p>
+            </div>
+            <div class='row' id='mainContainer'>
+            </div>
+        </div>
+		<script src="/adminstatic/main.js"></script>
+    </body>
+</html>
