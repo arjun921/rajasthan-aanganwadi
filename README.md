@@ -22,11 +22,15 @@ Working API
 - `/form/create`
 - `/form/delete`
 - `/form/submit`
+- `/form/responses`
 - `/content/create`
 - `/content/delete`
 - `/content/list`
 - `/content`
-
+- `/category/delete`
+- `/category/create`
+- `/category`
+- `/report`
 
 
 
@@ -65,3 +69,8 @@ DEFAULTS
 --------
 
 Default DB entries need to be inserted with `python dummy_setup.py`.
+
+Content Reordering
+---------------
+
+Already uploaded content can be reordered by uploading an excel file via ADMIN in the format similar to [given requirements file](server/tree.xlsx)
