@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <!--Import Google Icon Font-->
+  <link href="css/fonts.css" rel="stylesheet">
+  <!--Import materialize.css-->
+  <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection" />
+  <link href='css/nprogress.css' rel='stylesheet' />
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+<body>
+  <nav>
+    <div class="nav-wrapper ">
+      <span class="breadcrumb hide-on-med-and-up " id="crumbtitle"></span>
+      <b><span class="right tooltipped" data-position="left" data-delay="50" data-tooltip="Shows login status" style="padding-right: 25px;" id="loginStatus">●</span></b>
+      <b><span class="breadcrumb right" style="padding-right: 10px;" id="spinner"></span></b>
+      <a class="brand-logo show-on-medium-and-up hide-on-small-only center truncate" style="padding-left: 10px;" id="crumbtitle2">Activity</a>
+      <a href="#" class="brand-logo show-on-large hide-on-med-and-down"><img style="height: 64px;" src="images/logo.png" alt="logo"></a>
+      <a href="#" data-activates="mobile-demo" id="hamburgerMenu"><i class="material-icons">menu</i></a>
+      <a style="z-index: 10;" id="closeMenu" onclick='window.history.go(-1);'><i id="closeIcon" class="material-icons" style="font-size: 200%;" >arrow_back</i></a>
+      <a class="hide-on-small-only tabletClose hidden" id="CloseTablet" onclick="window.history.go(-1);" class=""><i id="" class="material-icons black-text" style="font-size: 200%;">arrow_back</i></a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="index.html">Home</a></li>
+        <li><a id="formLink" href="all_forms.html">Forms to Fill</a></li>
+        <li><a onclick="$('.button-collapse').sideNav('hide');$('#help').modal('open');">Help</a></li>
+        <li><a onclick="logout()" id="logout_Mainmenu_but">Logout</a></li>
+        <li><a href="login.html" id="login_Mainmenu_but">Login/Sign-up</a></li>
+      </ul>
+      <ul class="side-nav" id="mobile-demo">
+        <li>
+          <div class="user-view">
+            <div class="background">
+              <img style="min-width: 100%; max-width: 100%">
+            </div>
+            <a><img class="circle" id="profile_pic"></a>
+            <a><span class="white-text name" id="name_menu"></span></a>
+            <a><span class="white-text email" id="email_menu"></span></a>
+          </div>
+        </li>
+        <li><a class="waves-effect " href="index.html"><i class="material-icons">home</i>Home</a></li>
+        <li><a class="waves-effect" id="formLink" href="all_forms.html"><i class="material-icons">format_align_left</i>Forms to Fill</a></li>
+        <li><a class="waves-effect" onclick="$('.button-collapse').sideNav('hide');$('#help').modal('open');"><i class="material-icons">help</i>Help</a></li>
+        <li><a class="waves-effect" onclick="logout()" id="logout_menu_but"><i class="material-icons">exit_to_app</i>Logout</a></li>
+        <li><a class="waves-effect" href="login.html" id="login_menu_but"><i class="material-icons">exit_to_app</i>Login/Sign-up</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container" id="container" style="padding-top: 10px;">
+    <form id="searchForm" class="card-panel" style="padding-top: 10px; padding-bottom: 3px;">
+      <div class="form-group">
+        <label for="searchInput">
+            Filter text
+            <span id="bookCountBadge" class="badge"></span>
+          </label>
+        <input class="form-control" type="search" id="newSearchInput" oninput="newSearch" placeholder="Search..">
+      </div>
+    </form>
+    <div class="" id="content">
+    </div>
+    <div id="preloader" class="z-depth-0">
+      <div class="progress">
+        <div class="indeterminate"></div>
+      </div>
+    </div>
+    <ul class="collection" id="navi">
+    </ul>
+    <div class="row">
+      <div class="col s12">
+        <ul class="pagination center" id="pagination">
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div id="help" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h5>Help</h5>
+      <br>
+      <b>Home</b>
+      <p>The home page shows Activity Bank. On opening an activity, the categories of the Activity are shown. On going further, the content associated with the activity is shown. Content can be viewed only after login.
+      </p>
+      <b>Forms to Fill</b>
+      <p>
+        The forms that are available to fill will be listed here. Forms can be viewed only after login.
+      </p>
+      <b>Status Icons</b>
+      <p class="valign-wrapper"><img src="images/help/loader.jpg" style="max-height: 3em;padding-right: 15px;" alt="Loader Image"> Indicates page loading.</p>
+      <p class="valign-wrapper"><img src="images/help/status_green.jpg" style="max-height: 3em;padding-right: 15px;" alt="Loader Image">Indicates user logged in.</p>
+      <p class="valign-wrapper"><img src="images/help/status_red.jpg" style="max-height: 3em;padding-right: 15px;" alt="Loader Image">Indicates user not logged.</p>
+      <b>Reset App</b>
+      <p>Reset if your app is not functioning as expected.</p>
+      <button class="btn waves-effect waves-light" onclick="resetApp();">Reset
+        <i class="material-icons right">history</i>
+      </button>
+      <div class="">
+        <br>
+        <b>Support</b>
+        <p>For any queries or issues in the app,<br>
+          <a href="mailto:incoming+theSage21/rajasthan@gitlab.com?Subject=App%20Feedback" target="_top">Contact Us</a>
+        </p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+    </div>
+  </div>
+  <div class="fixed-action-btn noselect moveFabUp">
+    <a id="searchFab" onclick="searchClickedFunction()" style="background-color: var(--theme-color);"class="btn-floating  btn-large z-depth-5">
+      <!-- <a id="searchFab" onclick="searchClickedFunction()" class="btn-floating yellow lighten-2 btn-large z-depth-5"> -->
+      <i class="large material-icons ">search</i>
+    </a>
+  </div>
+  <script type="text/javascript" src="js/returnHtml.js"></script>
+  <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="js/materialize.min.js"></script>
+  <script type="text/javascript" src="js/js.cookie.js"></script>
+  <script type="text/javascript" src="js/common.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
+  <script type="text/javascript" src="js/searchScript.js"></script>
+</body>
+
+</html>

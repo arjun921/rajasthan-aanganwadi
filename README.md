@@ -1,6 +1,8 @@
 Rajasthan
 =========
 
+App and server code for Aanganwadi.
+
 Component   |   Coverage
 ------------|-------------
 Server      |[![pipeline status](https://gitlab.com/theSage21/rajasthan/badges/master/pipeline.svg)](https://gitlab.com/theSage21/rajasthan/commits/master)

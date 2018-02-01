@@ -1,0 +1,1 @@
+keytool -genkey -v -keystore Aanganwadi.keystore -alias Aanganwadi -keyalg RSA -keysize 2048 -validity 100000

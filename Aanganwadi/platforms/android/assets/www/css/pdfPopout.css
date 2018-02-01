@@ -1,0 +1,6 @@
+div[aria-label="Pop-out"] {
+    display: none;
+}
+div["aria-label=toolbar"] {
+    width: 52px;
+}
