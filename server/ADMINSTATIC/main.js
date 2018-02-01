@@ -672,28 +672,28 @@ $( document ).ready(function() {
 
             $("#categories_list").append(item);
             // ADD EXCEL BASED REORGANIZATION
-            var item = makeTag("li", "", {"class": "list-group-item input-group"});
-            var form = makeTag("form", "", {"class": "form-group",
+            var item2 = makeTag("li", "", {"class": "list-group-item input-group"});
+            var form2 = makeTag("form", "", {"class": "form-group",
                                             "action": "/category/reorganize",
                                             "method": "post",
                                             "enctype": "multipart/form-data",
                                             "id": "categoryReorganizeForm"
                                            });
-            item.append(form);
-            var upload = makeTag("input", "", {"class": "form-control", "type": "file", "name": "upload", "multiple": "multiple"});
-            var button = makeTag("button", "Upload", {"class": "btn btn-primary", "type": "submit"});
-            var tok = makeTag("input", "", {"type": "hidden", "name": "token", "value": getCurrentToken() });
+            item2.append(form2);
+            var upload2 = makeTag("input", "", {"class": "form-control", "type": "file", "name": "upload", "multiple": "multiple"});
+            var button2 = makeTag("button", "Upload", {"class": "btn btn-primary", "type": "submit"});
+            var tok2 = makeTag("input", "", {"type": "hidden", "name": "token", "value": getCurrentToken() });
 
 
-            form.append(makeTag("b", "Reorganize Categories With Excel File"));
-            form.append(tok);
-            form.append(upload);
-            form.append(button);
+            form2.append(makeTag("b", "Reorganize Categories With Excel File"));
+            form2.append(tok2);
+            form2.append(upload2);
+            form2.append(button2);
 
-            button.click(function uploadForm(event){
+            button2.click(function uploadForm(event){
                 event.preventDefault();
-                var data = new FormData(form[0]);
-                button.prop("disabled", true);
+                var data = new FormData(form2[0]);
+                button2.prop("disabled", true);
                 $.ajax({
                         type: "POST",
                         enctype: 'multipart/form-data',
@@ -711,7 +711,7 @@ $( document ).ready(function() {
             });
 
 
-            $("#categories_list").append(item);
+            $("#categories_list").append(item2);
         });
     } // show category
 
