@@ -73,6 +73,61 @@ Content Reordering
 
 Already uploaded content can be reorganized by uploading an excel file via ADMIN in the format similar to [given requirements file](server/tree.xlsx).
 
+SETUP
+-----
+
+The server can be set up with the following steps.
+
+```bash
+sudo apt install python3-dev python-virtualenv
+cd ~/rajasthan
+virtualenv -p python3 venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+
+# Mongo setup
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.6.list
+sudo apt-get update
+sudo apt-get install -y mongodb-org
+sudo service mongod start
+sudo service mongod enable
+
+# nginx
+sudo apt install nginx
+```
+
+To run the server then we can issue the following commands.
+
+```bash
+cd ~/rajasthan
+source venv/bin/activate
+cd server && USE_MONGO=1 MONGODB_URI=mongodb://127.0.0.1:27017/aang python server.py
+```
+
+In order to set up an `nginx` proxy we can use the following config in `/etc/nginx/sites-available` and then create a symlink for it in `/etc/nginx/sites-enabled`
+
+```
+server {
+        client_max_body_size 1G;
+	listen 80;
+
+	location / {
+		proxy_set_header X-Forward-For $proxy_add_x_forwarded_for;
+		proxy_set_header Host $http_host;
+
+		proxy_redirect off;
+		if (!-f $request_filename) {
+		    proxy_pass http://127.0.0.1:8000;
+		    break;
+		}
+	}
+
+}
+```
+
+The server is not available at `http://<your machine's ip>`
 NOTES
 -----
 
