@@ -31,3 +31,6 @@ Sphinx==1.6.3
 sphinxcontrib-websupport==1.0.1
 urllib3==1.22
 tqdm
+xlrd
+xlwt
+openpyxl
