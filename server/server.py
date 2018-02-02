@@ -733,7 +733,10 @@ def form_delete():
 def staticfiles(link):
     fname = db.content_get_fname_for_link(link)
     if fname is not None:
-        return bottle.static_file(fname, root=utils.upath)
+        response = bottle.static_file(fname, root=utils.upath)
+        for k, v in CORS_HEADERS:
+            response.set_header(k, v)
+        return response
     else:
         return raisehttp(404, 'Perhaps this link has been used already')
 
