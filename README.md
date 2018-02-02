@@ -61,13 +61,6 @@ Documentation about API
 Run `cd server/docs && make html` to build the documentation. It is then available in `server/docs/_build/html/index.html`
 
 
-Initial content setup
---------
-
-Default demo entries need to be inserted with `python dummy_setup.py`.
-
-The data provided by DoIT&C can be uploaded by using the scripts present at [this gist](https://gist.github.com/theSage21/5c73da683be8751e19e8558c75c64638). Please not that the script does not upload MP4 and PNG. Those have to be manually uploaded in their respective categories.
-
 Content Reordering
 ---------------
 
@@ -127,7 +120,13 @@ server {
 }
 ```
 
-The server is not available at `http://<your machine's ip>`
+The server is now available at `http://<your machine's ip>`
+
+Default demo entries need to be inserted with `python dummy_setup.py`.
+
+The data provided by DoIT&C can be uploaded by using the scripts present at [this gist](https://gist.github.com/theSage21/5c73da683be8751e19e8558c75c64638). Please not that the script does not upload MP4 and PNG. Those have to be manually uploaded in their respective categories.
+
+
 NOTES
 -----
 
