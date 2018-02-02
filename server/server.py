@@ -500,7 +500,6 @@ def content_retreive():
     link = db.generate_content_url(fname)
     db.record_content_usage(fname)
     meta["creation_stamp"] = str(meta['creation_stamp'])
-    print(meta)
     return {'url': '/static/'+link,
             'meta': meta}
 
@@ -734,7 +733,7 @@ def staticfiles(link):
     fname = db.content_get_fname_for_link(link)
     if fname is not None:
         response = bottle.static_file(fname, root=utils.upath)
-        for k, v in CORS_HEADERS:
+        for k, v in CORS_HEADERS.items():
             response.set_header(k, v)
         return response
     else:
