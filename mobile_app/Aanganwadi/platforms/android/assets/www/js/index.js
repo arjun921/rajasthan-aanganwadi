@@ -99,6 +99,7 @@ function loadmp4(data) {
   p = getHTMLVideoPlayer(data);
   $('#preloader').hide();
   $('#content').append(p);
+  $('#preloader').hide();
 }
 
 function loadmp3(data) {
@@ -107,6 +108,7 @@ function loadmp3(data) {
   p = getHTMLAudioPlayer(data)
   $('#preloader').hide();
   $('#content').append(p);
+  $('#preloader').hide();
 }
 
 function loadpdf(data) {
@@ -114,13 +116,17 @@ function loadpdf(data) {
   fileDownLink = server + data.url
   p = getHTMLPDFViewer(flink,fileDownLink);
   Cookies.set('fileDownLink',fileDownLink);
-  // $("#MenuDownload").attr("href", fileDownLink);
   $('#content').append(p);
+}
+
+function loadImage(data){
+  p = getHTMLimageView(data);
+  $('#content').append(p);
+  $('#preloader').hide();
 }
 
 function downloadFile(){
   window.open(Cookies.get('fileDownLink'), '_system', 'location=yes');
-  // window.open('https://www.google.com/', '_system', 'location=yes');
 }
 
 function pdfLoaded() {
@@ -135,11 +141,6 @@ function pdfLoaded() {
   $('#preloader').hide();
 }
 
-function loadImage(data){
-  p = getHTMLimageView(data);
-  $('#content').append(p);
-  $('#preloader').hide();
-}
 
 function loadUnsupported(){
   p = getHTMLUnsupportedContent()

@@ -76,13 +76,13 @@ function setTitle(stri) {//sets title of the page in navigation
     }
   }
   else if ($(window).width()>330 && $(window).width()<=375) {//375x667
-    if(stri.length>21){
-      stri = stri.substring(0,21)+'...'
+    if(stri.length>19){
+      stri = stri.substring(0,19)+'...'
     }
   }
   else if ($(window).width()>385 && $(window).width()<=414) {//414x736
-    if(stri.length>25){
-      stri = stri.substring(0,25)+'...'
+    if(stri.length>23){
+      stri = stri.substring(0,23)+'...'
     }
   }
   else {
@@ -198,10 +198,14 @@ function enableHamburgerMenu() {
   $('#closeMenu').addClass('hidden');
   $('#MenuDownload').removeClass('button-collapse');
   $('#MenuDownload').addClass('hidden');
-  $('#CloseTablet').addClass('hidden');
   $('#TabletDownload').addClass('hidden');
   $('#closeIcon').removeClass('black-text');
+  $('#CloseTablet').addClass('hidden');
+  $('#CloseTablet').removeClass('black-text');
+  $('#TabletDownload').removeClass('black-text');
   $('#downloadIcon').removeClass('black-text');
+  $('#closeTabletIcon').removeClass('black-text');
+  $('#TabletIconDownload').removeClass('black-text');
   $(".button-collapse").sideNav();
 }
 
@@ -213,10 +217,8 @@ function disableHamburgerMenu() {// used when loading media to add close button
   $('#MenuDownload').addClass('button-collapse');
   $('#MenuDownload').removeClass('hidden');
   $('#CloseTablet').removeClass('hidden');
-  $('#CloseTablet').addClass('tabletClose');
   $('#CloseTablet').removeClass('tabletClosePdf');
   $('#TabletDownload').removeClass('hidden');
-  $('#TabletDownload').addClass('tabletDownload');
   $('#TabletDownload').removeClass('tabletDownloadPdf');
   $('#hamburgerMenu').removeClass('button-collapse');
   $('#hamburgerMenu').addClass('hidden');
