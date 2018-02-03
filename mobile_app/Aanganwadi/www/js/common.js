@@ -71,8 +71,8 @@ function resetApp() {//used in "Help"> reset
 
 function setTitle(stri) {//sets title of the page in navigation
   if ($(window).width()<=320) {//320x568
-    if(stri.length>18){
-      stri = stri.substring(0,18)+'...'
+    if(stri.length>13){
+      stri = stri.substring(0,13)+'...'
     }
   }
   else if ($(window).width()>330 && $(window).width()<=375) {//375x667

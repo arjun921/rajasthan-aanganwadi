@@ -121,8 +121,10 @@ function hitApi(url,sendData,apisuccess,apierror) {// all API end points called 
     type: 'post',
     contentType: 'application/json',
     data: JSON.stringify(sendData),
-    success: function(data, st, xhr) { apisuccess(data,st,xhr) },
-    error: function(returnval) { apierror(returnval) }
+    success: function(data, st, xhr) { apisuccess(data,st,xhr); clearInterval(spinid);
+    $("#spinner").hide();},
+    error: function(returnval) { apierror(returnval); clearInterval(spinid);
+    $("#spinner").hide();}
   });
 }
 
