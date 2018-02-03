@@ -125,7 +125,7 @@ function downloadFile(){
 
 function pdfLoaded() {
   $('#closeIcon').addClass('black-text');
-  $('#MenuDownload').addClass('black-text');
+  $('#downloadIcon').addClass('black-text');
   $('#closeTabletIcon').addClass('black-text');
   $('#TabletIconDownload').addClass('black-text');
   $('#CloseTablet').removeClass('tabletClose');

@@ -199,6 +199,7 @@ function enableHamburgerMenu() {
   $('#CloseTablet').addClass('hidden');
   $('#TabletDownload').addClass('hidden');
   $('#closeIcon').removeClass('black-text');
+  $('#downloadIcon').removeClass('black-text');
   $(".button-collapse").sideNav();
 }
 
