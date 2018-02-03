@@ -61,6 +61,14 @@ function sign_up() {
       }
       toastWithAction(msg, href, action)
     }
+    else if (returnval.responseText.includes('user exists')) {
+      msg = 'User already exists'
+      href = 'register.html'
+      function action() {
+        openLoginPage()
+      }
+      toastWithAction(msg, href, action)
+    }
   }
   hitApi(url, sendData, apisuccess, apierror);
 }

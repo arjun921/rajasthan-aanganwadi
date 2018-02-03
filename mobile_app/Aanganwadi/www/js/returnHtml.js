@@ -69,7 +69,7 @@ function getHTMLPDFViewer(flink) {
 
 function getHTMLCategoryFileListElement(item){
   fileType = getFileType(item);
-  strBegin = " <li class=\"collection-item\" id=\""+item.id+"\" onclick=\"navClick(this.id)\"><div>"+item.title+"<div class=\"secondary-content \"><i class=\"material-icons\">"
+  strBegin = " <li class=\"collection-item\" id=\""+item.id+"\" onclick=\"navClick(this.id)\"><div class=\"\">"+item.title+"<div class=\"secondary-content \"><i class=\"material-icons\">"
   icon = getIcon(fileType);
   strEnd = "</i></div></li>"
   p = strBegin+icon+strEnd
@@ -86,6 +86,10 @@ function getHTMLCategoryUp(){
 
 function getHTMLimageView(data) {
   imgLink = server + data.url;
-  s = "<img src=\""+imgLink+"\" alt=\"image\" >"
+  s = "<img style=\"max-width: 100%;height: auto;width: auto;\" src=\""+imgLink+"\" alt=\"image\" >"
+  return s
+}
+function getHTMLUnsupportedContent(){
+  s = "<div class=\"card-panel\"><h5>Unsupported Content</h5></div>"
   return s
 }

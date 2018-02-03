@@ -125,7 +125,7 @@ function downloadFile(){
 
 function pdfLoaded() {
   $('#closeIcon').addClass('black-text');
-  $('#MenuDownload').addClass('black-text');
+  $('#downloadIcon').addClass('black-text');
   $('#closeTabletIcon').addClass('black-text');
   $('#TabletIconDownload').addClass('black-text');
   $('#CloseTablet').removeClass('tabletClose');
@@ -138,6 +138,13 @@ function pdfLoaded() {
 function loadImage(data){
   p = getHTMLimageView(data);
   $('#content').append(p);
+  $('#preloader').hide();
+}
+
+function loadUnsupported(){
+  p = getHTMLUnsupportedContent()
+  $('#content').append(p);
+  $('#preloader').hide();
 }
 
 function navClick(id) {
@@ -177,18 +184,21 @@ function loadPreviousList50() {
 function getFileType(item) {
   fileType = item.id.split(".")[1];
   if (fileType) {
-    return fileType.toUpperCase();
+    return fileType.toLowerCase();
   }
 }
 
 function getIcon(fileType) {
-  if (fileType == "MP3") {
+  if (fileType == "mp3") {
     return ["audiotrack", ]
-  } else if (fileType == "PDF") {
+  } else if (fileType == "pdf") {
     return "picture_as_pdf"
-  } else if (fileType == "MP4") {
+  } else if (fileType == "mp4") {
     return "video_library"
-  } else {
+  } else if (['bmp', 'jpg', 'jpeg', 'png', 'gif'].indexOf(fileType)!=-1) {
+    return "image"
+  }
+  else {
     return ""
   }
 }
@@ -209,8 +219,11 @@ function loadFileByType(data) {
     loadmp3(data)
   } else if (ftype == "pdf") {
     loadpdf(data)
-  } else if (['jpg','png'].indexOf(ftype)!=-1 ){
+  } else if (['bmp', 'jpg', 'jpeg', 'png', 'gif'].indexOf(ftype)!=-1 ){
     loadImage(data)
+  }
+  else {
+    loadUnsupported()
   }
 }
 
