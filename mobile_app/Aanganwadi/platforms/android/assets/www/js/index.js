@@ -94,12 +94,16 @@ function reINT() { //re-run functions to be run on document ready/page shown
 }
 
 function loadmp4(data) {
+  fileDownLink = server+data.url
+  Cookies.set('fileDownLink',fileDownLink);
   p = getHTMLVideoPlayer(data);
   $('#preloader').hide();
   $('#content').append(p);
 }
 
 function loadmp3(data) {
+  fileDownLink = server+data.url
+  Cookies.set('fileDownLink',fileDownLink);
   p = getHTMLAudioPlayer(data)
   $('#preloader').hide();
   $('#content').append(p);
@@ -107,7 +111,32 @@ function loadmp3(data) {
 
 function loadpdf(data) {
   flink = 'https://docs.google.com/viewer?url=' + server + data.url + "&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
-  p = getHTMLPDFViewer(flink);
+  fileDownLink = server + data.url
+  p = getHTMLPDFViewer(flink,fileDownLink);
+  Cookies.set('fileDownLink',fileDownLink);
+  // $("#MenuDownload").attr("href", fileDownLink);
+  $('#content').append(p);
+}
+
+function downloadFile(){
+  window.open(Cookies.get('fileDownLink'), '_system', 'location=yes');
+  // window.open('https://www.google.com/', '_system', 'location=yes');
+}
+
+function pdfLoaded() {
+  $('#closeIcon').addClass('black-text');
+  $('#MenuDownload').addClass('black-text');
+  $('#closeTabletIcon').addClass('black-text');
+  $('#TabletIconDownload').addClass('black-text');
+  $('#CloseTablet').removeClass('tabletClose');
+  $('#CloseTablet').addClass('tabletClosePdf');
+  $('#TabletDownload').removeClass('tabletDownload');
+  $('#TabletDownload').addClass('tabletDownloadPdf');
+  $('#preloader').hide();
+}
+
+function loadImage(data){
+  p = getHTMLimageView(data);
   $('#content').append(p);
 }
 
@@ -180,6 +209,8 @@ function loadFileByType(data) {
     loadmp3(data)
   } else if (ftype == "pdf") {
     loadpdf(data)
+  } else if (['jpg','png'].indexOf(ftype)!=-1 ){
+    loadImage(data)
   }
 }
 

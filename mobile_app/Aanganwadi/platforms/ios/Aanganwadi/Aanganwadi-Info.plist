@@ -21,11 +21,11 @@
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.10.92</string>
+    <string>1.14.104</string>
     <key>CFBundleSignature</key>
     <string>????</string>
     <key>CFBundleVersion</key>
-    <string>1.10.92</string>
+    <string>1.14.104</string>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSMainNibFile</key>
@@ -51,8 +51,11 @@
     <dict>
       <key>NSExceptionDomains</key>
       <dict>
-        <key>rajasthan-aanganwadi.herokuapp.com</key>
-        <dict/>
+        <key>35.154.76.18</key>
+        <dict>
+          <key>NSExceptionAllowsInsecureHTTPLoads</key>
+          <true/>
+        </dict>
         <key>docs.google.com</key>
         <dict/>
       </dict>

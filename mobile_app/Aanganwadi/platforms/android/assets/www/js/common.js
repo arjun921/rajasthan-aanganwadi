@@ -194,7 +194,10 @@ function enableHamburgerMenu() {
   $('#hamburgerMenu').removeClass('hidden');
   $('#closeMenu').removeClass('button-collapse');
   $('#closeMenu').addClass('hidden');
+  $('#MenuDownload').removeClass('button-collapse');
+  $('#MenuDownload').addClass('hidden');
   $('#CloseTablet').addClass('hidden');
+  $('#TabletDownload').addClass('hidden');
   $('#closeIcon').removeClass('black-text');
   $(".button-collapse").sideNav();
 }
@@ -204,9 +207,14 @@ function disableHamburgerMenu() {// used when loading media to add close button
   $('#navi').hide();
   $('#closeMenu').addClass('button-collapse');
   $('#closeMenu').removeClass('hidden');
+  $('#MenuDownload').addClass('button-collapse');
+  $('#MenuDownload').removeClass('hidden');
   $('#CloseTablet').removeClass('hidden');
   $('#CloseTablet').addClass('tabletClose');
   $('#CloseTablet').removeClass('tabletClosePdf');
+  $('#TabletDownload').removeClass('hidden');
+  $('#TabletDownload').addClass('tabletDownload');
+  $('#TabletDownload').removeClass('tabletDownloadPdf');
   $('#hamburgerMenu').removeClass('button-collapse');
   $('#hamburgerMenu').addClass('hidden');
 }

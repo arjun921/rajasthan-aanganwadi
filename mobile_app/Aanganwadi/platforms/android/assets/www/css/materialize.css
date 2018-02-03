@@ -97,6 +97,22 @@
   margin: 0px 18px;
 }
 
+.tabletDownload{
+  z-index: 10;
+  float: left;
+  position: relative;
+  height: 56px;
+  margin: 65px 18px;
+}
+
+.tabletDownloadPdf{
+  z-index: 10;
+  float: left;
+  position: relative;
+  height: 56px;
+  margin: 0px 18px;
+}
+
 
 
 .fixed-action-btn-mod{

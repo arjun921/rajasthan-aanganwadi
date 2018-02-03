@@ -61,7 +61,10 @@ function getHTMLAudioPlayer(data) {
 }
 
 function getHTMLPDFViewer(flink) {
-  return "<iframe onload=\"$('#closeIcon').addClass('black-text');$('#closeTabletIcon').addClass('black-text');$('#CloseTablet').removeClass('tabletClose');$('#CloseTablet').addClass('tabletClosePdf');$('#preloader').hide();\" src=\""+flink+"\" class=\"z-depth-4\" id=\"docIframe\" style=\"position:absolute; top:0px; left:0px; bottom:0px; z-index: 2; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden;\">Your browser doesn't support iframes</iframe>"
+  // console.log(flink);
+  // Cookies.get('pdfURL')
+  return "<iframe onload=\"pdfLoaded()\" src=\""+flink+"\" class=\"z-depth-4\" id=\"docIframe\" style=\"position:absolute; top:0px; left:0px; bottom:0px; z-index: 2; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden;\">Your browser doesn't support iframes</iframe>"
+  // return "<a href=\""+flink+"\"></a>"
 }
 
 function getHTMLCategoryFileListElement(item){
@@ -79,4 +82,10 @@ function getHTMLCategoryUp(){
   strEnd = "</i></div></li>"
   p = strBegin+icon+strEnd
   return p
+}
+
+function getHTMLimageView(data) {
+  imgLink = server + data.url;
+  s = "<img src=\""+imgLink+"\" alt=\"image\" >"
+  return s
 }
