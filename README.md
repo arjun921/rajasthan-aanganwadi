@@ -66,6 +66,23 @@ Content Reordering
 
 Already uploaded content can be reorganized by uploading an excel file via ADMIN in the format similar to [given requirements file](server/tree.xlsx).
 
+## Server Specifications
+
+The following are the server specs used for the Aanganwadi backend.
+
+- **OS**
+  - Ubuntu 16.04.3 LTS
+- **CPU**
+  - 8 cores
+  - 8 threads
+- **RAM**
+  - 8 GB
+- **Storage**
+  - 8+20GB (root partition + storage)
+- **Bandwidth** (as per lastest  speedtest)
+  - Download: 866.80 Mbit/s
+  - Upload: 841.65 Mbit/s
+
 ## SETUP
 
 The server can be set up with the following steps.
@@ -123,25 +140,7 @@ The server is now available at `http://<your machine's ip>`
 
 Default demo entries need to be inserted with `python dummy_setup.py`.
 
-The data provided by DoIT&C can be uploaded by using the scripts present at [this gist](https://gist.github.com/theSage21/5c73da683be8751e19e8558c75c64638). Please not that the script does not upload MP4 and PNG. Those have to be manually uploaded in their respective categories.
-
-## Server Specifications
-
-The following are the server specs used for the Aanganwadi backend.
-
-- **OS**
-  - Ubuntu 16.04.3 LTS
-- **CPU**
-  - 8 cores
-  - 8 threads
-- **RAM**
-  - 8 GB
-- **Storage**
-  - 8+20GB (root partition + storage)
-- **Bandwidth** (as per lastest  speedtest)
-  - Download: 866.80 Mbit/s
-  - Upload: 841.65 Mbit/s
-
+The data provided by DoIT&C can be uploaded by using the scripts present at [this gist](https://gist.github.com/theSage21/5c73da683be8751e19e8558c75c64638). Please note that the script does not upload MP4 and PNG. Those have to be manually uploaded in their respective categories.
 
 NOTES
 -----

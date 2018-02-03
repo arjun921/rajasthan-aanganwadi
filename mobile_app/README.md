@@ -25,7 +25,7 @@ Connect device/emulator to adb.
 $ phonegap run android
 ```
 
-Disclaimer: Needs Android SDK, adb tools and adb drivers to be installed and adb access granted if running from device. 
+Disclaimer: Needs Android SDK, adb tools and adb drivers to be installed and adb access granted if running on device. 
 
 #### iOS
 
