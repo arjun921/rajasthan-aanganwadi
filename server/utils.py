@@ -86,6 +86,7 @@ def generate_tree_from_excel_file(path):
     tree_start = list(df.columns).index('TreeColumnsMarker') + 1
     path_columns = list(df.columns)[tree_start:]
     attr_columns = list(df.columns)[2: tree_start-1]
+    print(attr_columns)
     for _, row in df.iterrows():
         if not math.isnan(row['filehash']):
             meta = db.content_meta_data(row['filehash'])
@@ -147,7 +148,6 @@ def doitc_file_to_generalized_format(path):
              'TreeColumnsMarker',
              # tree path
              'Language', 'Tab', 'Category', 'Type', 'Subtype']]
-    d1['title'] = d1['Content Title']
     d2 = df[['filehash', 'Filename',
              # Meta data
              'Medium',
@@ -171,10 +171,10 @@ def doitc_file_to_generalized_format(path):
              'Language', 'Tab (Hindi)', 'Category (Hindi)',
              'Type (Hindi)', 'Subtype (Hindi)',
              ]]
-    d2['title'] = d2['Content Title (Hindi)']
     c2 = [i.replace('(Hindi)', '').strip() for i in d2.columns]
     d2.columns = c2
     df = pd.concat([d1, d2])
+    df['title'] = df['Content Title']
     df = df[['filehash', 'Filename', 'title',
              # Meta data
              'Medium', 'Content Title', 'VideoGroup Name',
