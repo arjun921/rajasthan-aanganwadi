@@ -11,3 +11,4 @@ htmlcov/
 TEMP/
 *.csv
 FileTree.xlsx
+.pytest_cache/
