@@ -5,7 +5,8 @@ test_server_ram_db:
         - pip install pipenv
         - pipenv install --ignore-pipfile --dev
     script:
-        - "printf '\n\n' | pipenv run -p server.py &"
+        - "test -e server.py || cd server"
+        - "printf '\n\n' | pipenv run server.py &"
         - "sleep 10s && pipenv run dummy_setup.py"
         - "sleep 10s && pipenv run pytest tests"
     stage: test
@@ -21,6 +22,7 @@ test_server_mongo:
         - pip install pipenv
         - pipenv install --ignore-pipfile --dev
     script:
+        - "test -e server.py || cd server"
         - "printf '\n\n' | pipenv run server.py &"
         - "sleep 10s && pipenv run dummy_setup.py"
         - "sleep 10s && pipenv run pytest tests"
