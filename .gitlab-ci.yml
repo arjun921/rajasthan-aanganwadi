@@ -1,11 +1,11 @@
 test_server_ram_db:
     image: "python:3.5"
     before_script:
-        - cd server
         - pip install pipenv
         - pipenv install --ignore-pipfile --dev
+        - cd server
     script:
-        - "test -e server.py || cd server"
+        - "echo $PWD"
         - "printf '\n\n' | pipenv run server.py &"
         - "sleep 10s && pipenv run dummy_setup.py"
         - "sleep 10s && pipenv run pytest tests"
@@ -18,11 +18,11 @@ test_server_mongo:
     services:
         - mongo
     before_script:
-        - cd server
         - pip install pipenv
         - pipenv install --ignore-pipfile --dev
+        - cd server
     script:
-        - "test -e server.py || cd server"
+        - "echo $PWD"
         - "printf '\n\n' | pipenv run server.py &"
         - "sleep 10s && pipenv run dummy_setup.py"
         - "sleep 10s && pipenv run pytest tests"
