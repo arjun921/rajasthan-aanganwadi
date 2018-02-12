@@ -7,9 +7,10 @@ test_server_ram_db:
     script:
         - "echo $PWD"
         - "printf '\n\n' | pipenv run server.py &"
-        - "sleep 10s && pipenv run dummy_setup.py"
+        - "sleep 10s && pipenv run python dummy_setup.py"
         - "sleep 10s && pipenv run pytest tests"
     stage: test
+
 test_server_mongo:
     image: "python:3.5"
     variables:
@@ -24,6 +25,6 @@ test_server_mongo:
     script:
         - "echo $PWD"
         - "printf '\n\n' | pipenv run server.py &"
-        - "sleep 10s && pipenv run dummy_setup.py"
+        - "sleep 10s && pipenv run python dummy_setup.py"
         - "sleep 10s && pipenv run pytest tests"
     stage: test
