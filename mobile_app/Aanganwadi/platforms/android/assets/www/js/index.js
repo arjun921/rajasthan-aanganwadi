@@ -94,21 +94,58 @@ function reINT() { //re-run functions to be run on document ready/page shown
 }
 
 function loadmp4(data) {
+  fileDownLink = server+data.url
+  Cookies.set('fileDownLink',fileDownLink);
   p = getHTMLVideoPlayer(data);
   $('#preloader').hide();
   $('#content').append(p);
+  $('#preloader').hide();
 }
 
 function loadmp3(data) {
+  fileDownLink = server+data.url
+  Cookies.set('fileDownLink',fileDownLink);
   p = getHTMLAudioPlayer(data)
   $('#preloader').hide();
   $('#content').append(p);
+  $('#preloader').hide();
 }
 
 function loadpdf(data) {
   flink = 'https://docs.google.com/viewer?url=' + server + data.url + "&pid=explorer&efh=false&a=v&chrome=false&embedded=true"
-  p = getHTMLPDFViewer(flink);
+  fileDownLink = server + data.url
+  p = getHTMLPDFViewer(flink,fileDownLink);
+  Cookies.set('fileDownLink',fileDownLink);
   $('#content').append(p);
+}
+
+function loadImage(data){
+  p = getHTMLimageView(data);
+  $('#content').append(p);
+  $('#preloader').hide();
+}
+
+function downloadFile(){
+  window.open(Cookies.get('fileDownLink'), '_system', 'location=yes');
+}
+
+function pdfLoaded() {
+  $('#closeIcon').addClass('black-text');
+  $('#downloadIcon').addClass('black-text');
+  $('#closeTabletIcon').addClass('black-text');
+  $('#TabletIconDownload').addClass('black-text');
+  $('#CloseTablet').removeClass('tabletClose');
+  $('#CloseTablet').addClass('tabletClosePdf');
+  $('#TabletDownload').removeClass('tabletDownload');
+  $('#TabletDownload').addClass('tabletDownloadPdf');
+  $('#preloader').hide();
+}
+
+
+function loadUnsupported(){
+  p = getHTMLUnsupportedContent()
+  $('#content').append(p);
+  $('#preloader').hide();
 }
 
 function navClick(id) {
@@ -148,18 +185,21 @@ function loadPreviousList50() {
 function getFileType(item) {
   fileType = item.id.split(".")[1];
   if (fileType) {
-    return fileType.toUpperCase();
+    return fileType.toLowerCase();
   }
 }
 
 function getIcon(fileType) {
-  if (fileType == "MP3") {
+  if (fileType == "mp3") {
     return ["audiotrack", ]
-  } else if (fileType == "PDF") {
+  } else if (fileType == "pdf") {
     return "picture_as_pdf"
-  } else if (fileType == "MP4") {
+  } else if (fileType == "mp4") {
     return "video_library"
-  } else {
+  } else if (['bmp', 'jpg', 'jpeg', 'png', 'gif'].indexOf(fileType)!=-1) {
+    return "image"
+  }
+  else {
     return ""
   }
 }
@@ -180,6 +220,11 @@ function loadFileByType(data) {
     loadmp3(data)
   } else if (ftype == "pdf") {
     loadpdf(data)
+  } else if (['bmp', 'jpg', 'jpeg', 'png', 'gif'].indexOf(ftype)!=-1 ){
+    loadImage(data)
+  }
+  else {
+    loadUnsupported()
   }
 }
 

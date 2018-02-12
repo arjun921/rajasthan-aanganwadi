@@ -21,9 +21,11 @@
       <b><span class="breadcrumb right" style="padding-right: 10px;" id="spinner"></span></b>
       <a class="brand-logo show-on-medium-and-up hide-on-small-only " style="padding-left: 10px;" id="crumbtitle2">Activity</a>
       <a href="#" data-activates="mobile-demo" id="hamburgerMenu"><i class="material-icons">menu</i></a>
-      <a style="z-index: 10;" id="closeMenu" onclick='window.history.go(-1);'><i id="closeIcon" class="material-icons" style="font-size: 200%;" >arrow_back</i></a>
-      <a class="hide-on-small-only tabletClose hidden" id="CloseTablet" onclick="window.history.go(-1);" class=""><i id="closeTabletIcon" class="material-icons black-text" style="font-size: 200%;transform: rotate(45deg);">add_circle</i></a>
+      <a style="z-index: 10;" id="closeMenu" onclick='window.history.go(-1);'><i id="closeIcon" class="material-icons" style="font-size: 2.3em;" >arrow_back</i></a>
+      <a style="z-index: 10;" id="MenuDownload" onclick="downloadFile()"><i id="downloadIcon" class="material-icons" style="font-size: 2.3em;" >cloud_download</i></a>
       <ul class="right hide-on-med-and-down">
+        <li><a class="hide-on-med-and-down tabletClosePdf hidden" id="CloseTablet" onclick="window.history.go(-1);" class=""><i id="closeTabletIcon" class="material-icons" style="font-size: 200%;transform: rotate(45deg);">add_circle</i></a></li>
+        <li><a class="hide-on-med-and-down tabletDownloadPdf hidden" id="TabletDownload" onclick="downloadFile()" class=""><i id="TabletIconDownload" class="material-icons" style="font-size: 200%;">cloud_download</i></a></li>
         <li><a href="index.html">Home</a></li>
         <li><a id="formLink" href="all_forms.html">Forms to Fill</a></li>
         <li><a onclick="$('.button-collapse').sideNav('hide');$('#help').modal('open');">Help</a></li>
@@ -114,6 +116,7 @@
     </a>
   </div>
   <script type="text/javascript" src="js/returnHtml.js"></script>
+  <script src="cordova.js"></script>
   <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
   <script type="text/javascript" src="js/materialize.min.js"></script>
   <script type="text/javascript" src="js/js.cookie.js"></script>

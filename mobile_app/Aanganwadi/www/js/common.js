@@ -71,18 +71,18 @@ function resetApp() {//used in "Help"> reset
 
 function setTitle(stri) {//sets title of the page in navigation
   if ($(window).width()<=320) {//320x568
-    if(stri.length>18){
-      stri = stri.substring(0,18)+'...'
+    if(stri.length>13){
+      stri = stri.substring(0,13)+'...'
     }
   }
   else if ($(window).width()>330 && $(window).width()<=375) {//375x667
-    if(stri.length>21){
-      stri = stri.substring(0,21)+'...'
+    if(stri.length>19){
+      stri = stri.substring(0,19)+'...'
     }
   }
   else if ($(window).width()>385 && $(window).width()<=414) {//414x736
-    if(stri.length>25){
-      stri = stri.substring(0,25)+'...'
+    if(stri.length>23){
+      stri = stri.substring(0,23)+'...'
     }
   }
   else {
@@ -121,8 +121,10 @@ function hitApi(url,sendData,apisuccess,apierror) {// all API end points called 
     type: 'post',
     contentType: 'application/json',
     data: JSON.stringify(sendData),
-    success: function(data, st, xhr) { apisuccess(data,st,xhr) },
-    error: function(returnval) { apierror(returnval) }
+    success: function(data, st, xhr) { apisuccess(data,st,xhr); clearInterval(spinid);
+    $("#spinner").hide();},
+    error: function(returnval) { apierror(returnval); clearInterval(spinid);
+    $("#spinner").hide();}
   });
 }
 
@@ -194,8 +196,16 @@ function enableHamburgerMenu() {
   $('#hamburgerMenu').removeClass('hidden');
   $('#closeMenu').removeClass('button-collapse');
   $('#closeMenu').addClass('hidden');
-  $('#CloseTablet').addClass('hidden');
+  $('#MenuDownload').removeClass('button-collapse');
+  $('#MenuDownload').addClass('hidden');
+  $('#TabletDownload').addClass('hidden');
   $('#closeIcon').removeClass('black-text');
+  $('#CloseTablet').addClass('hidden');
+  $('#CloseTablet').removeClass('black-text');
+  $('#TabletDownload').removeClass('black-text');
+  $('#downloadIcon').removeClass('black-text');
+  $('#closeTabletIcon').removeClass('black-text');
+  $('#TabletIconDownload').removeClass('black-text');
   $(".button-collapse").sideNav();
 }
 
@@ -204,9 +214,12 @@ function disableHamburgerMenu() {// used when loading media to add close button
   $('#navi').hide();
   $('#closeMenu').addClass('button-collapse');
   $('#closeMenu').removeClass('hidden');
+  $('#MenuDownload').addClass('button-collapse');
+  $('#MenuDownload').removeClass('hidden');
   $('#CloseTablet').removeClass('hidden');
-  $('#CloseTablet').addClass('tabletClose');
   $('#CloseTablet').removeClass('tabletClosePdf');
+  $('#TabletDownload').removeClass('hidden');
+  $('#TabletDownload').removeClass('tabletDownloadPdf');
   $('#hamburgerMenu').removeClass('button-collapse');
   $('#hamburgerMenu').addClass('hidden');
 }

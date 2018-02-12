@@ -3,9 +3,9 @@ Rajasthan
 
 App and server code for Aanganwadi.
 
-Component   |   Coverage
-------------|-------------
-Server      |[![pipeline status](https://gitlab.com/theSage21/rajasthan/badges/master/pipeline.svg)](https://gitlab.com/theSage21/rajasthan/commits/master)
+| Component | Coverage                                 |
+| --------- | ---------------------------------------- |
+| Server    | [![pipeline status](https://gitlab.com/theSage21/rajasthan/badges/master/pipeline.svg)](https://gitlab.com/theSage21/rajasthan/commits/master) |
 
 
 App and server code for Aanganwadi. Relevant documents like sprint reports can be found on [Google Drive](https://drive.google.com/drive/folders/0B9peBTEXP4UdSWRmR0tKb01zaGM?usp=sharing). Ask for access if you do not have it.
@@ -66,8 +66,24 @@ Content Reordering
 
 Already uploaded content can be reorganized by uploading an excel file via ADMIN in the format similar to [given requirements file](server/tree.xlsx).
 
-SETUP
------
+## Server Specifications
+
+The following are the server specs used for the Aanganwadi backend.
+
+- **OS**
+  - Ubuntu 16.04.3 LTS
+- **CPU**
+  - 8 cores
+  - 8 threads
+- **RAM**
+  - 8 GB
+- **Storage**
+  - 8+20GB (root partition + storage)
+- **Bandwidth** (as per lastest  speedtest)
+  - Download: 866.80 Mbit/s
+  - Upload: 841.65 Mbit/s
+
+## SETUP
 
 The server can be set up with the following steps.
 
@@ -124,8 +140,7 @@ The server is now available at `http://<your machine's ip>`
 
 Default demo entries need to be inserted with `python dummy_setup.py`.
 
-The data provided by DoIT&C can be uploaded by using the scripts present at [this gist](https://gist.github.com/theSage21/5c73da683be8751e19e8558c75c64638). Please not that the script does not upload MP4 and PNG. Those have to be manually uploaded in their respective categories.
-
+The data provided by DoIT&C can be uploaded by using the scripts present at [this gist](https://gist.github.com/theSage21/5c73da683be8751e19e8558c75c64638). Please note that the script does not upload MP4 and PNG. Those have to be manually uploaded in their respective categories.
 
 NOTES
 -----

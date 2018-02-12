@@ -12,3 +12,4 @@ TEMP/
 *.csv
 FileTree.xlsx
 .pytest_cache/
+*.DS_Store

@@ -86,6 +86,7 @@
   float: left;
   position: relative;
   height: 56px;
+  color: #FFF;
   margin: 65px 18px;
 }
 
@@ -94,6 +95,25 @@
   float: left;
   position: relative;
   height: 56px;
+  color: #FFF;
+  margin: 0px 18px;
+}
+
+.tabletDownload{
+  z-index: 10;
+  float: left;
+  position: relative;
+  height: 56px;
+  color: #FFF;
+  margin: 65px 18px;
+}
+
+.tabletDownloadPdf{
+  z-index: 10;
+  float: left;
+  position: relative;
+  height: 56px;
+  color: #FFF;
   margin: 0px 18px;
 }
 

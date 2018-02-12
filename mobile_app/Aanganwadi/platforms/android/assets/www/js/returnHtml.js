@@ -61,12 +61,15 @@ function getHTMLAudioPlayer(data) {
 }
 
 function getHTMLPDFViewer(flink) {
-  return "<iframe onload=\"$('#closeIcon').addClass('black-text');$('#closeTabletIcon').addClass('black-text');$('#CloseTablet').removeClass('tabletClose');$('#CloseTablet').addClass('tabletClosePdf');$('#preloader').hide();\" src=\""+flink+"\" class=\"z-depth-4\" id=\"docIframe\" style=\"position:absolute; top:0px; left:0px; bottom:0px; z-index: 2; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden;\">Your browser doesn't support iframes</iframe>"
+  // console.log(flink);
+  // Cookies.get('pdfURL')
+  return "<iframe onload=\"pdfLoaded()\" src=\""+flink+"\" class=\"z-depth-4\" id=\"docIframe\" style=\"position:absolute; top:0px; left:0px; bottom:0px; z-index: 2; right:0px; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden;\">Your browser doesn't support iframes</iframe>"
+  // return "<a href=\""+flink+"\"></a>"
 }
 
 function getHTMLCategoryFileListElement(item){
   fileType = getFileType(item);
-  strBegin = " <li class=\"collection-item\" id=\""+item.id+"\" onclick=\"navClick(this.id)\"><div>"+item.title+"<div class=\"secondary-content \"><i class=\"material-icons\">"
+  strBegin = " <li class=\"collection-item\" id=\""+item.id+"\" onclick=\"navClick(this.id)\"><div class=\"\">"+item.title+"<div class=\"secondary-content \"><i class=\"material-icons\">"
   icon = getIcon(fileType);
   strEnd = "</i></div></li>"
   p = strBegin+icon+strEnd
@@ -79,4 +82,14 @@ function getHTMLCategoryUp(){
   strEnd = "</i></div></li>"
   p = strBegin+icon+strEnd
   return p
+}
+
+function getHTMLimageView(data) {
+  imgLink = server + data.url;
+  s = "<img style=\"max-width: 100%;height: auto;width: auto;\" src=\""+imgLink+"\" alt=\"image\" >"
+  return s
+}
+function getHTMLUnsupportedContent(){
+  s = "<div class=\"card-panel\"><h5>Unsupported Content</h5></div>"
+  return s
 }
