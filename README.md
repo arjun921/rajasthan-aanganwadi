@@ -9,7 +9,7 @@ Finalized UI for the app.
 
 [![final_UI.png](https://s31.postimg.cc/ze0ob2yhn/final_UI.png)](https://postimg.cc/image/vueql9vrr/)
 
-[Alternate Link](https://s31.postimg.cc/ze0ob2yhn/final_UI.png)
+[View Larger](https://s31.postimg.cc/ze0ob2yhn/final_UI.png)
 
 ## Download
 
