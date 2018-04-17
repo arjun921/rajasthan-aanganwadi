@@ -1,7 +1,20 @@
-Rajasthan
+Rajasthan-Aanganwadi Server
 =========
 
 App and server code for Aanganwadi.
+
+## Screenshots
+
+Finalized UI for the app.
+
+[![final_UI.png](https://s31.postimg.cc/ze0ob2yhn/final_UI.png)](https://postimg.cc/image/vueql9vrr/)
+
+[Alternate Link](https://s31.postimg.cc/ze0ob2yhn/final_UI.png)
+
+## Download
+
+Android .apk : [http://bit.do/AanganwadiApp](http://bit.do/AanganwadiApp)
+
 
 | Component | Coverage                                 |
 | --------- | ---------------------------------------- |
@@ -11,8 +24,7 @@ App and server code for Aanganwadi.
 App and server code for Aanganwadi. Relevant documents like sprint reports can be found on [Google Drive](https://drive.google.com/drive/folders/0B9peBTEXP4UdSWRmR0tKb01zaGM?usp=sharing). Ask for access if you do not have it.
 
 
-Working API
-----------
+## Working API
 
 - `/user`
 - `/user/login`
@@ -149,3 +161,4 @@ NOTES
 - The server must be set up with `https`
 - The server's Admin page contains a brief tutorial of how to use the Admin page.
 - Admin setup requires inputs once. After that it works without prompt. On not receiving such input it prceeds with the defaults.
+
