@@ -1,4 +1,4 @@
-Rajasthan-Aanganwadi Server
+Rajasthan Aanganwadi
 =========
 
 App and server code for Aanganwadi.
