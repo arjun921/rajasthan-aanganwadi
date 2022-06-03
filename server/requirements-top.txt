@@ -1,4 +1,4 @@
-bottle==0.12.13
+bottle==0.12.20
 pandas==0.21.0
 gunicorn==19.7.1
 pymongo==3.5.1
